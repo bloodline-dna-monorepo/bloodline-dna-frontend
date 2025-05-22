@@ -43,41 +43,72 @@ yarn dev
 
 ---
 
-## Cấu trúc thư mục và ý nghĩa
+Dưới đây là nội dung bạn có thể copy vào phần `README.md` để mô tả **cấu trúc thư mục** của dự án frontend `Bloodline DNA Testing Service Management System`:
 
-```
+---
+
+Dưới đây là phần **tổng hợp cấu trúc thư mục chi tiết** bạn có thể **copy dán vào `README.md`** để mô tả rõ ràng kiến trúc frontend của dự án **Bloodline DNA Testing Service Management System**:
+
+---
+
+## 📁 Cấu trúc thư mục frontend
+
+Dự án sử dụng kiến trúc **feature-based modular architecture**, chia theo từng tính năng, dễ bảo trì và mở rộng trong tương lai.
+
+```bash
 bloodline-dna-frontend/
-├── public/                 # Tài nguyên tĩnh như favicon, index.html
+├── public/                         # File tĩnh (favicon, logo, robots.txt, etc.)
 ├── src/
-│   ├── assets/             # Hình ảnh, fonts, media
-│   ├── components/         # Các component React tái sử dụng UI
-│   ├── constants/          # Các hằng số, config tĩnh dùng chung
-│   ├── contexts/           # React Context quản lý state toàn cục
-│   ├── hooks/              # Custom React hooks dự án
-│   ├── modules/            # Các module hoặc tính năng lớn (feature)
-│   ├── routes/             # Định nghĩa React Router các route
-│   ├── utils/              # Các hàm helper chung
-│   ├── App.tsx             # Component gốc ứng dụng
-│   ├── main.tsx            # Điểm vào ứng dụng (render React vào DOM)
-│   └── vite-env.d.ts       # Khai báo môi trường Vite
-├── .editorconfig           # Quy chuẩn format editor
-├── .eslintrc.cjs           # Cấu hình ESLint
-├── .gitignore              # Các file/thư mục git sẽ bỏ qua
-├── .prettierignore         # File ignore cho Prettier
-├── .prettierrc             # Cấu hình Prettier
-├── eslint.config.js        # File cấu hình ESLint (tùy dự án)
-├── index.html              # HTML gốc, template của Vite
-├── package.json            # Thông tin project & scripts
-├── postcss.config.js       # Cấu hình PostCSS (dùng cho TailwindCSS)
-├── tailwind.config.js      # Cấu hình TailwindCSS
-├── tsconfig.app.json       # Cấu hình TypeScript cho app
-├── tsconfig.json           # Cấu hình TypeScript chung
-├── tsconfig.node.json      # Cấu hình TypeScript cho node scripts
-├── vite.config.ts          # Cấu hình Vite
-└── yarn.lock               # Khóa phiên bản package
+│   ├── assets/                     # Tài nguyên chung (ảnh, fonts, icons,...)
+│   ├── components/                 # UI components dùng toàn app (Button, Modal, Spinner,...)
+│   ├── constants/                  # Các hằng số toàn cục (routes, enums, config,...)
+│   ├── features/                   # Các module chức năng (feature-based)
+│   │   ├── auth/                   # Đăng nhập, đăng ký, xác thực
+│   │   │   ├── components/        # UI riêng cho auth
+│   │   │   ├── pages/             # Trang login, register,...
+│   │   │   ├── services/          # Gọi API liên quan auth
+│   │   │   ├── hooks/             # Custom hooks riêng của auth
+│   │   │   ├── slices/            # Redux slice / Zustand store (nếu dùng)
+│   │   │   ├── types/             # Kiểu dữ liệu liên quan auth
+│   │   │   └── index.ts           # Barrel exports
+│   │   ├── customer/              # Người dùng đặt xét nghiệm
+│   │   ├── appointment/           # Đặt lịch xét nghiệm
+│   │   ├── dnaTest/               # Quản lý xét nghiệm và kết quả
+│   │   ├── sampleTracking/        # Theo dõi mẫu xét nghiệm
+│   │   ├── manager/               # Tính năng cho quản lý trung tâm
+│   │   ├── admin/                 # Tính năng dành cho admin hệ thống
+│   │   └── ...                    # (Mở rộng thêm nếu cần)
+│   ├── hooks/                      # Custom hooks dùng toàn app (useDebounce, useAuth, etc.)
+│   ├── layouts/                    # Bố cục chính (MainLayout, AuthLayout,...)
+│   ├── pages/                      # Entry cho từng trang nếu cần mapping
+│   ├── routes/                     # Cấu hình route, bảo vệ route,...
+│   ├── services/                   # Gọi API chung (axios instance, interceptor,...)
+│   ├── styles/                     # CSS/tailwind hoặc global styles
+│   ├── utils/                      # Hàm tiện ích dùng chung (formatDate, validateEmail,...)
+│   ├── App.tsx                     # Root component
+│   ├── main.tsx                    # Entry point chính
+│   └── vite-env.d.ts               # Cấu hình hỗ trợ cho Vite
+├── .eslintrc.cjs                   # Cấu hình ESLint
+├── .prettierrc                     # Cấu hình Prettier
+├── package.json                    # Thông tin dependencies
+├── tsconfig.json                   # Cấu hình TypeScript
+└── README.md                       # Mô tả dự án, hướng dẫn cài đặt
 ```
 
 ---
+
+### ✅ Nguyên tắc tổ chức
+
+* **Tách rõ theo tính năng**: Mỗi module nằm trong `features/` chứa đầy đủ component, logic, API, hook, store, type riêng.
+* **Không cần thư mục `shared/`**: Vì mọi thứ đã được chia rõ theo từng feature hoặc dùng chung thì nằm trong `components/`, `hooks/`, `utils/`.
+* **Dễ scale**: Khi cần thêm tính năng mới (ví dụ: `billing`, `notifications`), chỉ cần tạo thêm thư mục trong `features/`.
+
+---
+
+📌 *Gợi ý*: Mỗi `features/<module>` có thể có file `index.ts` để `barrel export` giúp import code gọn hơn.
+
+Bạn có thể dán nguyên block này vào README. Nếu muốn mình tạo sẵn file `README.md` markdown đúng chuẩn để paste vào VS Code, mình có thể gửi luôn!
+
 
 ## Quy trình quản lý code và branch
 

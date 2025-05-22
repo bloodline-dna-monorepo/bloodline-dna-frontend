@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #1a8b8b;
+  --primary-dark: #157575;
+  --secondary: #8b3db8;
+  --secondary-dark: #7a2ea6;
+  --text-dark: #333333;
+  --text-light: #666666;
+  --background: #ffffff;
+  --background-alt: #f8f9fa;
+  --border: #e5e7eb;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text-dark);
+  background-color: var(--background);
+}
+
+.container {
+  @apply px-4 mx-auto max-w-7xl;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium transition-colors rounded-md;
+}
+
+.btn-primary {
+  @apply text-white bg-[var(--primary)] hover:bg-[var(--primary-dark)];
+}
+
+.btn-secondary {
+  @apply text-white bg-[var(--secondary)] hover:bg-[var(--secondary-dark)];
+}
+
+.btn-outline {
+  @apply border border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white;
+}
+
+.section {
+  @apply py-16;
+}
+
+.section-title {
+  @apply mb-12 text-3xl font-bold text-center md:text-4xl;
+}
+
+.section-subtitle {
+  @apply mb-16 text-lg text-center text-[var(--text-light)] max-w-3xl mx-auto;
+}
+
+.card {
+  @apply p-6 transition-shadow bg-white rounded-lg shadow-sm hover:shadow-md;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.help-button {
+  @apply fixed z-50 flex items-center justify-center w-16 h-16 text-white transition-all duration-300 rounded-full shadow-lg bg-[var(--secondary)] hover:bg-[var(--secondary-dark)];
+  bottom: 80px;
+  right: 20px;
+}
+
+.help-button:hover {
+  transform: scale(1.05);
+}
+
+.nav-link {
+  @apply relative px-3 py-2 text-base font-medium transition-colors;
+}
+
+.nav-link::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--primary)] transition-all duration-300;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  @apply w-full;
+}
+
+.lazy-load {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+  opacity: 1;
+}
