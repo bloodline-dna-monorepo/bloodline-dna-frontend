@@ -1,5 +1,7 @@
+"use client"
+
+// Replace LazyImage with regular img
 import { Link } from "react-router-dom"
-import LazyImage from "./LazyImage"
 
 const Hero = () => {
   return (
@@ -21,7 +23,7 @@ const Hero = () => {
           <div className="text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               <span className="text-[var(--primary)]">Accurate</span> -
-              <span className="text-[var(--secondary)]"> Reliable</span> -
+              <span className="text-[var(--secondary)]">Reliable</span> -
               <span className="text-[var(--primary)]"> Fast</span>
               <br />
               DNA Testing Services
@@ -31,7 +33,17 @@ const Hero = () => {
               can trust.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link to="/services" className="btn btn-primary">
+              <Link
+                to="/#appointment"
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault()
+                  const element = document.getElementById("appointment")
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" })
+                  }
+                }}
+              >
                 Schedule a Test Now
               </Link>
               <Link to="/guide" className="btn btn-outline">
@@ -42,11 +54,7 @@ const Hero = () => {
           <div className="relative">
             <div className="absolute -top-10 -left-10 w-32 h-32 bg-[var(--primary)] opacity-10 rounded-full"></div>
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[var(--secondary)] opacity-10 rounded-full"></div>
-            <LazyImage
-              src="/hero-image.jpg"
-              alt="DNA Testing Professional"
-              className="w-full h-auto rounded-lg shadow-xl"
-            />
+            <img src="/hero-image.jpg" alt="DNA Testing Professional" className="w-full h-auto rounded-lg shadow-xl" />
           </div>
         </div>
       </div>

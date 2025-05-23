@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import LazyImage from "./LazyImage"
 
 const ProcessSteps = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -91,8 +90,8 @@ const ProcessSteps = () => {
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-[var(--secondary)] opacity-10 rounded-full"></div>
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-[var(--primary)] opacity-10 rounded-full"></div>
             <div className="relative rounded-lg overflow-hidden shadow-lg">
-              <LazyImage
-                src={steps[activeStep].image}
+              <img
+                src={steps[activeStep].image || "/placeholder.svg"}
                 alt={`Step ${activeStep + 1}: ${steps[activeStep].title}`}
                 className="w-full h-auto"
               />
