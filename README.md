@@ -118,6 +118,8 @@ Bạn có thể dán nguyên block này vào README. Nếu muốn mình tạo s�
 - **hotfix/\<tên-hotfix>**: sửa lỗi nhanh trên main hoặc develop
 
 ### Quy trình làm việc
+đầu tiên nè mấy ba mở terminal npm install --global yarn
+git clone project về
 
 1. Cập nhật nhánh develop mới nhất:
 
@@ -125,13 +127,14 @@ Bạn có thể dán nguyên block này vào README. Nếu muốn mình tạo s�
 git checkout develop
 git pull origin develop
 ```
+yarn install
 
 2. Tạo nhánh feature mới:
 
 ```bash
 git checkout -b feature/<tên-feature>
 ```
-
+yarn dev
 3. Viết code, commit rõ ràng.
 
 4. Đẩy nhánh lên repo:
