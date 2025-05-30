@@ -6,6 +6,8 @@ import BlogPage from "../pages/BlogPage"
 import BlogPostPage from "../pages/BlogPostPage"
 import GuidePage from "../pages/GuidePage"
 import AuthPage from "../pages/AuthPage"
+import ServicesPage from "../pages/ServicesPage"
+import TermsPage from "../pages/TermsPage"
 
 export default function AppRoutes() {
   return (
@@ -23,6 +25,14 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <AboutPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/services"
+        element={
+          <MainLayout>
+            <ServicesPage />
           </MainLayout>
         }
       />
@@ -55,6 +65,14 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <AuthPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/terms"
+        element={
+          <MainLayout>
+            <TermsPage />
           </MainLayout>
         }
       />

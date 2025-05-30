@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { Link, useLocation } from "react-router-dom"
-import { Menu, X } from "lucide-react"
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { Menu, X } from 'lucide-react'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -15,8 +15,8 @@ const Header = () => {
       setIsScrolled(window.scrollY > 10)
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const toggleMobileMenu = () => {
@@ -24,19 +24,19 @@ const Header = () => {
   }
 
   const isActive = (path: string) => {
-    return location.pathname === path ? "active" : ""
+    return location.pathname === path ? 'active' : ''
   }
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+      element.scrollIntoView({ behavior: 'smooth' })
     }
     setIsMobileMenuOpen(false)
   }
 
   // Reserve space for header to prevent layout shifts
-  const headerHeight = isScrolled ? "h-[72px]" : "h-[96px]"
+  const headerHeight = isScrolled ? 'h-[72px]' : 'h-[96px]'
 
   return (
     <>
@@ -45,37 +45,37 @@ const Header = () => {
 
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+          isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'
         }`}
       >
-        <div className="container flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            <img src="/logo.png" alt="Gen Unity Logo" className="h-16" width="64" height="64" />
+        <div className='container flex items-center justify-between'>
+          <Link to='/' className='flex items-center'>
+            <img src='/logo.png' alt='Gen Unity Logo' className='h-16' width='64' height='64' />
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-1">
-            <Link to="/" className={`nav-link ${isActive("/")}`}>
+          <nav className='hidden md:flex items-center space-x-1'>
+            <Link to='/' className={`nav-link ${isActive('/')}`}>
               Home
             </Link>
-            <Link to="/about" className={`nav-link ${isActive("/about")}`}>
+            <Link to='/about' className={`nav-link ${isActive('/about')}`}>
               About
             </Link>
-            <Link to="/services" className={`nav-link ${isActive("/services")}`}>
-              DNA Testing
+            <Link to='/services' className={`nav-link ${isActive('/services')}`}>
+              DNA Services
             </Link>
-            <Link to="/guide" className={`nav-link ${isActive("/guide")}`}>
+            <Link to='/guide' className={`nav-link ${isActive('/guide')}`}>
               Guide & FAQ
             </Link>
-            <Link to="/blog" className={`nav-link ${isActive("/blog")}`}>
+            <Link to='/blog' className={`nav-link ${isActive('/blog')}`}>
               Blog
             </Link>
-            <Link to="/auth" className="btn btn-primary ml-4">
+            <Link to='/auth' className='btn btn-primary ml-4'>
               Sign In / Register
             </Link>
           </nav>
 
-          <div className="flex items-center md:hidden">
-            <button onClick={toggleMobileMenu} className="p-2 text-gray-600 hover:text-[var(--primary)]">
+          <div className='flex items-center md:hidden'>
+            <button onClick={toggleMobileMenu} className='p-2 text-gray-600 hover:text-[var(--primary)]'>
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
@@ -83,46 +83,46 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white shadow-lg">
-            <div className="container py-4 space-y-3">
+          <div className='md:hidden bg-white shadow-lg'>
+            <div className='container py-4 space-y-3'>
               <Link
-                to="/"
-                className="block py-2 hover:text-[var(--primary)]"
+                to='/'
+                className='block py-2 hover:text-[var(--primary)]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Home
               </Link>
               <Link
-                to="/about"
-                className="block py-2 hover:text-[var(--primary)]"
+                to='/about'
+                className='block py-2 hover:text-[var(--primary)]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
               </Link>
               <Link
-                to="/services"
-                className="block py-2 hover:text-[var(--primary)]"
+                to='/services'
+                className='block py-2 hover:text-[var(--primary)]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 DNA Testing
               </Link>
               <Link
-                to="/guide"
-                className="block py-2 hover:text-[var(--primary)]"
+                to='/guide'
+                className='block py-2 hover:text-[var(--primary)]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Guide & FAQ
               </Link>
               <Link
-                to="/blog"
-                className="block py-2 hover:text-[var(--primary)]"
+                to='/blog'
+                className='block py-2 hover:text-[var(--primary)]'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Blog
               </Link>
               <Link
-                to="/auth"
-                className="btn btn-primary w-full text-center"
+                to='/auth'
+                className='btn btn-primary w-full text-center'
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Sign In / Register
