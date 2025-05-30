@@ -1,248 +1,315 @@
-import { Beaker, Award, Users, Building, Heart, Shield, CheckCircle } from "lucide-react";
-
-import ourImage from '../assets/about/our.png';
-import menber1 from '../assets/about/m1.png';
-import menber2 from '../assets/about/m2.png';
-import menber3 from '../assets/about/m3.png';
-import menber4 from '../assets/about/m4.png';
+import { Beaker, Award, Users, Building, Heart, Shield } from "lucide-react"
 
 const AboutPage = () => {
   return (
-    <div className="pt-24 font-['Inter'] antialiased bg-gray-50">
-
-      <section className="bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white py-24 px-4 rounded-b-3xl shadow-lg">
-        <div className="container mx-auto max-w-5xl text-center">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-            About Gen Unity
-          </h1>
-          <p className="text-xl md:text-2xl opacity-95 mb-8 max-w-3xl mx-auto">
-            Pioneering DNA testing services with a commitment to accuracy, privacy, and exceptional care.
-            Empowering individuals with profound genetic insights.
-          </p>
+    <div className="pt-24">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white py-20">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Gen Unity</h1>
+            <p className="text-xl opacity-90">
+              Pioneering DNA testing services with a commitment to accuracy, privacy, and exceptional care.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* Our Mission */}
+      <section className="py-16">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">Our Mission: Unlocking Genetic Potential</h2>
-              <p className="text-lg md:text-xl text-gray-700 mb-6 leading-relaxed">
+              <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
+              <p className="text-lg text-gray-600 mb-6">
                 At Gen Unity, we believe that everyone deserves access to accurate genetic information in a way that's
                 easy to understand and act upon. Our mission is to provide the highest quality DNA testing services with
                 uncompromising accuracy, complete privacy, and compassionate support.
               </p>
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-600">
                 We're committed to advancing genetic science while making it accessible and meaningful for individuals
                 and families. Through innovation and education, we empower people to make informed decisions about their
-                health, ancestry, and relationships, fostering a healthier and more informed future.
+                health, ancestry, and relationships.
               </p>
             </div>
-            <div className="relative order-1 lg:order-2 flex justify-center items-center p-4 bg-white rounded-xl shadow-2xl">
-              <img
-                src={ourImage}
-                alt="Our Mission"
-                className="rounded-xl w-full max-w-lg h-auto transition-transform duration-500 hover:scale-105"
-                onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/600x400/A7F3D0/065F46?text=Image+Not+Found"; }}
-              />
+            <div className="relative">
+              <div className="absolute -top-4 -left-4 w-24 h-24 bg-[var(--primary)] opacity-10 rounded-full"></div>
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-[var(--secondary)] opacity-10 rounded-full"></div>
+              <img src="/about-mission.jpg" alt="Our Mission" className="rounded-lg shadow-xl w-full h-auto" />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-gray-100 py-20 px-4 rounded-3xl shadow-inner my-12">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-12">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-[var(--primary)] mb-4 flex justify-center">
-                <Shield size={48} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Integrity & Accuracy</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                We uphold the highest standards of scientific rigor and ethical practices, ensuring every result is precise and trustworthy.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-[var(--secondary)] mb-4 flex justify-center">
-                <Heart size={48} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Compassionate Care</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                We provide empathetic support and clear communication, guiding our clients through their genetic journey with understanding.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-[var(--primary)] mb-4 flex justify-center">
-                <Users size={48} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Privacy & Security</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Protecting your personal genetic information is our paramount responsibility, secured with advanced protocols.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-[var(--secondary)] mb-4 flex justify-center">
-                <Beaker size={48} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Innovation</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Continuously exploring new scientific advancements to offer cutting-edge and comprehensive genetic insights.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-[var(--primary)] mb-4 flex justify-center">
-                <Award size={48} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Excellence</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Striving for the highest quality in every aspect of our service, from testing to customer support.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-[var(--secondary)] mb-4 flex justify-center">
-                <Building size={48} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Community</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Building a supportive community where individuals can connect and share their genetic journeys.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-12">Why Choose Gen Unity?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
-              <div className="text-green-500 mb-4">
-                <CheckCircle size={40} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Certified Accuracy</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Our labs are accredited, ensuring highly reliable and precise DNA test results every time.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
-              <div className="text-blue-500 mb-4">
-                <Shield size={40} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Unwavering Privacy</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Your genetic data is protected with state-of-the-art encryption and strict privacy protocols.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
-              <div className="text-purple-500 mb-4">
-                <Users size={40} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Expert Support</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Access to genetic counselors and customer service for any questions or guidance you need.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
-              <div className="text-orange-500 mb-4">
-                <Beaker size={40} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Advanced Technology</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Utilizing the latest advancements in genetic sequencing for comprehensive insights.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
-              <div className="text-red-500 mb-4">
-                <Heart size={40} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Personalized Insights</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Tailored reports that are easy to understand, helping you make informed decisions about your health.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
-              <div className="text-teal-500 mb-4">
-                <Award size={40} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">Trusted by Thousands</h3>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                Join a growing community of satisfied clients who trust Gen Unity with their genetic journey.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-gray-800 text-white py-20 px-4 rounded-3xl my-12">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12">Meet Our Dedicated Team</h2>
-          <p className="text-lg md:text-xl opacity-80 mb-10 max-w-3xl mx-auto">
-            Our team of passionate scientists, geneticists, and customer care specialists are dedicated to providing
-            you with the best possible experience and insights.
+      {/* Our Values */}
+      <section className="py-16 bg-[var(--background-alt)]">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-6 text-center">Our Core Values</h2>
+          <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
+            These principles guide everything we do, from how we develop our testing procedures to how we interact with
+            our clients.
           </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="w-12 h-12 bg-[var(--primary)] bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                <Beaker className="text-[var(--primary)]" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Scientific Excellence</h3>
+              <p className="text-gray-600">
+                We maintain the highest standards of scientific rigor and accuracy in all our testing procedures.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="w-12 h-12 bg-[var(--primary)] bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                <Shield className="text-[var(--primary)]" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Privacy & Confidentiality</h3>
+              <p className="text-gray-600">
+                We protect your genetic information with industry-leading security measures and strict privacy policies.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="w-12 h-12 bg-[var(--primary)] bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                <Heart className="text-[var(--primary)]" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Compassionate Care</h3>
+              <p className="text-gray-600">
+                We approach every client with empathy, understanding the personal nature of genetic testing.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="w-12 h-12 bg-[var(--primary)] bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                <Award className="text-[var(--primary)]" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Integrity</h3>
+              <p className="text-gray-600">
+                We operate with complete transparency and honesty in all aspects of our business.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="w-12 h-12 bg-[var(--primary)] bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                <Users className="text-[var(--primary)]" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Accessibility</h3>
+              <p className="text-gray-600">
+                We make advanced genetic testing accessible to everyone through clear communication and affordable
+                options.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <div className="w-12 h-12 bg-[var(--primary)] bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                <Building className="text-[var(--primary)]" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Innovation</h3>
+              <p className="text-gray-600">
+                We continuously improve our methods and services to stay at the forefront of genetic science.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Team */}
+      <section className="py-16">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-6 text-center">Our Expert Team</h2>
+          <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
+            Our team consists of leading geneticists, laboratory specialists, and healthcare professionals dedicated to
+            providing the highest quality DNA testing services.
+          </p>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-gray-700 p-6 rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
-              <img
-                src={menber1}
-                alt="Team Member 1"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-[var(--primary)]"
-                onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/150x150/E0F2FE/1E40AF?text=Image+Not+Found"; }}
-              />
-              <h3 className="text-xl md:text-2xl font-semibold mb-2">Dr. Emily Chen</h3>
-              <p className="text-base text-gray-300">Lead Geneticist</p>
-              <p className="text-base text-gray-400 mt-2">Specializing in genomic sequencing and analysis.</p>
+            <div className="text-center">
+              <div className="mb-4 relative mx-auto w-48 h-48 rounded-full overflow-hidden">
+                <img src="/team-member-1.jpg" alt="Dr. Sarah Johnson" className="w-full h-full object-cover" />
+              </div>
+              <h3 className="text-xl font-semibold">Dr. Sarah Johnson</h3>
+              <p className="text-[var(--primary)] font-medium">Chief Medical Officer</p>
+              <p className="text-gray-600 mt-2">
+                Board-certified geneticist with over 15 years of experience in clinical genetics.
+              </p>
             </div>
-            <div className="bg-gray-700 p-6 rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
-              <img
-                src={menber2}
-                alt="Team Member 2"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-[var(--secondary)]"
-                onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/150x150/E0F2FE/1E40AF?text=Image+Not+Found"; }}
-              />
-              <h3 className="text-xl md:text-2xl font-semibold mb-2">Michael Davis</h3>
-              <p className="text-base text-gray-300">Bioinformatics Engineer</p>
-              <p className="text-base text-gray-400 mt-2">Developing advanced data processing algorithms.</p>
+
+            <div className="text-center">
+              <div className="mb-4 relative mx-auto w-48 h-48 rounded-full overflow-hidden">
+                <img src="/team-member-2.jpg" alt="Dr. Michael Chen" className="w-full h-full object-cover" />
+              </div>
+              <h3 className="text-xl font-semibold">Dr. Michael Chen</h3>
+              <p className="text-[var(--primary)] font-medium">Laboratory Director</p>
+              <p className="text-gray-600 mt-2">
+                PhD in Molecular Biology with expertise in advanced DNA sequencing technologies.
+              </p>
             </div>
-            <div className="bg-gray-700 p-6 rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
-              <img
-                src={menber3}
-                alt="Team Member 3"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-[var(--primary)]"
-                onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/150x150/E0F2FE/1E40AF?text=Image+Not+Found"; }}
-              />
-              <h3 className="text-xl md:text-2xl font-semibold mb-2">Sarah Lee</h3>
-              <p className="text-base text-gray-300">Customer Relations Lead</p>
-              <p className="text-base text-gray-400 mt-2">Ensuring a seamless and supportive client experience.</p>
+
+            <div className="text-center">
+              <div className="mb-4 relative mx-auto w-48 h-48 rounded-full overflow-hidden">
+                <img src="/team-member-3.jpg" alt="Dr. Emily Rodriguez" className="w-full h-full object-cover" />
+              </div>
+              <h3 className="text-xl font-semibold">Dr. Emily Rodriguez</h3>
+              <p className="text-[var(--primary)] font-medium">Research Director</p>
+              <p className="text-gray-600 mt-2">
+                Specializes in population genetics and leads our ancestry testing program.
+              </p>
             </div>
-            <div className="bg-gray-700 p-6 rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
-              <img
-                src={menber4}
-                alt="Team Member 4"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-[var(--secondary)]"
-                onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/150x150/E0F2FE/1E40AF?text=Image+Not+Found"; }}
-              />
-              <h3 className="text-xl md:text-2xl font-semibold mb-2">Dr. Alex Kim</h3>
-              <p className="text-base text-gray-300">Medical Advisor</p>
-              <p className="text-base text-gray-400 mt-2">Providing clinical expertise and guidance.</p>
+
+            <div className="text-center">
+              <div className="mb-4 relative mx-auto w-48 h-48 rounded-full overflow-hidden">
+                <img src="/team-member-4.jpg" alt="James Wilson" className="w-full h-full object-cover" />
+              </div>
+              <h3 className="text-xl font-semibold">James Wilson</h3>
+              <p className="text-[var(--primary)] font-medium">Client Services Director</p>
+              <p className="text-gray-600 mt-2">
+                Ensures exceptional client experience with a background in healthcare administration.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-gradient-to-r from-[var(--secondary)] to-[var(--primary)] text-white py-20 px-4 rounded-t-3xl shadow-lg mt-12">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Discover Your Genetic Story?</h2>
-          <p className="text-xl md:text-2xl opacity-90 mb-8">
-            Start your journey with Gen Unity today and unlock personalized insights into your health, ancestry, and more.
+      {/* Our Technology */}
+      <section className="py-16 bg-[var(--background-alt)]">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <h2 className="text-3xl font-bold mb-6">State-of-the-Art Technology</h2>
+              <p className="text-lg text-gray-600 mb-6">
+                Gen Unity utilizes the most advanced DNA testing technologies available, ensuring the highest levels of
+                accuracy and reliability in our results.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-[var(--primary)] text-white flex items-center justify-center mr-3 mt-1 flex-shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Next-Generation Sequencing</h4>
+                    <p className="text-gray-600">
+                      Our laboratory uses advanced NGS technology to analyze DNA with exceptional precision.
+                    </p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-[var(--primary)] text-white flex items-center justify-center mr-3 mt-1 flex-shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Automated Sample Processing</h4>
+                    <p className="text-gray-600">
+                      Robotic systems handle samples to minimize human error and contamination risks.
+                    </p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-[var(--primary)] text-white flex items-center justify-center mr-3 mt-1 flex-shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Secure Digital Results Platform</h4>
+                    <p className="text-gray-600">
+                      Our encrypted online portal ensures your results are accessible only to you.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="order-1 lg:order-2 relative">
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-[var(--secondary)] opacity-10 rounded-full"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--primary)] opacity-10 rounded-full"></div>
+              <img
+                src="/lab-technology.jpg"
+                alt="Our Laboratory Technology"
+                className="rounded-lg shadow-xl w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners & Accreditations */}
+      <section className="py-16">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-6 text-center">Our Partners & Accreditations</h2>
+          <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
+            We collaborate with leading institutions and maintain the highest industry certifications.
           </p>
-          <button className="bg-white text-[var(--primary)] px-10 py-4 rounded-full font-semibold text-xl shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out">
-            Get Started Now
-          </button>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+              <img src="/partner-logo-1.png" alt="Partner 1" className="h-16 mx-auto mb-4" />
+              <p className="font-medium">American College of Medical Genetics</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+              <img src="/partner-logo-2.png" alt="Partner 2" className="h-16 mx-auto mb-4" />
+              <p className="font-medium">Clinical Laboratory Improvement Amendments (CLIA)</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+              <img src="/partner-logo-3.png" alt="Partner 3" className="h-16 mx-auto mb-4" />
+              <p className="font-medium">College of American Pathologists</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+              <img src="/partner-logo-4.png" alt="Partner 4" className="h-16 mx-auto mb-4" />
+              <p className="font-medium">International Society of Genetic Genealogy</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-6 text-center">Why Choose Gen Unity</h2>
+          <p className="text-lg opacity-90 mb-12 text-center max-w-3xl mx-auto">
+            We stand apart in the DNA testing industry for our commitment to excellence in every aspect of our service.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-3">Unmatched Accuracy</h3>
+              <p className="opacity-90">
+                Our rigorous quality control processes and advanced technology ensure 99.99% accuracy in all our tests.
+              </p>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-3">Comprehensive Support</h3>
+              <p className="opacity-90">
+                Our team of genetic counselors is available to help you understand your results and next steps.
+              </p>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-3">Fast Turnaround</h3>
+              <p className="opacity-90">
+                Most results are available within 3-5 business days, with expedited options available.
+              </p>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-3">Privacy Guaranteed</h3>
+              <p className="opacity-90">
+                Your genetic information is protected with bank-level security and strict privacy policies.
+              </p>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-3">Convenient Options</h3>
+              <p className="opacity-90">
+                Choose between at-home collection kits or visits to our partner facilities nationwide.
+              </p>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-lg">
+              <h3 className="text-xl font-semibold mb-3">Transparent Pricing</h3>
+              <p className="opacity-90">
+                No hidden fees or surprises—our pricing is clear and competitive, with options for every budget.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default AboutPage;
+export default AboutPage
