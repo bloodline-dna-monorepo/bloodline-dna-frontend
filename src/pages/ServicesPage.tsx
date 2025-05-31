@@ -25,8 +25,8 @@ const ServicesPage = () => {
       description: "Phân tích từ 24–33 loci với độ chính xác cao.",
       accuracy: "độ chính xác cao",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "48 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.000.000 đ" },
+        { time: "24 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.500.000 đ" },
         { time: "4 giờ", twoSamples: "4.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     },
@@ -35,8 +35,8 @@ const ServicesPage = () => {
       description: "Phân tích từ 24–33 loci với độ chính xác cao.",
       accuracy: "độ chính xác cao",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "48 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.000.000 đ" },
+        { time: "24 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.500.000 đ" },
         { time: "4 giờ", twoSamples: "4.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     },
@@ -45,9 +45,9 @@ const ServicesPage = () => {
       description: "Phân tích 23 loci trên nhiễm sắc thể Y và 12 loci trên NST X, độ chính xác cao.",
       accuracy: "độ chính xác cao",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.000.000 đ" },
-        { time: "24 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "4 giờ", twoSamples: "3.500.000 đ", additionalSample: "1.750.000 đ" }
+        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.0000.000 đ" },
+        { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "4 giờ", twoSamples: "5.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     },
     {
@@ -55,9 +55,9 @@ const ServicesPage = () => {
       description: "Phân tích ADN ty thể, độ chính xác cao.",
       accuracy: "độ chính xác cao",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
+        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.000.000 đ" },
         { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
-        { time: "4 giờ", twoSamples: "4.000.000 đ", additionalSample: "2.000.000 đ" }
+        { time: "4 giờ", twoSamples: "5.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     }
   ]
@@ -68,9 +68,9 @@ const ServicesPage = () => {
       description: "Phân tích từ 24–33 loci với độ chính xác 99,999999%.",
       accuracy: "độ chính xác 99,999999%",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
-        { time: "4 giờ", twoSamples: "4.000.000 đ", additionalSample: "2.000.000 đ" }
+        { time: "48 giờ", twoSamples: "1.500.000 đ", additionalSample: "1.000.000 đ" },
+        { time: "24 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "4 giờ", twoSamples: "3.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     },
     {
@@ -78,9 +78,9 @@ const ServicesPage = () => {
       description: "Phân tích từ 24–33 loci với độ chính xác 99,999999%.",
       accuracy: "độ chính xác 99,999999%",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
-        { time: "4 giờ", twoSamples: "4.000.000 đ", additionalSample: "2.000.000 đ" }
+        { time: "48 giờ", twoSamples: "1.500.000 đ", additionalSample: "1.000.000 đ" },
+        { time: "24 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "4 giờ", twoSamples: "3.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     },
     {
@@ -88,9 +88,9 @@ const ServicesPage = () => {
       description: "Phân tích 23 loci trên nhiễm sắc thể Y và 12 loci trên NST X, độ chính xác 99,9999%.",
       accuracy: "độ chính xác 99,9999%",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.000.000 đ" },
-        { time: "24 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "4 giờ", twoSamples: "3.500.000 đ", additionalSample: "1.750.000 đ" }
+        { time: "48 giờ", twoSamples: "1.500.000 đ", additionalSample: "1.000.000 đ" },
+        { time: "24 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "4 giờ", twoSamples: "3.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     },
     {
@@ -98,9 +98,9 @@ const ServicesPage = () => {
       description: "Phân tích ADN ty thể, độ chính xác 99,9999%.",
       accuracy: "độ chính xác 99,9999%",
       pricing: [
-        { time: "48 giờ", twoSamples: "2.500.000 đ", additionalSample: "1.250.000 đ" },
-        { time: "24 giờ", twoSamples: "3.000.000 đ", additionalSample: "1.500.000 đ" },
-        { time: "4 giờ", twoSamples: "4.000.000 đ", additionalSample: "2.000.000 đ" }
+        { time: "48 giờ", twoSamples: "1.500.000 đ", additionalSample: "1.000.000 đ" },
+        { time: "24 giờ", twoSamples: "2.000.000 đ", additionalSample: "1.500.000 đ" },
+        { time: "4 giờ", twoSamples: "3.000.000 đ", additionalSample: "2.000.000 đ" }
       ]
     }
   ]

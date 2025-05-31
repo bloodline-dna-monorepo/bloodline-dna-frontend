@@ -1,4 +1,5 @@
 import { Beaker, Award, Users, Building, Heart, Shield, CheckCircle } from "lucide-react";
+import ServiceCards from "../components/ServiceCards/ServiceCards"
 
 import ourImage from '../assets/about/our.png';
 import menber1 from '../assets/about/m1.png';
@@ -49,6 +50,8 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+
+      <ServiceCards />
 
       <section className="bg-gray-100 py-20 px-4 rounded-3xl shadow-inner my-12">
         <div className="container mx-auto max-w-6xl text-center">

@@ -40,11 +40,7 @@ const ServiceCards = () => {
   return (
     <section id="services" className="section bg-[var(--background-alt)]">
       <div className="container">
-        <h2 className="section-title">Our Services</h2>
-        <p className="section-subtitle">
-          We offer a comprehensive range of DNA testing services with the highest standards of accuracy and confidentiality.
-        </p>
-
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-12 text-center">Our Services</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
             <ServiceCard

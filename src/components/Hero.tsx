@@ -46,7 +46,7 @@ const Hero = () => {
               >
                 Schedule a Test Now
               </Link>
-              <Link to="/guide" className="btn btn-outline">
+              <Link to="/about" className="btn btn-outline">
                 Learn More
               </Link>
             </div>
@@ -54,7 +54,7 @@ const Hero = () => {
           <div className="relative">
             <div className="absolute -top-10 -left-10 w-32 h-32 bg-[var(--primary)] opacity-10 rounded-full"></div>
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[var(--secondary)] opacity-10 rounded-full"></div>
-            <img src="/hero-image.jpg" alt="DNA Testing Professional" className="w-full h-auto rounded-lg shadow-xl" />
+            <img src="https://i.pinimg.com/736x/a8/5c/ce/a85cceff87fef2c85ba978d6d3118ca0.jpg" alt="DNA Testing Professional" className="w-full h-auto rounded-lg shadow-xl" />
           </div>
         </div>
       </div>
