@@ -349,13 +349,6 @@ const AboutPage = () => {
             Join thousands of satisfied customers who have discovered life-changing insights about their health, ancestry, and family connections with Gen Unity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-
-            <button
-              className="bg-white text-[var(--primary)] px-8 py-3 rounded-full font-medium text-base shadow hover:bg-gray-100 transition duration-300 ease-in-out"
-              onClick={() => navigate('/order')}
-            >
-              Order Your Kit Today
-            </button>
             <button
               className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-medium text-base hover:bg-white hover:text-[var(--primary)] transition duration-300"
               onClick={() => navigate('/services')}
