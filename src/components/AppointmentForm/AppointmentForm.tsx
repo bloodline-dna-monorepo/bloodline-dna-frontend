@@ -12,6 +12,7 @@ import SelectField from "./SelectField"
 import RadioGroup from "./RadioGroup"
 import SubmitButton from "./SubmitButton"
 import ThankYouMessage from "./ThankYouMessage"
+import { authService } from "../../services/authService"
 
 const testTypes = [
   { value: "paternity", label: "Paternity Testing" },
@@ -78,7 +79,7 @@ const AppointmentForm = () => {
     }
 
     // Check if user is authenticated
-    const isAuthenticated = false // This would be replaced with actual auth check
+    const isAuthenticated = authService.isAuthenticated()
 
     if (!isAuthenticated) {
       // Redirect to login page with return URL

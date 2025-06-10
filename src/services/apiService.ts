@@ -4,7 +4,7 @@ class ApiService {
   private baseURL: string
   private defaultHeaders: Record<string, string>
 
-  constructor(baseURL = "/api") {
+  constructor(baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api") {
     this.baseURL = baseURL
     this.defaultHeaders = {
       "Content-Type": "application/json",
@@ -14,11 +14,16 @@ class ApiService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`
 
+    // Get auth token from localStorage
+    const token = localStorage.getItem("authToken")
+
     try {
       const response = await fetch(url, {
         ...options,
+        credentials: "include",
         headers: {
           ...this.defaultHeaders,
+          ...(token && { Authorization: `Bearer ${token}` }),
           ...options.headers,
         },
       })
