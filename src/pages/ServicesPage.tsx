@@ -532,13 +532,15 @@ const RegistrationForm = ({ serviceType, onBack }: { serviceType: 'legal' | 'civ
               <div className="border-t pt-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Thông tin người xét nghiệm</h3>
-                  <button
-                    type="button"
-                    onClick={addTestSubject}
-                    className="btn btn-outline text-sm"
-                  >
-                    Thêm người
-                  </button>
+                  {testSubjects.length < 3 && (
+                    <button
+                      type="button"
+                      onClick={addTestSubject}
+                      className="btn btn-outline text-sm"
+                    >
+                      Thêm người
+                    </button>
+                  )}
                 </div>
 
                 {testSubjects.map((subject, index) => (

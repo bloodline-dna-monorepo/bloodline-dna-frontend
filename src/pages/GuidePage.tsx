@@ -170,7 +170,7 @@ const GuidePage = () => {
                 <div className="w-full max-w-[960px] mx-auto">
   <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
     <iframe
-      src="https://www.youtube.com/embed/Oaj4soWET0A"
+      src="https://www.youtube.com/embed/KMHmxjKN90k?si=OFlctof1VkwSj5qq"
       title="Video Title"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       allowFullScreen
