@@ -1,14 +1,7 @@
 "use client"
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
-import { authService } from "../services/authService"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  role: string
-}
+import { authService, type User } from "../services/authService"
 
 interface AuthContextType {
   user: User | null
@@ -17,6 +10,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>
   register: (name: string, email: string, password: string) => Promise<void>
   logout: () => Promise<void>
+  getUserInitials: () => string
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -36,17 +30,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const response = await authService.login({ email, password })
-    setUser(response.user)
+    if (response.success) {
+      setUser(response.user)
+    } else {
+      throw new Error(response.message || "Login failed")
+    }
   }
 
   const register = async (name: string, email: string, password: string) => {
     const response = await authService.register({ name, email, password })
-    setUser(response.user)
+    if (response.success) {
+      setUser(response.user)
+    } else {
+      throw new Error(response.message || "Registration failed")
+    }
   }
 
   const logout = async () => {
     await authService.logout()
     setUser(null)
+  }
+
+  const getUserInitials = () => {
+    return authService.getUserInitials()
   }
 
   const value = {
@@ -56,6 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     login,
     register,
     logout,
+    getUserInitials,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -11,25 +11,29 @@ export interface RegisterData {
   password: string
 }
 
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: string
+}
+
 export interface AuthResponse {
-  user: {
-    id: string
-    name: string
-    email: string
-    role: string
-  }
-  accessToken: string
-  refreshToken: string
+  success: boolean
+  message: string
+  user: User
+  token: string
 }
 
 class AuthService {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const response = await apiService.post<AuthResponse>("/auth/login", credentials)
 
-    // Store tokens
-    localStorage.setItem("authToken", response.accessToken)
-    localStorage.setItem("refreshToken", response.refreshToken)
-    localStorage.setItem("user", JSON.stringify(response.user))
+    if (response.success && response.token) {
+      // Store token and user info
+      localStorage.setItem("authToken", response.token)
+      localStorage.setItem("user", JSON.stringify(response.user))
+    }
 
     return response
   }
@@ -37,10 +41,11 @@ class AuthService {
   async register(userData: RegisterData): Promise<AuthResponse> {
     const response = await apiService.post<AuthResponse>("/auth/register", userData)
 
-    // Store tokens
-    localStorage.setItem("authToken", response.accessToken)
-    localStorage.setItem("refreshToken", response.refreshToken)
-    localStorage.setItem("user", JSON.stringify(response.user))
+    if (response.success && response.token) {
+      // Store token and user info
+      localStorage.setItem("authToken", response.token)
+      localStorage.setItem("user", JSON.stringify(response.user))
+    }
 
     return response
   }
@@ -54,36 +59,39 @@ class AuthService {
     } finally {
       // Clear local storage
       localStorage.removeItem("authToken")
-      localStorage.removeItem("refreshToken")
       localStorage.removeItem("user")
     }
   }
 
-  async refreshToken(): Promise<string> {
-    const refreshToken = localStorage.getItem("refreshToken")
-    if (!refreshToken) {
-      throw new Error("No refresh token available")
-    }
-
-    const response = await apiService.post<{ accessToken: string }>("/auth/refresh-token", {
-      refreshToken,
-    })
-
-    localStorage.setItem("authToken", response.accessToken)
-    return response.accessToken
+  async getCurrentUserProfile(): Promise<User> {
+    return await apiService.get<User>("/auth/profile")
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem("authToken")
+    const token = localStorage.getItem("authToken")
+    const user = localStorage.getItem("user")
+    return !!(token && user)
   }
 
-  getCurrentUser() {
+  getCurrentUser(): User | null {
     const userStr = localStorage.getItem("user")
     return userStr ? JSON.parse(userStr) : null
   }
 
   getToken(): string | null {
     return localStorage.getItem("authToken")
+  }
+
+  // Get user initials for profile avatar
+  getUserInitials(): string {
+    const user = this.getCurrentUser()
+    if (!user || !user.name) return "U"
+
+    const names = user.name.trim().split(" ")
+    if (names.length === 1) {
+      return names[0].charAt(0).toUpperCase()
+    }
+    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase()
   }
 }
 

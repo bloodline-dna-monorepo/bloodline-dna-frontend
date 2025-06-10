@@ -2,7 +2,7 @@ export interface ApiError {
   message: string
   code: string
   status: number
-  details?: any
+  details?: string
 }
 
 export interface ErrorState {

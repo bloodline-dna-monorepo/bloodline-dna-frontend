@@ -1,11 +1,11 @@
-import { ErrorHandler } from "../utils/errorUtils"
+import ErrorHandler from "../utils/errorUtils"
 
 class ApiService {
   private baseURL: string
   private defaultHeaders: Record<string, string>
 
-  constructor(baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api") {
-    this.baseURL = baseURL
+  constructor() {
+    this.baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api"
     this.defaultHeaders = {
       "Content-Type": "application/json",
     }
@@ -14,36 +14,30 @@ class ApiService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`
 
-    // Get auth token from localStorage
     const token = localStorage.getItem("authToken")
+    const headers = {
+      ...this.defaultHeaders,
+      ...options.headers,
+      ...(token && { Authorization: `Bearer ${token}` }),
+    }
 
     try {
-      const response = await fetch(url, {
-        ...options,
-        credentials: "include",
-        headers: {
-          ...this.defaultHeaders,
-          ...(token && { Authorization: `Bearer ${token}` }),
-          ...options.headers,
-        },
-      })
+      const response = await fetch(url, { ...options, headers })
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        throw ErrorHandler.createApiError(
-          errorData.message || `HTTP ${response.status}`,
-          errorData.code || ErrorHandler.getErrorType(response.status),
-          response.status,
-          errorData,
-        )
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`)
       }
 
-      return await response.json()
-    } catch (error) {
-      if (error instanceof TypeError) {
-        throw ErrorHandler.createApiError("Network error occurred", "NETWORK_ERROR", 0)
+      const contentType = response.headers.get("content-type")
+      if (contentType && contentType.includes("application/json")) {
+        return await response.json()
       }
-      throw error
+
+      return {} as T
+    } catch (error) {
+      ErrorHandler.handleError(error instanceof Error ? error.message : "An unexpected error occurred")
+      throw new Error("An unexpected error occurred")
     }
   }
 
@@ -67,6 +61,10 @@ class ApiService {
 
   async delete<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: "DELETE" })
+  }
+
+  setBaseURL(url: string) {
+    this.baseURL = url
   }
 }
 

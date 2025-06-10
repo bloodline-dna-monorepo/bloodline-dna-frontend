@@ -1,13 +1,19 @@
 import { BrowserRouter } from "react-router-dom"
+import  ErrorBoundary  from "./components/ErrorBoundary"
+import { AuthProvider } from "./hooks/useAuth"
 import AppRoutes from "./routes"
-import ErrorBoundary from "./components/ErrorBoundary"
+import "./styles/global.css"
 
-export default function App() {
+function App() {
   return (
     <ErrorBoundary>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
     </ErrorBoundary>
   )
 }
+
+export default App
