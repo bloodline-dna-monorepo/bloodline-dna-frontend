@@ -227,25 +227,25 @@ const RegistrationForm = ({
   const services =
     serviceType === 'legal'
       ? [
-          'Xét nghiệm ADN Cha – Con (2 mẫu)',
-          'Xét nghiệm ADN Cha – Con (3 mẫu)',
-          'Xét nghiệm ADN Mẹ – Con (2 mẫu)',
-          'Xét nghiệm ADN Mẹ – Con (3 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng cha (2 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng cha (3 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (2 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (3 mẫu)'
-        ]
+        'Xét nghiệm ADN Cha – Con (2 mẫu)',
+        'Xét nghiệm ADN Cha – Con (3 mẫu)',
+        'Xét nghiệm ADN Mẹ – Con (2 mẫu)',
+        'Xét nghiệm ADN Mẹ – Con (3 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng cha (2 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng cha (3 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (2 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (3 mẫu)'
+      ]
       : [
-          'Xét nghiệm ADN Cha – Con (2 mẫu)',
-          'Xét nghiệm ADN Cha – Con (3 mẫu)',
-          'Xét nghiệm ADN Mẹ – Con (2 mẫu)',
-          'Xét nghiệm ADN Mẹ – Con (3 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng cha (2 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng cha (3 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (2 mẫu)',
-          'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (3 mẫu)'
-        ]
+        'Xét nghiệm ADN Cha – Con (2 mẫu)',
+        'Xét nghiệm ADN Cha – Con (3 mẫu)',
+        'Xét nghiệm ADN Mẹ – Con (2 mẫu)',
+        'Xét nghiệm ADN Mẹ – Con (3 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng cha (2 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng cha (3 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (2 mẫu)',
+        'Xét nghiệm ADN Họ hàng dòng mẹ (ADN ty thể) (3 mẫu)'
+      ]
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -679,21 +679,19 @@ const ServicesPage: React.FC = () => {
           {/* Tabs */}
           <div className='flex justify-center mb-8'>
             <button
-              className={`px-6 py-2 rounded-l-md ${
-                activeTab === 'legal'
+              className={`px-6 py-2 rounded-l-md ${activeTab === 'legal'
                   ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
               onClick={() => handleTabClick('legal')}
             >
               Hành chính pháp lý
             </button>
             <button
-              className={`px-6 py-2 rounded-r-md ${
-                activeTab === 'civil'
+              className={`px-6 py-2 rounded-r-md ${activeTab === 'civil'
                   ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+                }`}
               onClick={() => handleTabClick('civil')}
             >
               Dân sự tự nguyện
