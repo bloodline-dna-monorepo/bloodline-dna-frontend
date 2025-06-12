@@ -11,26 +11,26 @@ interface ErrorAlertProps {
 
 const ErrorAlert = ({ error, onClose, className = "" }: ErrorAlertProps) => {
   return (
-    <div className={`bg-red-50 border border-red-200 rounded-md p-4 ${className}`}>
+    <div className={`bg-red-50 border border-red-200 rounded-md p-3 ${className}`}>
       <div className="flex">
         <div className="flex-shrink-0">
-          <AlertCircle className="h-5 w-5 text-red-400" />
+          <AlertCircle className="h-4 w-4 text-red-400" />
         </div>
-        <div className="ml-3 flex-1">
-          <h3 className="text-sm font-medium text-red-800">Error</h3>
-          <div className="mt-2 text-sm text-red-700">
+        <div className="ml-2 flex-1">
+          <h3 className="text-xs font-medium text-red-800">Error</h3>
+          <div className="mt-1 text-xs text-red-700">
             <p>{error.message}</p>
-            {error.details && <p className="mt-1 text-xs opacity-75">Error Code: {error.code}</p>}
+            {error.details && <p className="mt-0.5 text-xs opacity-75">Error Code: {error.code}</p>}
           </div>
         </div>
         {onClose && (
-          <div className="ml-auto pl-3">
-            <div className="-mx-1.5 -my-1.5">
+          <div className="ml-auto pl-2">
+            <div className="-mx-1 -my-1">
               <button
                 onClick={onClose}
-                className="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600"
+                className="inline-flex bg-red-50 rounded-md p-1 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-offset-red-50 focus:ring-red-600"
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3" />
               </button>
             </div>
           </div>

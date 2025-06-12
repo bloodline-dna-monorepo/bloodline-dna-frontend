@@ -3,54 +3,37 @@
 import React, { useState } from "react"
 import CustomerLayout from "../../components/Layout/CustomerLayout"
 
-interface ProcessStep {
-    id: number
-    title: string
-    icon: string
-    isCompleted: boolean
-    isActive: boolean
-}
-
 const TestProcessPage = () => {
-    const [serviceType, setServiceType] = useState<'home' | 'facility'>('home')
+    const [testingType, setTestingType] = useState<'home' | 'facility'>('home')
 
-    const homeSteps: ProcessStep[] = [
-        { id: 1, title: "Confirmed", icon: "✓", isCompleted: true, isActive: false },
-        { id: 2, title: "Kit Sent", icon: "📦", isCompleted: true, isActive: false },
-        { id: 3, title: "Kit Received", icon: "🤝", isCompleted: true, isActive: false },
-        { id: 4, title: "In Testing", icon: "🧪", isCompleted: false, isActive: true },
-        { id: 5, title: "Result Delivered", icon: "📋", isCompleted: false, isActive: false }
+    const steps = [
+        { id: 1, name: "Confirmed", status: "completed", icon: "✓" },
+        { id: 2, name: "Kit Sent", status: "completed", icon: "📦" },
+        { id: 3, name: "Kit Received", status: "completed", icon: "🏆" },
+        { id: 4, name: "In Testing", status: "current", icon: "🧪" },
+        { id: 5, name: "Result Delivered", status: "pending", icon: "📋" }
     ]
-
-    const facilitySteps: ProcessStep[] = [
-        { id: 1, title: "Confirmed", icon: "✓", isCompleted: true, isActive: false },
-        { id: 2, title: "Sample Collection", icon: "🤝", isCompleted: true, isActive: false },
-        { id: 3, title: "Testing in Progress", icon: "🧪", isCompleted: false, isActive: true },
-        { id: 4, title: "Result Processing", icon: "📋", isCompleted: false, isActive: false }
-    ]
-
-    const currentSteps = serviceType === 'home' ? homeSteps : facilitySteps
 
     return (
-        <CustomerLayout title={`${serviceType === 'home' ? 'Home' : 'Facility-Based'} Testing Service`}>
-            <div className="bg-white rounded-lg shadow p-8">
-                {/* Service Type Toggle */}
-                <div className="mb-8 flex justify-center">
-                    <div className="bg-gray-100 p-1 rounded-lg">
+        <CustomerLayout title="Test Process">
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+                {/* Testing Type Toggle */}
+                <div className="mb-6">
+                    <div className="flex bg-gray-100 rounded-lg p-1 max-w-sm">
                         <button
-                            onClick={() => setServiceType('home')}
-                            className={`px-4 py-2 rounded-md transition-colors ${serviceType === 'home'
-                                ? 'bg-white shadow text-teal-600 font-medium'
-                                : 'text-gray-600 hover:text-gray-800'
+                            onClick={() => setTestingType('home')}
+                            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${testingType === 'home'
+                                ? 'bg-teal-600 text-white shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
                             Home Testing Service
                         </button>
                         <button
-                            onClick={() => setServiceType('facility')}
-                            className={`px-4 py-2 rounded-md transition-colors ${serviceType === 'facility'
-                                ? 'bg-white shadow text-teal-600 font-medium'
-                                : 'text-gray-600 hover:text-gray-800'
+                            onClick={() => setTestingType('facility')}
+                            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${testingType === 'facility'
+                                ? 'bg-teal-600 text-white shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
                             Facility-Based Testing
@@ -59,54 +42,68 @@ const TestProcessPage = () => {
                 </div>
 
                 {/* Progress Steps */}
-                <div className="relative">
-                    {/* Progress Line */}
-                    <div className="absolute top-12 left-0 right-0 h-0.5 bg-gray-200">
-                        <div
-                            className="h-full bg-teal-500 transition-all duration-500"
-                            style={{
-                                width: `${(currentSteps.filter(step => step.isCompleted).length / (currentSteps.length - 1)) * 100}%`
-                            }}
-                        />
-                    </div>
+                <div className="mb-8">
+                    <div className="flex items-center justify-between relative">
+                        {steps.map((step, index) => (
+                            <React.Fragment key={step.id}>
+                                <div className="flex flex-col items-center z-10">
+                                    {/* Step Circle */}
+                                    <div className={`
+                                        w-12 h-12 rounded-full flex items-center justify-center text-lg font-medium border-2 ${step.status === 'completed'
+                                            ? 'bg-teal-600 border-teal-600 text-white'
+                                            : step.status === 'current'
+                                                ? 'bg-white border-teal-600 text-teal-600 ring-4 ring-teal-100'
+                                                : 'bg-gray-100 border-gray-300 text-gray-400'
+                                        }
+                                    `}>
+                                        <span className="text-sm">{step.icon}</span>
+                                    </div>
 
-                    {/* Steps */}
-                    <div className="flex justify-between relative">
-                        {currentSteps.map((step) => (
-                            <div key={step.id} className="flex flex-col items-center">
-                                {/* Step Circle */}
-                                <div className={`
-                  w-24 h-24 rounded-full flex items-center justify-center text-2xl mb-4 border-4 transition-all
-                  ${step.isCompleted
-                                        ? 'bg-teal-500 border-teal-500 text-white'
-                                        : step.isActive
-                                            ? 'bg-white border-teal-500 text-teal-500'
-                                            : 'bg-white border-gray-300 text-gray-400'
-                                    }
-                `}>
-                                    <span>{step.icon}</span>
+                                    {/* Step Label */}
+                                    <div className="mt-2 text-center">
+                                        <p className={`text-xs font-medium ${step.status === 'completed' || step.status === 'current'
+                                            ? 'text-gray-900'
+                                            : 'text-gray-500'
+                                            }`}>
+                                            {step.name}
+                                        </p>
+                                    </div>
                                 </div>
 
-                                {/* Step Title */}
-                                <h3 className={`text-sm font-medium text-center max-w-20 ${step.isCompleted || step.isActive ? 'text-teal-600' : 'text-gray-400'
-                                    }`}>
-                                    {step.title}
-                                </h3>
-                            </div>
+                                {/* Connector Line */}
+                                {index < steps.length - 1 && (
+                                    <div className={`
+                                        flex-1 h-0.5 mx-4 ${step.status === 'completed'
+                                            ? 'bg-teal-600'
+                                            : 'bg-gray-300'
+                                        }
+                                    `} />
+                                )}
+                            </React.Fragment>
                         ))}
                     </div>
                 </div>
 
                 {/* Current Status */}
-                <div className="mt-12 p-6 bg-teal-50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-teal-800 mb-2">Current Status</h3>
-                    <p className="text-teal-600">
-                        {currentSteps.find(step => step.isActive)?.title === "In Testing" ||
-                            currentSteps.find(step => step.isActive)?.title === "Testing in Progress"
-                            ? "Your sample is currently being processed in our laboratory. Results will be available soon."
-                            : `Your test is currently in the "${currentSteps.find(step => step.isActive)?.title}" phase.`
-                        }
+                <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                    <h3 className="text-base font-semibold text-teal-900 mb-2">Current Status</h3>
+                    <p className="text-sm text-teal-700">
+                        Your sample is currently being processed in our laboratory. Results will be available soon.
                     </p>
+                </div>
+
+                {/* Additional Information */}
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-2">Estimated Completion</h4>
+                        <p className="text-sm text-gray-600">3-5 business days</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4">
+                        <h4 className="text-sm font-semibold text-gray-900 mb-2">Test Type</h4>
+                        <p className="text-sm text-gray-600">
+                            {testingType === 'home' ? 'Home Collection Kit' : 'Laboratory Visit'}
+                        </p>
+                    </div>
                 </div>
             </div>
         </CustomerLayout>

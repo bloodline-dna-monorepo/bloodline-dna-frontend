@@ -16,51 +16,57 @@ const sidebarItems: SidebarItem[] = [
     { icon: "📊", label: "History Services", path: "/customer/history" },
 ]
 
-export const CustomerSidebar = () => {
+const CustomerSidebar = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
     const handleLogout = () => {
-        // Handle logout logic
         localStorage.removeItem("authToken")
         navigate("/")
     }
 
     return (
-        <div className="w-64 bg-teal-600 text-white rounded-lg p-6 h-fit">
-            <div className="flex items-center space-x-3 mb-8">
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-teal-600 font-bold">N</span>
+        <div className="w-60 bg-gradient-to-b from-teal-600 to-teal-700 text-white rounded-lg shadow-lg p-4 h-fit sticky top-20"> {/* Giảm width, padding, top */}
+            {/* User Profile Section */}
+            <div className="flex items-center space-x-3 mb-6 p-3 bg-white/10 rounded-lg"> {/* Giảm spacing và padding */}
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md"> {/* Giảm size */}
+                    <span className="text-teal-600 font-bold text-sm">N</span> {/* Giảm font size */}
                 </div>
-                <div>
-                    <p className="font-medium">Nguyen Van A</p>
-                    <p className="text-teal-200 text-sm">nguyen.vana@gmail.com</p>
+                <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm truncate">Nguyen Van A</p> {/* Giảm font size */}
+                    <p className="text-teal-200 text-xs truncate">user@example.com</p> {/* Giảm font size */}
                 </div>
             </div>
 
-            <nav className="space-y-2">
+            {/* Navigation */}
+            <nav className="space-y-1 mb-6"> {/* Giảm spacing */}
                 {sidebarItems.map((item) => (
                     <button
                         key={item.path}
                         onClick={() => navigate(item.path)}
-                        className={`flex items-center space-x-3 p-2 rounded w-full text-left transition-colors ${location.pathname === item.path
-                            ? "bg-teal-700 font-medium"
-                            : "hover:bg-teal-700"
+                        className={`flex items-center space-x-2 w-full p-2.5 rounded-md transition-all duration-200 text-sm ${location.pathname === item.path
+                                ? "bg-white/20 font-semibold shadow-sm"
+                                : "hover:bg-white/10"
                             }`}
                     >
-                        <span>{item.icon}</span>
-                        <span>{item.label}</span>
+                        <span className="text-base">{item.icon}</span> {/* Giảm icon size */}
+                        <span className="font-medium">{item.label}</span>
                     </button>
                 ))}
+            </nav>
 
+            {/* Logout Button */}
+            <div className="border-t border-white/20 pt-3"> {/* Giảm padding */}
                 <button
                     onClick={handleLogout}
-                    className="flex items-center space-x-3 p-2 rounded hover:bg-teal-700 w-full text-left"
+                    className="flex items-center space-x-2 w-full p-2.5 rounded-md hover:bg-red-500/20 transition-all duration-200 text-red-200 hover:text-white text-sm"
                 >
-                    <span>🚪</span>
-                    <span>Logout</span>
+                    <span className="text-base">🚪</span>
+                    <span className="font-medium">Logout</span>
                 </button>
-            </nav>
+            </div>
         </div>
     )
 }
+
+export default CustomerSidebar

@@ -1,17 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Header from './components/Header' // Đảm bảo import Header
+import CustomerRoutes from './routes/CustomerRoutes'
 import AppRoutes from "./routes"
 import ErrorBoundary from "./components/ErrorBoundary"
-import CustomerRoutes from "./routes/CustomerRoutes"
 
-export default function App() {
+function App() {
   return (
     <ErrorBoundary>
-      <BrowserRouter>
+      <Router>
+        <Header /> {/* Đảm bảo Header được render ở đây */}
         <Routes>
           <Route path="/*" element={<AppRoutes />} />
           <Route path="/customer/*" element={<CustomerRoutes />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </ErrorBoundary>
   )
 }
+
+export default App
