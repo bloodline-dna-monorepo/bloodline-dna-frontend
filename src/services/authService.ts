@@ -1,4 +1,4 @@
-import { apiService } from "./apiService"
+import { apiService } from './apiService'
 
 export interface LoginCredentials {
   email: string
@@ -12,7 +12,7 @@ export interface RegisterData {
 }
 
 export interface User {
-  id: string
+  id: number
   name: string
   email: string
   role: string
@@ -22,29 +22,29 @@ export interface AuthResponse {
   success: boolean
   message: string
   user: User
-  token: string
+  AccessToken: string
 }
 
 class AuthService {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>("/auth/login", credentials)
+    const data = await apiService.post<AuthResponse>('/auth/login', credentials)
 
-    if (response.success && response.token) {
+    if (data.success && data.AccessToken) {
       // Store token and user info
-      localStorage.setItem("authToken", response.token)
-      localStorage.setItem("user", JSON.stringify(response.user))
+      localStorage.setItem('authToken', data.AccessToken)
+      localStorage.setItem('user', JSON.stringify(data.user))
     }
 
-    return response
+    return data
   }
 
   async register(userData: RegisterData): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>("/auth/register", userData)
+    const response = await apiService.post<AuthResponse>('/auth/register', userData)
 
-    if (response.success && response.token) {
+    if (response.success && response.AccessToken) {
       // Store token and user info
-      localStorage.setItem("authToken", response.token)
-      localStorage.setItem("user", JSON.stringify(response.user))
+      localStorage.setItem('authToken', response.AccessToken)
+      localStorage.setItem('user', JSON.stringify(response.user))
     }
 
     return response
@@ -53,41 +53,41 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // Call logout endpoint if available
-      await apiService.post("/auth/logout")
+      await apiService.post('/auth/logout')
     } catch (error) {
-      console.error("Logout error:", error)
+      console.error('Logout error:', error)
     } finally {
       // Clear local storage
-      localStorage.removeItem("authToken")
-      localStorage.removeItem("user")
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('user')
     }
   }
 
   async getCurrentUserProfile(): Promise<User> {
-    return await apiService.get<User>("/auth/profile")
+    return await apiService.get<User>('/auth/profile')
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem("authToken")
-    const user = localStorage.getItem("user")
+    const token = localStorage.getItem('authToken')
+    const user = localStorage.getItem('user')
     return !!(token && user)
   }
 
   getCurrentUser(): User | null {
-    const userStr = localStorage.getItem("user")
+    const userStr = localStorage.getItem('user')
     return userStr ? JSON.parse(userStr) : null
   }
 
   getToken(): string | null {
-    return localStorage.getItem("authToken")
+    return localStorage.getItem('authToken')
   }
 
   // Get user initials for profile avatar
   getUserInitials(): string {
     const user = this.getCurrentUser()
-    if (!user || !user.name) return "U"
+    if (!user || !user.name) return 'U'
 
-    const names = user.name.trim().split(" ")
+    const names = user.name.trim().split(' ')
     if (names.length === 1) {
       return names[0].charAt(0).toUpperCase()
     }

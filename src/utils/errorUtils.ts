@@ -1,5 +1,5 @@
-import { type ApiError, ERROR_TYPE } from "../types/error"
-import { ERROR_MESSAGES } from "../constants/errorMessages"
+import { type ApiError, ERROR_TYPE } from '../types/error'
+import { ERROR_MESSAGES } from '../constants/errorMessages'
 
 export class ErrorHandler {
   // Tạo lỗi API từ các thông tin đã cho
@@ -8,7 +8,7 @@ export class ErrorHandler {
       message,
       code,
       status,
-      details,
+      details
     }
   }
 
@@ -34,7 +34,7 @@ export class ErrorHandler {
 
   // Lấy thông báo lỗi tương ứng với mã trạng thái
   static getErrorMessage(error: ApiError): string {
-    const { code, status } = error
+    const { status } = error
 
     switch (status) {
       case 400:
@@ -57,7 +57,7 @@ export class ErrorHandler {
   // Kiểm tra xem có phải lỗi mạng không
   static isNetworkError(error: unknown): boolean {
     // Kiểm tra kiểu dữ liệu được trả về và nếu không có phản hồi thì là lỗi mạng
-    if (error instanceof Error && !("response" in error) && "request" in error) {
+    if (error instanceof Error && !('response' in error) && 'request' in error) {
       return true
     }
     return false
@@ -69,13 +69,13 @@ export class ErrorHandler {
       return this.createApiError(ERROR_MESSAGES.NETWORK.CONNECTION_FAILED, ERROR_TYPE.NETWORK, 0)
     }
 
-    if (error instanceof Error && "response" in error) {
+    if (error instanceof Error && 'response' in error) {
       const { status, data } = (error as { response: { status: number; data: any } }).response
       return this.createApiError(
-        data?.message || this.getErrorMessage({ code: "", status, message: "" }),
+        data?.message || this.getErrorMessage({ code: '', status, message: '' }),
         data?.code || this.getErrorType(status),
         status,
-        data,
+        data
       )
     }
 
@@ -84,12 +84,12 @@ export class ErrorHandler {
 
   // Log lỗi ra console với thông tin chi tiết
   static logError(error: ApiError, context?: string): void {
-    console.error(`[${context || "Error"}]:`, {
+    console.error(`[${context || 'Error'}]:`, {
       message: error.message,
       code: error.code,
       status: error.status,
       details: error.details,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     })
   }
 }

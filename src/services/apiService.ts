@@ -1,4 +1,4 @@
-import ErrorHandler from "../utils/errorUtils"
+import {ErrorHandler} from "../utils/errorUtils"
 
 class ApiService {
   private baseURL: string
@@ -36,7 +36,7 @@ class ApiService {
 
       return {} as T
     } catch (error) {
-      ErrorHandler.handleError(error instanceof Error ? error.message : "An unexpected error occurred")
+      ErrorHandler.handleApiError(error instanceof Error ? error.message : "An unexpected error occurred")
       throw new Error("An unexpected error occurred")
     }
   }
