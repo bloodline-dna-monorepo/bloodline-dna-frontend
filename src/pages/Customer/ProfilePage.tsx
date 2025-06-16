@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import CustomerLayout from "../../components/Layout/CustomerLayout"
 
 interface UserProfile {
@@ -38,7 +38,7 @@ const ProfilePage = () => {
         try {
             await new Promise(resolve => setTimeout(resolve, 1000))
             setMessage({ type: 'success', text: 'Profile updated successfully!' })
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' })
         } finally {
             setIsLoading(false)
@@ -57,7 +57,7 @@ const ProfilePage = () => {
             await new Promise(resolve => setTimeout(resolve, 1000))
             setMessage({ type: 'success', text: 'Password changed successfully!' })
             setPasswords({ current: "", new: "", confirm: "" })
-        } catch (error) {
+        } catch {
             setMessage({ type: 'error', text: 'Failed to change password.' })
         } finally {
             setIsLoading(false)
@@ -87,7 +87,10 @@ const ProfilePage = () => {
                                     type="text"
                                     value={profile.fullName}
                                     onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 text-sm" /* Tăng padding và font size */
+                                    /*...profile: Spread operator - giữ nguyên các field khác
+                                    fullName: e.target.value: Chỉ thay đổi field fullName
+                                    e.target.value: Giá trị user nhập vào*/
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 text-sm"
                                     required
                                 />
                             </div>

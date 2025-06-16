@@ -28,35 +28,35 @@ const CustomerSidebar = () => {
     return (
         <div className="w-60 bg-gradient-to-b from-teal-600 to-teal-700 text-white rounded-lg shadow-lg p-4 h-fit sticky top-20"> {/* Giảm width, padding, top */}
             {/* User Profile Section */}
-            <div className="flex items-center space-x-3 mb-6 p-3 bg-white/10 rounded-lg"> {/* Giảm spacing và padding */}
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md"> {/* Giảm size */}
-                    <span className="text-teal-600 font-bold text-sm">N</span> {/* Giảm font size */}
+            <div className="flex items-center space-x-3 mb-6 p-3 bg-white/10 rounded-lg">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                    <span className="text-teal-600 font-bold text-sm">N</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm truncate">Nguyen Van A</p> {/* Giảm font size */}
-                    <p className="text-teal-200 text-xs truncate">user@example.com</p> {/* Giảm font size */}
+                    <p className="font-semibold text-sm truncate">Nguyen Van A</p>
+                    <p className="text-teal-200 text-xs truncate">user@example.com</p>
                 </div>
             </div>
 
             {/* Navigation */}
-            <nav className="space-y-1 mb-6"> {/* Giảm spacing */}
+            <nav className="space-y-1 mb-6">
                 {sidebarItems.map((item) => (
                     <button
                         key={item.path}
                         onClick={() => navigate(item.path)}
                         className={`flex items-center space-x-2 w-full p-2.5 rounded-md transition-all duration-200 text-sm ${location.pathname === item.path
-                                ? "bg-white/20 font-semibold shadow-sm"
-                                : "hover:bg-white/10"
+                            ? "bg-white/20 font-semibold shadow-sm"
+                            : "hover:bg-white/10"
                             }`}
                     >
-                        <span className="text-base">{item.icon}</span> {/* Giảm icon size */}
+                        <span className="text-base">{item.icon}</span>
                         <span className="font-medium">{item.label}</span>
                     </button>
                 ))}
             </nav>
 
             {/* Logout Button */}
-            <div className="border-t border-white/20 pt-3"> {/* Giảm padding */}
+            <div className="border-t border-white/20 pt-3">
                 <button
                     onClick={handleLogout}
                     className="flex items-center space-x-2 w-full p-2.5 rounded-md hover:bg-red-500/20 transition-all duration-200 text-red-200 hover:text-white text-sm"

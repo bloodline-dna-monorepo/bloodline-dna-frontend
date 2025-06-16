@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom"
 import ProfilePage from "../pages/Customer/ProfilePage"
 import HistoryPage from "../pages/Customer/HistoryPage"
 import TestProcessPage from "../pages/Customer/TestProcessPage"
-import ServicesPage from "../pages/ServicesPage" // Your existing services page
+import ServicesPage from "../pages/ServicesPage"
 
 const CustomerRoutes = () => {
     return (

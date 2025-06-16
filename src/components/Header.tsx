@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -14,19 +12,16 @@ const Header = () => {
   const isAuthenticated = true // Luôn true để test
   const user = { name: "Nguyen Van A" }
 
-  // Use passive event listener for better scroll performance
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
+    //window.scrollY là một Web API property của Browser, 
+    // trả về số pixel mà trang web đã được scroll theo chiều dọc (vertical) từ đầu trang.
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
 
   const isActive = (path: string) => {
     return location.pathname === path ? 'active' : ''
@@ -34,13 +29,11 @@ const Header = () => {
 
   const handleProfileClick = () => {
     navigate("/customer/profile")
-    setIsMobileMenuOpen(false)
   }
 
   const handleLogout = () => {
     // Tạm thời không làm gì để test
     console.log("Logout clicked")
-    setIsMobileMenuOpen(false)
   }
 
   // Reserve space for header to prevent layout shifts
@@ -57,11 +50,10 @@ const Header = () => {
       >
         <div className='container flex items-center justify-between'>
           <Link to='/' className='flex items-center'>
-            <img src='/logo.png' alt='Gen Unity Logo' className='h-12' width='48' height='48' /> {/* Giảm logo size */}
+            <img src='/logo.png' alt='Gen Unity Logo' className='h-12' width='48' height='48' />
           </Link>
 
-          <nav className='hidden md:flex items-center space-x-1'>
-            {/* Navigation links với font size nhỏ hơn */}
+          <nav className='flex items-center space-x-1'>
             <Link to='/' className={`nav-link text-sm ${isActive('/')}`}>
               Home
             </Link>
@@ -78,7 +70,6 @@ const Header = () => {
               Blog
             </Link>
 
-            {/* Process link như nav link bình thường */}
             {isAuthenticated && (
               <Link to='/customer/test-process' className={`nav-link text-sm ${isActive('/customer/test-process')}`}>
                 Process
@@ -138,111 +129,7 @@ const Header = () => {
               </Link>
             )}
           </nav>
-
-          <div className='flex items-center md:hidden'>
-            <button onClick={toggleMobileMenu} className='p-2 text-gray-600 hover:text-[var(--primary)]'>
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className='md:hidden bg-white shadow-lg'>
-            <div className='container py-4 space-y-3'>
-              <Link
-                to='/'
-                className='block py-2 hover:text-[var(--primary)]'
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                to='/about'
-                className='block py-2 hover:text-[var(--primary)]'
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link
-                to='/services'
-                className='block py-2 hover:text-[var(--primary)]'
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                DNA Testing
-              </Link>
-              <Link
-                to='/guide'
-                className='block py-2 hover:text-[var(--primary)]'
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Guide & FAQ
-              </Link>
-              <Link
-                to='/blog'
-                className='block py-2 hover:text-[var(--primary)]'
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Blog
-              </Link>
-
-              {/* Process link cho mobile */}
-              {isAuthenticated && (
-                <Link
-                  to='/customer/test-process'
-                  className='block py-2 hover:text-[var(--primary)]'
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Process
-                </Link>
-              )}
-
-              {/* Mobile menu cho authenticated users */}
-              {isAuthenticated ? (
-                <>
-                  <button
-                    onClick={handleProfileClick}
-                    className='block w-full text-left py-2 hover:text-[var(--primary)]'
-                  >
-                    My Profile
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigate("/customer/services")
-                      setIsMobileMenuOpen(false)
-                    }}
-                    className='block w-full text-left py-2 hover:text-[var(--primary)]'
-                  >
-                    Services
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigate("/customer/history")
-                      setIsMobileMenuOpen(false)
-                    }}
-                    className='block w-full text-left py-2 hover:text-[var(--primary)]'
-                  >
-                    History
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className='block w-full text-left py-2 text-red-600 hover:text-red-700'
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <Link
-                  to='/auth'
-                  className='btn btn-primary w-full text-center'
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Sign In / Register
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
       </header>
     </>
   )
