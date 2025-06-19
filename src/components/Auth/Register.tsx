@@ -16,6 +16,7 @@ const Register: React.FC = () => {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   const { register } = useAuth()
   const navigate = useNavigate()
@@ -47,8 +48,14 @@ const Register: React.FC = () => {
     }
 
     try {
-      await register(formData)
-      navigate('/dashboard')
+      const response = await register(formData) // response.message
+
+      setSuccessMessage(response.message || 'Register successful! Redirecting...')
+
+      // Chờ 2 giây rồi chuyển trang
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 2000)
     } catch (error: any) {
       setError(error.response?.data?.message || 'Registration failed. Please try again.')
     } finally {
@@ -71,7 +78,12 @@ const Register: React.FC = () => {
             </Link>
           </p>
         </div>
-
+        {successMessage && (
+          <div className='bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md'>
+            {successMessage}
+          </div>
+        )}
+        {error && <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md'>{error}</div>}
         <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
           {error && <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md'>{error}</div>}
 

@@ -1,4 +1,4 @@
-import { apiClient } from "../utils/api"
+import { apiClient } from '../utils/api'
 import type {
   LoginRequest,
   RegisterRequest,
@@ -6,43 +6,46 @@ import type {
   LoginResponse,
   User,
   ApiResponse,
-} from "../types/types"
+  RegisterResponse
+} from '../types/types'
 
 export const authService = {
   async login(data: LoginRequest): Promise<LoginResponse> {
-    const response = await apiClient.post<ApiResponse<LoginResponse>>("/auth/login", data)
+    const response = await apiClient.post<ApiResponse<LoginResponse>>('/auth/login', data)
     return {
-      user: response.data.user!,
-      accessToken: response.data.accessToken!,
-      refreshToken: response.data.refreshToken!,
-      success:response.data.success,
-      message:response.data.message
+      user: response.data.user,
+      accessToken: response.data.accessToken,
+      refreshToken: response.data.refreshToken,
+      success: response.data.success,
+      message: response.data.message
     }
   },
 
-  async register(data: RegisterRequest): Promise<LoginResponse> {
-    const response = await apiClient.post<ApiResponse<LoginResponse>>("/auth/register", data)
-    return response.data.data!
+  async register(data: RegisterRequest): Promise<RegisterResponse> {
+    const response = await apiClient.post<ApiResponse<RegisterResponse>>('/auth/register', data)
+    return {
+      message: response.data.message
+    }
   },
 
   async logout(refreshToken: string): Promise<void> {
-    await apiClient.post("/auth/logout", { refreshToken })
+    await apiClient.post('/auth/logout', { refreshToken })
   },
 
   async refreshToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
     const response = await apiClient.post<ApiResponse<{ accessToken: string; refreshToken: string }>>(
-      "/auth/refresh-token",
-      { refreshToken },
+      '/auth/refresh-token',
+      { refreshToken }
     )
     return response.data.data!
   },
 
   async changePassword(data: ChangePasswordRequest): Promise<void> {
-    await apiClient.put("/auth/change-password", data)
+    await apiClient.put('/auth/change-password', data)
   },
 
   async getProfile(): Promise<User> {
-    const response = await apiClient.get<ApiResponse<{ user: User }>>("/auth/profile")
+    const response = await apiClient.get<ApiResponse<{ user: User }>>('/auth/profile')
     return response.data.data!.user
-  },
+  }
 }

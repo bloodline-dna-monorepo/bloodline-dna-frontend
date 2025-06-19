@@ -43,6 +43,9 @@ export interface LoginResponse {
   accessToken: string
   refreshToken: string
 }
+export interface RegisterResponse {
+  message: string
+}
 
 // Service Types
 export interface Service {

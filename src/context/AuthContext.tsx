@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { createContext, useContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { authService } from "../services/authService"
-import type { LoginRequest, RegisterRequest, ChangePasswordRequest, User } from "../types/types"
+import type React from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { authService } from '../services/authService'
+import type { LoginRequest, RegisterRequest, ChangePasswordRequest, User, RegisterResponse } from '../types/types'
 
 interface AuthContextType {
   user: User | null
   loading: boolean
   login: (data: LoginRequest) => Promise<void>
-  register: (data: RegisterRequest) => Promise<void>
+  register: (data: RegisterRequest) => Promise<RegisterResponse>
   logout: () => Promise<void>
   changePassword: (data: ChangePasswordRequest) => Promise<void>
   refreshUserData: () => Promise<void>
@@ -34,15 +34,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const initializeAuth = async () => {
     try {
-      const token = localStorage.getItem("accessToken")
+      const token = localStorage.getItem('accessToken')
       if (token) {
         const userData = await authService.getProfile()
         setUser(userData)
       }
     } catch (error) {
-      console.error("Initialize auth error:", error)
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("refreshToken")
+      console.error('Initialize auth error:', error)
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
     } finally {
       setLoading(false)
     }
@@ -53,31 +53,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await authService.login(data)
 
       // Store tokens
-      localStorage.setItem("accessToken", response.accessToken)
-      localStorage.setItem("refreshToken", response.refreshToken)
-
+      localStorage.setItem('accessToken', response.accessToken)
+      localStorage.setItem('refreshToken', response.refreshToken)
+      localStorage.setItem('user', JSON.stringify(response.user))
       // Set user data
       setUser(response.user)
 
       // Navigate based on role
       const role = response.user.role
       switch (role) {
-        case "Admin":
-          navigate("/admin/dashboard")
+        case 'Admin':
+          navigate('/admin/dashboard')
           break
-        case "Manager":
-          navigate("/manager/dashboard")
+        case 'Manager':
+          navigate('/manager/dashboard')
           break
-        case "Staff":
-          navigate("/staff/dashboard")
+        case 'Staff':
+          navigate('/staff/dashboard')
           break
-        case "Customer":
+        case 'Customer':
         default:
-          navigate("/customer/dashboard")
+          navigate('/customer/dashboard')
           break
       }
     } catch (error) {
-      console.error("Login error:", error)
+      console.error('Login error:', error)
       throw error
     }
   }
@@ -85,36 +85,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (data: RegisterRequest) => {
     try {
       const response = await authService.register(data)
-
-      // Store tokens
-      localStorage.setItem("accessToken", response.accessToken)
-      localStorage.setItem("refreshToken", response.refreshToken)
-
-      // Set user data
-      setUser(response.user)
-
-      // Navigate to customer dashboard (default role)
-      navigate("/customer/dashboard")
+      // Navigate to customer dashboard (default role)'
+      return response // ✅ Trả về để component sử dụng message
     } catch (error) {
-      console.error("Register error:", error)
+      console.error('Register error:', error)
       throw error
     }
   }
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshToken")
+      const refreshToken = localStorage.getItem('refreshToken')
       if (refreshToken) {
         await authService.logout(refreshToken)
       }
     } catch (error) {
-      console.error("Logout error:", error)
+      console.error('Logout error:', error)
     } finally {
       // Clear local storage and state
-      localStorage.removeItem("accessToken")
-      localStorage.removeItem("refreshToken")
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
       setUser(null)
-      navigate("/login")
+      navigate('/login')
     }
   }
 
@@ -122,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await authService.changePassword(data)
     } catch (error) {
-      console.error("Change password error:", error)
+      console.error('Change password error:', error)
       throw error
     }
   }
@@ -132,16 +124,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userData = await authService.getProfile()
       setUser(userData)
     } catch (error) {
-      console.error("Refresh user data error:", error)
+      console.error('Refresh user data error:', error)
       throw error
     }
   }
 
   const isAuthenticated = !!user
-  const isAdmin = user?.role === "Admin"
-  const isManager = user?.role === "Manager"
-  const isStaff = user?.role === "Staff"
-  const isCustomer = user?.role === "Customer"
+  const isAdmin = user?.role === 'Admin'
+  const isManager = user?.role === 'Manager'
+  const isStaff = user?.role === 'Staff'
+  const isCustomer = user?.role === 'Customer'
 
   const value: AuthContextType = {
     user,
@@ -155,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAdmin,
     isManager,
     isStaff,
-    isCustomer,
+    isCustomer
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
@@ -164,7 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
 }
