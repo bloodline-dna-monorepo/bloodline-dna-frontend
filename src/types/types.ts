@@ -51,16 +51,13 @@ export interface RegisterResponse {
 export interface Service {
   serviceId: number
   serviceName: string
-  serviceTypeId: number
-  serviceType: string
   description: string
   price: number
   sampleCount: number
-  collectionMethodId: number
-  collectionMethod: string
-  isActive: boolean
 }
-
+export interface ServiceResponse {
+  service: Service[]
+}
 export interface ServiceRegistration {
   registrationId: number
   customerId: number
