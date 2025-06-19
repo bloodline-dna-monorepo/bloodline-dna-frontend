@@ -1,98 +1,48 @@
-import { apiService } from './apiService'
+import { apiClient } from "../utils/api"
+import type {
+  LoginRequest,
+  RegisterRequest,
+  ChangePasswordRequest,
+  LoginResponse,
+  User,
+  ApiResponse,
+} from "../types/types"
 
-export interface LoginCredentials {
-  email: string
-  password: string
-}
-
-export interface RegisterData {
-  name: string
-  email: string
-  password: string
-}
-
-export interface User {
-  id: number
-  name: string
-  email: string
-  role: string
-}
-
-export interface AuthResponse {
-  success: boolean
-  message: string
-  user: User
-  AccessToken: string
-}
-
-class AuthService {
-  async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const data = await apiService.post<AuthResponse>('/auth/login', credentials)
-
-    if (data.success && data.AccessToken) {
-      // Store token and user info
-      localStorage.setItem('authToken', data.AccessToken)
-      localStorage.setItem('user', JSON.stringify(data.user))
+export const authService = {
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    const response = await apiClient.post<ApiResponse<LoginResponse>>("/auth/login", data)
+    return {
+      user: response.data.user!,
+      accessToken: response.data.accessToken!,
+      refreshToken: response.data.refreshToken!,
+      success:response.data.success,
+      message:response.data.message
     }
+  },
 
-    return data
-  }
+  async register(data: RegisterRequest): Promise<LoginResponse> {
+    const response = await apiClient.post<ApiResponse<LoginResponse>>("/auth/register", data)
+    return response.data.data!
+  },
 
-  async register(userData: RegisterData): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>('/auth/register', userData)
+  async logout(refreshToken: string): Promise<void> {
+    await apiClient.post("/auth/logout", { refreshToken })
+  },
 
-    if (response.success && response.AccessToken) {
-      // Store token and user info
-      localStorage.setItem('authToken', response.AccessToken)
-      localStorage.setItem('user', JSON.stringify(response.user))
-    }
+  async refreshToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+    const response = await apiClient.post<ApiResponse<{ accessToken: string; refreshToken: string }>>(
+      "/auth/refresh-token",
+      { refreshToken },
+    )
+    return response.data.data!
+  },
 
-    return response
-  }
+  async changePassword(data: ChangePasswordRequest): Promise<void> {
+    await apiClient.put("/auth/change-password", data)
+  },
 
-  async logout(): Promise<void> {
-    try {
-      // Call logout endpoint if available
-      await apiService.post('/auth/logout')
-    } catch (error) {
-      console.error('Logout error:', error)
-    } finally {
-      // Clear local storage
-      localStorage.removeItem('authToken')
-      localStorage.removeItem('user')
-    }
-  }
-
-  async getCurrentUserProfile(): Promise<User> {
-    return await apiService.get<User>('/auth/profile')
-  }
-
-  isAuthenticated(): boolean {
-    const token = localStorage.getItem('authToken')
-    const user = localStorage.getItem('user')
-    return !!(token && user)
-  }
-
-  getCurrentUser(): User | null {
-    const userStr = localStorage.getItem('user')
-    return userStr ? JSON.parse(userStr) : null
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('authToken')
-  }
-
-  // Get user initials for profile avatar
-  getUserInitials(): string {
-    const user = this.getCurrentUser()
-    if (!user || !user.name) return 'U'
-
-    const names = user.name.trim().split(' ')
-    if (names.length === 1) {
-      return names[0].charAt(0).toUpperCase()
-    }
-    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase()
-  }
+  async getProfile(): Promise<User> {
+    const response = await apiClient.get<ApiResponse<{ user: User }>>("/auth/profile")
+    return response.data.data!.user
+  },
 }
-
-export const authService = new AuthService()
