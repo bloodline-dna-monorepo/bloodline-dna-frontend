@@ -2,7 +2,6 @@
 
   import { useParams, Link } from "react-router-dom"
   import { ArrowLeft, Calendar, User, Tag, Facebook, Twitter, Linkedin } from "lucide-react"
-  import img1 from '../../src/assets/blog/img1.jpg';
 
   const BlogPostPage = () => {
     const { id } = useParams<{ id: string }>()
@@ -87,7 +86,7 @@
         
         <p class="mb-4">Whether you're curious about your family history, want to understand your health risks, or need to confirm a biological relationship, DNA testing can provide valuable insights that were impossible to obtain just a few decades ago.</p>
         `,
-        image: img1,
+        image: "/blog-post-1.jpg",
         date: "May 15, 2023",
         author: "Dr. Sarah Johnson",
         category: "Education",
