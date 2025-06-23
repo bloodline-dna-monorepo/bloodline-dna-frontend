@@ -8,6 +8,7 @@ import GuidePage from "../pages/GuidePage"
 import AuthPage from "../pages/AuthPage"
 import ServicesPage from "../pages/ServicesPage"
 import TermsPage from "../pages/TermsPage"
+import AdminPage from "../pages/AdminPage"
 
 export default function AppRoutes() {
   return (
@@ -73,6 +74,14 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <TermsPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <MainLayout>
+            <AdminPage />
           </MainLayout>
         }
       />
