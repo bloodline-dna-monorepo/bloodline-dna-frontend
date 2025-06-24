@@ -5,12 +5,23 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState<{ name: string } | null>(null)
   const location = useLocation()
   const navigate = useNavigate()
 
-  // Tạm thời luôn hiển thị để test
-  const isAuthenticated = true // Luôn true để test
-  const user = { name: "Nguyen Van A" }
+  useEffect(() => {
+    // Kiểm tra token và user trong localStorage
+    const token = localStorage.getItem("token")
+    const userData = localStorage.getItem("user")
+    if (token && userData) {
+      setIsAuthenticated(true)
+      setUser(JSON.parse(userData))
+    } else {
+      setIsAuthenticated(false)
+      setUser(null)
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,8 +43,11 @@ const Header = () => {
   }
 
   const handleLogout = () => {
-    // Tạm thời không làm gì để test
-    console.log("Logout clicked")
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    setIsAuthenticated(false)
+    setUser(null)
+    navigate("/")
   }
 
   // Reserve space for header to prevent layout shifts

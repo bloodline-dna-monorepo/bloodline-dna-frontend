@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import CustomerLayout from "../../components/Layout/CustomerLayout"
 
 interface UserProfile {
@@ -31,11 +32,61 @@ const ProfilePage = () => {
         confirm: ""
     })
 
+    const navigate = useNavigate()
+
+    // Thêm useEffect để lấy dữ liệu từ localStorage
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        const userData = localStorage.getItem("user")
+
+        // Kiểm tra đăng nhập
+        if (!token) {
+            navigate("/auth")
+            return
+        }
+
+        // Lấy thông tin user từ localStorage
+        if (userData) {
+            const user = JSON.parse(userData)
+            setProfile({
+                fullName: user.name || "", // Lấy tên từ API
+                email: user.email || `${user.username}@example.com`,
+                phone: user.phone || "",
+                dateOfBirth: user.dateOfBirth || "",
+                address: user.address || "",
+                emergencyContact: user.emergencyContact || "",
+                emergencyPhone: user.emergencyPhone || ""
+            })
+        }
+    }, [navigate])
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
 
         try {
+            // Cập nhật thông tin user trong localStorage
+            const userData = localStorage.getItem("user")
+            if (userData) {
+                const user = JSON.parse(userData)
+                const updatedUser = {
+                    ...user,
+                    name: profile.fullName, // Cập nhật tên
+                    email: profile.email,
+                    phone: profile.phone,
+                    dateOfBirth: profile.dateOfBirth,
+                    address: profile.address,
+                    emergencyContact: profile.emergencyContact,
+                    emergencyPhone: profile.emergencyPhone
+                }
+
+                // Lưu vào localStorage
+                localStorage.setItem("user", JSON.stringify(updatedUser))
+
+                // Dispatch event để Header cập nhật tên
+                window.dispatchEvent(new Event('authStateChanged'))
+            }
+
             await new Promise(resolve => setTimeout(resolve, 1000))
             setMessage({ type: 'success', text: 'Profile updated successfully!' })
         } catch {
@@ -87,9 +138,6 @@ const ProfilePage = () => {
                                     type="text"
                                     value={profile.fullName}
                                     onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
-                                    /*...profile: Spread operator - giữ nguyên các field khác
-                                    fullName: e.target.value: Chỉ thay đổi field fullName
-                                    e.target.value: Giá trị user nhập vào*/
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500 text-sm"
                                     required
                                 />
@@ -164,7 +212,7 @@ const ProfilePage = () => {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 disabled:opacity-50 text-sm font-medium" /* Tăng padding và font size */
+                                className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 disabled:opacity-50 text-sm font-medium"
                             >
                                 {isLoading ? 'Updating...' : 'Update Profile'}
                             </button>
