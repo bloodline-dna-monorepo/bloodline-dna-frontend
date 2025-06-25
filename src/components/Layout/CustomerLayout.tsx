@@ -18,7 +18,10 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
                         <div className="flex-shrink-0">
                             <CustomerSidebar />
                         </div>
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                         {/* Main Content Area */}
                         <div className="flex-1 min-w-0">
                             {title && (
