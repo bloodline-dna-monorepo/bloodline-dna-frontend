@@ -1,7 +1,6 @@
-'use client'
+// src/context/AuthContext.tsx
 
-import type React from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authService } from '../services/authService'
 import type { LoginRequest, RegisterRequest, ChangePasswordRequest, User, RegisterResponse } from '../types/types'
@@ -21,7 +20,7 @@ interface AuthContextType {
   isCustomer: boolean
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -85,7 +84,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (data: RegisterRequest) => {
     try {
       const response = await authService.register(data)
-      // Navigate to customer dashboard (default role)'
       return response // ✅ Trả về để component sử dụng message
     } catch (error) {
       console.error('Register error:', error)
@@ -102,7 +100,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
-      // Clear local storage and state
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('user')
@@ -152,12 +149,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
 }
