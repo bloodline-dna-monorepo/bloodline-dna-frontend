@@ -58,7 +58,7 @@ const Header: React.FC = () => {
             <Link to="/blog" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
               Blog
             </Link>
-            
+
           </nav>
 
           {/* Auth Section */}

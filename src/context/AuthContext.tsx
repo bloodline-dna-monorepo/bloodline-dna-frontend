@@ -1,6 +1,6 @@
 // src/context/AuthContext.tsx
 
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authService } from '../services/authService'
 import type { LoginRequest, RegisterRequest, ChangePasswordRequest, User, RegisterResponse } from '../types/types'
@@ -150,3 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};

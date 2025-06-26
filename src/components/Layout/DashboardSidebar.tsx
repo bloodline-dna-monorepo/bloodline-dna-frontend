@@ -30,38 +30,58 @@ const DashboardSidebar: React.FC = () => {
     return location.pathname === path
   }
 
-  const customerMenuItems = [
-    { path: "/dashboard", label: "Dashboard", icon: HomeIcon },
-    { path: "/profile", label: "Profile", icon: UserIcon },
-    { path: "/test-process", label: "Test Process", icon: BeakerIcon },
-    { path: "/history", label: "History & Results", icon: DocumentTextIcon },
-  ]
-
-  const staffMenuItems = [
-    { path: "/dashboard", label: "Dashboard", icon: HomeIcon },
-    { path: "/test-requests", label: "Test Requests", icon: BeakerIcon },
-    { path: "/profile", label: "Profile", icon: UserIcon },
-  ]
-
-  const managerMenuItems = [
-    { path: "/dashboard", label: "Dashboard", icon: HomeIcon },
-    { path: "/test-requests", label: "Test Requests", icon: BeakerIcon },
-    { path: "/reports", label: "Reports", icon: ChartBarIcon },
-    { path: "/profile", label: "Profile", icon: UserIcon },
-  ]
+  // Determine sidebar type based on current path
+  const isStaffPath = location.pathname.startsWith('/staff')
+  const isCustomerPath = location.pathname.startsWith('/customer')
+  const isManagerPath = location.pathname.startsWith('/manager')
+  const isAdminPath = location.pathname.startsWith('/admin')
 
   const adminMenuItems = [
-    { path: "/dashboard", label: "Dashboard", icon: HomeIcon },
-    { path: "/user-management", label: "User Management", icon: UsersIcon },
-    { path: "/service-management", label: "Service Management", icon: CogIcon },
-    { path: "/reports", label: "Reports & Statistics", icon: ChartBarIcon },
-    { path: "/settings", label: "Settings", icon: CogIcon },
-  ]
+    { path: "/admin/dashboard", label: "Dashboard", icon: HomeIcon },
+    { path: "/admin/users", label: "User Management", icon: UsersIcon },
+    { path: "/admin/reports", label: "Reports", icon: ChartBarIcon },
+    { path: "/admin/settings", label: "Settings", icon: CogIcon },
+  ];
 
-  let menuItems = customerMenuItems
-  if (isAdmin) menuItems = adminMenuItems
-  else if (isManager) menuItems = managerMenuItems
-  else if (isStaff) menuItems = staffMenuItems
+  const managerMenuItems = [
+    { path: "/manager/dashboard", label: "Dashboard", icon: HomeIcon },
+    { path: "/manager/staff", label: "Staff Management", icon: UsersIcon },
+    { path: "/manager/reports", label: "Reports", icon: ChartBarIcon },
+    { path: "/manager/settings", label: "Settings", icon: CogIcon },
+  ];
+
+  const staffMenuItems = [
+    { path: "/staff/dashboard", label: "Dashboard", icon: HomeIcon },
+    { path: "/staff/test-requests", label: "Quản lý yêu cầu", icon: DocumentTextIcon },
+    { path: "/staff/test-process", label: "Quy trình xét nghiệm", icon: CogIcon },
+    { path: "/staff/profile", label: "Profile", icon: UserIcon },
+    { path: "/staff/settings", label: "Settings", icon: CogIcon },
+  ];
+
+  const customerMenuItems = [
+    { path: "/customer/dashboard", label: "Dashboard", icon: HomeIcon },
+    { path: "/customer/profile", label: "Profile", icon: UserIcon },
+    { path: "/customer/test-process", label: "Test Process", icon: CogIcon },
+    { path: "/customer/history", label: "History & Results", icon: DocumentTextIcon },
+  ];
+
+  // Select menu items based on path first, then user role
+  let menuItems = [];
+  if (isStaffPath) {
+    menuItems = staffMenuItems;
+  } else if (isCustomerPath) {
+    menuItems = customerMenuItems;
+  } else if (isManagerPath) {
+    menuItems = managerMenuItems;
+  } else if (isAdminPath) {
+    menuItems = adminMenuItems;
+  } else {
+    // Fallback based on user role
+    if (isAdmin) menuItems = adminMenuItems;
+    else if (isManager) menuItems = managerMenuItems;
+    else if (isStaff) menuItems = staffMenuItems;
+    else if (isCustomer) menuItems = customerMenuItems;
+  }
 
   return (
     <div className="w-64 bg-teal-600 text-white min-h-screen flex flex-col">
@@ -87,9 +107,8 @@ const DashboardSidebar: React.FC = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive(item.path) ? "bg-teal-700 text-white" : "text-teal-100 hover:bg-teal-500 hover:text-white"
-                  }`}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.path) ? "bg-teal-700 text-white" : "text-teal-100 hover:bg-teal-500 hover:text-white"
+                    }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-medium">{item.label}</span>
@@ -112,9 +131,9 @@ const DashboardSidebar: React.FC = () => {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">
-              {user?.profile?.fullName || user?.email || "User"}
+              {user?.profile?.fullName || user?.email || "Nguyen Van A"}
             </p>
-            <p className="text-xs text-teal-200 truncate">{user?.role}</p>
+            <p className="text-xs text-teal-200 truncate">{user?.role || "Staff"}</p>
           </div>
         </div>
         <button

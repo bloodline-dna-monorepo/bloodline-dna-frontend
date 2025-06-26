@@ -1,5 +1,5 @@
 "use client"
-import  './index.css'
+import './index.css'
 import type React from "react"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { AuthProvider } from "./context/AuthContext"
@@ -27,8 +27,12 @@ import TestProcess from "./pages/customer/TestProcess"
 import HistoryServices from "./pages/customer/HistoryServices"
 
 // Staff Pages
-// import StaffDashboard from "./pages/staff/StaffDashboard"
-// import TestRequestDetails from "./pages/staff/TestRequestDetails"
+import StaffDashboard from "./pages/staff/StaffDashboard"
+import TestRequests from "./pages/staff/TestRequests"
+import StaffTestProcess from "./pages/staff/TestProcess"
+import ProcessDetail from "./pages/staff/ProcessDetail"
+import StaffProfile from "./pages/staff/StaffProfile"
+import StaffSettings from "./pages/staff/StaffSettings"
 
 // Manager Pages
 import ManagerDashboard from "./pages/manager/ManagerDashboard"
@@ -43,29 +47,34 @@ import AdminDashboard from "./pages/admin/AdminDashboard"
 // Protected Route Component
 import { useAuth } from "./context/AuthContext"
 
+// Comment out ProtectedRoute và chỉ render children
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
   allowedRoles,
 }) => {
-  const { user, loading } = useAuth()
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
-      </div>
-    )
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />
-  }
-
+  // TEMP: Disable auth for testing
   return <>{children}</>
+
+  // Original code:
+  // const { user, loading } = useAuth()
+
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+  //     </div>
+  //   )
+  // }
+
+  // if (!user) {
+  //   return <Navigate to="/login" replace />
+  // }
+
+  // if (allowedRoles && !allowedRoles.includes(user.role)) {
+  //   return <Navigate to="/unauthorized" replace />
+  // }
+
+  // return <>{children}</>
 }
 
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -230,7 +239,7 @@ const App: React.FC = () => {
               }
             />
 
-            {/* Staff Routes
+            {/* Staff Routes */}
             <Route
               path="/staff/dashboard"
               element={
@@ -240,13 +249,45 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/staff/test-request/:id"
+              path="/staff/test-requests"
               element={
                 <ProtectedRoute allowedRoles={["Staff"]}>
-                  <TestRequestDetails />
+                  <TestRequests />
                 </ProtectedRoute>
               }
-            /> */}
+            />
+            <Route
+              path="/staff/test-process"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <StaffTestProcess />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/process-detail/:id"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <ProcessDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/profile"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <StaffProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/settings"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <StaffSettings />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Manager Routes */}
             <Route
