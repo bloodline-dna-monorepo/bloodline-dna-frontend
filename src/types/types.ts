@@ -29,6 +29,11 @@ export interface RegisterRequest {
   email: string
   password: string
   confirmPassword: string
+  fullname: string
+  phoneNumber: string
+  address: string
+  dateOfBirth: string
+  signatureImage: string
 }
 
 export interface ChangePasswordRequest {

@@ -3,7 +3,7 @@
 import type React from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
 import type { RegisterRequest } from '../../types/types'
@@ -12,7 +12,12 @@ const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    fullname: '',
+    phoneNumber: '',
+    address: '',
+    dateOfBirth: '',
+    signatureImage: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -120,6 +125,61 @@ const Register: React.FC = () => {
               autoComplete='new-password'
               placeholder='Confirm your password'
             />
+
+            <Input
+              label='Full Name'
+              type='text'
+              name='fullname'
+              value={formData.fullname}
+              onChange={handleChange}
+              required
+              autoComplete='on'
+              placeholder='Full Name'
+            />
+
+            <Input
+              label='Phone Number'
+              type='text'
+              name='phoneNumber'
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+              autoComplete='off'
+              placeholder='Phone Number'
+            />
+
+            <Input
+              label='Address'
+              type='text'
+              name='address'
+              value={formData.address}
+              onChange={handleChange}
+              required
+              autoComplete='on'
+              placeholder='Address'
+            />
+
+            <Input
+              label='Date of Birth'
+              type='date'
+              name='dateOfBirth'
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+              required
+              autoComplete='off'
+              placeholder='Date of Birth'
+            />
+
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>Signature Image</label>
+              <input
+                type='file'
+                name='signatureImage'
+                onChange={handleChange}
+                className='w-full px-4 py-2 border border-gray-300 rounded-md'
+                required
+              />
+            </div>
           </div>
 
           <div className='flex items-center'>

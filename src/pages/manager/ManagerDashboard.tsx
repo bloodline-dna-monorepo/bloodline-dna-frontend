@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react'
 import { FiEye } from 'react-icons/fi';
 
@@ -9,6 +10,27 @@ type Test = {
     status: string
     staff: string
 };
+=======
+"use client"
+
+import type React from "react"
+import { useState, useEffect } from "react"
+import { useAuth } from "../..//hooks/useAuth"
+
+const ManagerDashboard: React.FC = () => {
+  const { user } = useAuth()
+  const [stats, setStats] = useState({
+    pending: 0,
+    completed: 0,
+    feedback: 0,
+    avgRating: 0,
+    ratingCount: 0,
+  });
+  const [testTypeStats, setTestTypeStats] = useState<any[]>([]);
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
+>>>>>>> d47897b11423abc1e18eaefdb98a5e92c153cfcd
 
 const statusStyle = (status: string) =>
   status === "Active"

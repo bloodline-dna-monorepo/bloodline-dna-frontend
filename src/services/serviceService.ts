@@ -23,16 +23,35 @@ class ServiceService {
   }
 
   async getServicesByType(serviceType: 'Administrative' | 'Civil'): Promise<Service[]> {
-    const response = await apiClient.get(`/services/${serviceType}`)
+    try {
+      const response = await apiClient.get(`/services/type/${serviceType}`)
 
-    // Giả sử backend trả tên cột viết hoa, map lại:
-    return response.data.map((item: any) => ({
-      serviceId: item.ServiceID,
-      serviceName: item.ServiceName, // ✅ Đúng tên cột
-      description: item.Description,
-      price: item.Price,
-      sampleCount: item.NumberSample
-    }))
+      // Check if the response is an object and contains the data field
+      if (response.data && Array.isArray(response.data)) {
+        return response.data.map((item) => ({
+          serviceId: item.ServiceID,
+          serviceName: item.ServiceName,
+          description: item.Description,
+          price: item.Price,
+          sampleCount: item.SampleCount
+        }))
+      } else if (response.data && Array.isArray(response.data.data)) {
+        // If response.data contains an array under the "data" key
+        return response.data.data.map((item) => ({
+          serviceId: item.ServiceID,
+          serviceName: item.ServiceName,
+          description: item.Description,
+          price: item.Price,
+          sampleCount: item.SampleCount
+        }))
+      } else {
+        console.error('Dữ liệu không phải là mảng', response.data)
+        return []
+      }
+    } catch (error) {
+      console.error('Lỗi khi gọi API:', error)
+      return []
+    }
   }
 }
 
