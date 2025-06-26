@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import ManaSidebar from "../../components/ManagerSidebar/ManaSidebar.tsx";
-// Giả sử bạn đã có component ManagerSidebar
+"use client"
 
-export default function ManagerDashboard() {
+import type React from "react"
+import { useState, useEffect } from "react"
+import { useAuth } from "../..//hooks/useAuth"
+
+const ManagerDashboard: React.FC = () => {
+  const { user } = useAuth()
   const [stats, setStats] = useState({
     pending: 0,
     completed: 0,

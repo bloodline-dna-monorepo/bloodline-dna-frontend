@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
 import type { Service } from '../types/types'
 
@@ -10,13 +10,13 @@ const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const navigate = useNavigate()
 
   const fetchServices = useCallback(async () => {
     try {
       setLoading(true)
       setError('')
       const data = await serviceService.getServicesByType(activeTab)
-      console.log('Fetched data:', data)
       if (Array.isArray(data)) {
         setServices(data)
       } else {
@@ -24,7 +24,6 @@ const Services: React.FC = () => {
         setError('Invalid data format from server')
       }
     } catch (error: any) {
-      console.error('Error fetching services:', error)
       setError('Failed to load services')
     } finally {
       setLoading(false)
@@ -39,16 +38,19 @@ const Services: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  // const getAdditionalSamplePrice = (basePrice: number) => {
-  //   return Math.floor(basePrice * 0.5)
-  // }
+  const handleRegisterClick = (service: Service) => {
+    // Điều hướng đến trang đăng ký với tham số serviceId
+    navigate(`/service-registration/${service.serviceId}`, {
+      state: { service } // Truyền dữ liệu dịch vụ vào state
+    })
+  }
 
   return (
-    <div className='min-h-screen bg-gray-50'>
-      <div className='bg-gradient-to-r from-teal-600 to-purple-600 py-16'>
-        <div className='max-w-7xl mx-auto px-4 text-center'>
-          <h1 className='text-4xl font-bold text-white mb-4'>Dịch vụ Giám định ADN</h1>
-          <div className='flex justify-center space-x-4 mb-8'>
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-gradient-to-r from-teal-600 to-purple-600 py-16">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Dịch vụ Giám định ADN</h1>
+          <div className="flex justify-center space-x-4 mb-8">
             {['Administrative', 'Civil'].map((tab) => (
               <button
                 key={tab}
@@ -64,59 +66,59 @@ const Services: React.FC = () => {
         </div>
       </div>
 
-      <div className='max-w-7xl mx-auto px-4 py-16'>
+      <div className="max-w-7xl mx-auto px-4 py-16">
         {loading ? (
-          <div className='text-center py-12'>
-            <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto'></div>
-            <p className='mt-4 text-gray-600'>Loading services...</p>
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading services...</p>
           </div>
         ) : error ? (
-          <div className='text-center py-12'>
-            <p className='text-red-600'>{error}</p>
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
             <button
               onClick={fetchServices}
-              className='mt-4 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700'
+              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700"
             >
               Thử lại
             </button>
           </div>
         ) : services.length === 0 ? (
-          <div className='text-center py-12'>
-            <p className='text-gray-600'>Không có dịch vụ nào cho loại: {activeTab}.</p>
+          <div className="text-center py-12">
+            <p className="text-gray-600">Không có dịch vụ nào cho loại: {activeTab}.</p>
           </div>
         ) : (
-          <div className='space-y-8'>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service) => {
               const basePrice = service.price ?? 0
               return (
                 <div
                   key={service.serviceId}
-                  className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
+                  className="bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white"
                 >
-                  <div className='mb-6'>
-                    <h2 className='text-2xl font-bold mb-2'>{service.serviceName}</h2>
-                    <p className='text-white/90'>{service.description}</p>
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold mb-2">{service.serviceName}</h2>
+                    <p className="text-white/90">{service.description}</p>
                   </div>
 
-                  <div className='grid grid-cols-1 md:grid-cols-4 gap-6'>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                      <h3 className='font-semibold mb-2'>Số mẫu</h3>
-                      <p className='text-xl'>{service.sampleCount ?? 'Không xác định'}</p>
+                      <h3 className="font-semibold mb-2">Số mẫu</h3>
+                      <p className="text-xl">{service.sampleCount ?? 'Không xác định'}</p>
                     </div>
 
                     <div>
-                      <h3 className='font-semibold mb-2'>Giá dịch vụ (48 giờ)</h3>
-                      <p className='text-xl font-bold'>{formatPrice(basePrice)}</p>
+                      <h3 className="font-semibold mb-2">Giá dịch vụ</h3>
+                      <p className="text-xl font-bold">{formatPrice(basePrice)}</p>
                     </div>
                     <div></div>
                     <div>
-                      <h3 className='font-semibold mb-2 '>Đăng ký</h3>
-                      <Link
-                        to={`/service-registration/${service.serviceId}?duration=48`}
-                        className='inline-block mt-2 px-6 py-2 rounded-full font-medium transition-colors bg-white/20 text-white hover:bg-white/30 active:bg-white/40'
+                      <h3 className="font-semibold mb-2">Đăng ký</h3>
+                      <button
+                        onClick={() => handleRegisterClick(service)}
+                        className="inline-block mt-2 px-6 py-2 rounded-full font-medium transition-colors bg-white/20 text-white hover:bg-white/30 active:bg-white/40"
                       >
                         Đăng ký
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

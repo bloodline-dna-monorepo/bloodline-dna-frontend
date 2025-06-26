@@ -1,68 +1,65 @@
-"use client"
-import  './index.css'
-import type React from "react"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import { AuthProvider } from "./context/AuthContext"
+'use client'
+import './index.css'
+import type React from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 
 // Layout Components
-import Header from "./components/Common/Header"
-import Footer from "./components/Common/Footer"
+import Header from './components/Common/Header'
+import Footer from './components/Common/Footer'
 
 // Public Pages
-import Home from "./pages/Home"
-import About from "./pages/About"
-import Services from "./pages/Services"
-import GuideAndFAQ from "./pages/GuideAndFAQ"
-import Blog from "./pages/Blog"
+import Home from './pages/Home'
+import About from './pages/About'
+import Services from './pages/Services'
+import GuideAndFAQ from './pages/GuideAndFAQ'
+import Blog from './pages/Blog'
 
 // Auth Pages
-import Login from "./components/Auth/Login"
-import Register from "./components/Auth/Register"
+import Login from './components/Auth/Login'
+import Register from './components/Auth/Register'
 // import ResetPassword from "./components/Auth/ResetPassword"
 
 // Customer Pages
-import CustomerDashboard from "./pages/customer/CustomerDashboard"
-import Profile from "./pages/customer/Profile"
-import TestProcess from "./pages/customer/TestProcess"
-import HistoryServices from "./pages/customer/HistoryServices"
+import CustomerDashboard from './pages/customer/CustomerDashboard'
+import Profile from './pages/customer/Profile'
+import TestProcess from './pages/customer/TestProcess'
+import HistoryServices from './pages/customer/HistoryServices'
 
 // Staff Pages
 // import StaffDashboard from "./pages/staff/StaffDashboard"
 // import TestRequestDetails from "./pages/staff/TestRequestDetails"
 
 // Manager Pages
-import ManagerDashboard from "./pages/manager/ManagerDashboard"
+import ManagerDashboard from './pages/manager/ManagerDashboard'
 
 // Admin Pages
-import AdminDashboard from "./pages/admin/AdminDashboard"
-
-// Service Components
-// import ServiceDetail from "./components/ServiceADN/ServiceDetail"
-// import ServiceForm from "./components/ServiceADN/ServiceForm"
+import AdminDashboard from './pages/admin/AdminDashboard'
 
 // Protected Route Component
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from './hooks/useAuth'
+import RegistrationPage from './pages/customer/ServicesRegistration'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
-  allowedRoles,
+  allowedRoles
 }) => {
   const { user, loading } = useAuth()
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+      <div className='min-h-screen flex items-center justify-center'>
+        <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600'></div>
       </div>
     )
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to='/login' replace />
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />
+    return <Navigate to='/unauthorized' replace />
   }
 
   return <>{children}</>
@@ -73,8 +70,8 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+      <div className='min-h-screen flex items-center justify-center'>
+        <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600'></div>
       </div>
     )
   }
@@ -82,15 +79,15 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   if (user) {
     // Redirect authenticated users to their dashboard
     switch (user.role) {
-      case "Admin":
-        return <Navigate to="/admin/dashboard" replace />
-      case "Manager":
-        return <Navigate to="/manager/dashboard" replace />
-      case "Staff":
-        return <Navigate to="/staff/dashboard" replace />
-      case "Customer":
+      case 'Admin':
+        return <Navigate to='/admin/dashboard' replace />
+      case 'Manager':
+        return <Navigate to='/manager/dashboard' replace />
+      case 'Staff':
+        return <Navigate to='/staff/dashboard' replace />
+      case 'Customer':
       default:
-        return <Navigate to="/customer/dashboard" replace />
+        return <Navigate to='/customer/dashboard' replace />
     }
   }
 
@@ -101,15 +98,15 @@ const App: React.FC = () => {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className='min-h-screen flex flex-col'>
           <Routes>
             {/* Public Routes with Header/Footer */}
             <Route
-              path="/"
+              path='/'
               element={
                 <>
                   <Header />
-                  <main className="flex-1">
+                  <main className='flex-1'>
                     <Home />
                   </main>
                   <Footer />
@@ -117,11 +114,11 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/about"
+              path='/about'
               element={
                 <>
                   <Header />
-                  <main className="flex-1">
+                  <main className='flex-1'>
                     <About />
                   </main>
                   <Footer />
@@ -129,11 +126,11 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/services"
+              path='/services'
               element={
                 <>
                   <Header />
-                  <main className="flex-1">
+                  <main className='flex-1'>
                     <Services />
                   </main>
                   <Footer />
@@ -141,11 +138,11 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/guide-faq"
+              path='/guide-faq'
               element={
                 <>
                   <Header />
-                  <main className="flex-1">
+                  <main className='flex-1'>
                     <GuideAndFAQ />
                   </main>
                   <Footer />
@@ -153,11 +150,11 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/blog"
+              path='/blog'
               element={
                 <>
                   <Header />
-                  <main className="flex-1">
+                  <main className='flex-1'>
                     <Blog />
                   </main>
                   <Footer />
@@ -176,10 +173,9 @@ const App: React.FC = () => {
                 </>
               }
             /> */}
-
             {/* Auth Routes */}
             <Route
-              path="/login"
+              path='/login'
               element={
                 <PublicRoute>
                   <Login />
@@ -187,7 +183,7 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/register"
+              path='/register'
               element={
                 <PublicRoute>
                   <Register />
@@ -195,41 +191,39 @@ const App: React.FC = () => {
               }
             />
             {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
-
             {/* Customer Routes */}
             <Route
-              path="/customer/dashboard"
+              path='/customer/dashboard'
               element={
-                <ProtectedRoute allowedRoles={["Customer"]}>
+                <ProtectedRoute allowedRoles={['Customer']}>
                   <CustomerDashboard />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/customer/profile"
+              path='/customer/profile'
               element={
-                <ProtectedRoute allowedRoles={["Customer"]}>
+                <ProtectedRoute allowedRoles={['Customer']}>
                   <Profile />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/customer/test-process"
+              path='/customer/test-process'
               element={
-                <ProtectedRoute allowedRoles={["Customer"]}>
+                <ProtectedRoute allowedRoles={['Customer']}>
                   <TestProcess />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/customer/history"
+              path='/customer/history'
               element={
-                <ProtectedRoute allowedRoles={["Customer"]}>
+                <ProtectedRoute allowedRoles={['Customer']}>
                   <HistoryServices />
                 </ProtectedRoute>
               }
             />
-
             {/* Staff Routes
             <Route
               path="/staff/dashboard"
@@ -247,49 +241,45 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             /> */}
-
             {/* Manager Routes */}
             <Route
-              path="/manager/dashboard"
+              path='/manager/dashboard'
               element={
-                <ProtectedRoute allowedRoles={["Manager"]}>
+                <ProtectedRoute allowedRoles={['Manager']}>
                   <ManagerDashboard />
                 </ProtectedRoute>
               }
             />
-
             {/* Admin Routes */}
             <Route
-              path="/admin/dashboard"
+              path='/admin/dashboard'
               element={
-                <ProtectedRoute allowedRoles={["Admin"]}>
+                <ProtectedRoute allowedRoles={['Admin']}>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
             />
-
-            {/* Service Registration
+            Service Registration
             <Route
-              path="/service-registration/:serviceId"
+              path='/service-registration/:serviceId'
               element={
                 <ProtectedRoute>
-                  <ServiceForm />
+                  <RegistrationPage />
                 </ProtectedRoute>
               }
-            /> */}
-
+            />
             {/* Fallback Routes */}
-            <Route path="/dashboard" element={<Navigate to="/customer/dashboard" replace />} />
-            <Route path="/profile" element={<Navigate to="/customer/profile" replace />} />
+            <Route path='/dashboard' element={<Navigate to='/customer/dashboard' replace />} />
+            <Route path='/profile' element={<Navigate to='/customer/profile' replace />} />
             <Route
-              path="/unauthorized"
+              path='/unauthorized'
               element={
-                <div className="min-h-screen flex items-center justify-center">
-                  <h1 className="text-2xl text-red-600">Unauthorized Access</h1>
+                <div className='min-h-screen flex items-center justify-center'>
+                  <h1 className='text-2xl text-red-600'>Unauthorized Access</h1>
                 </div>
               }
             />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path='*' element={<Navigate to='/' replace />} />
           </Routes>
         </div>
       </AuthProvider>

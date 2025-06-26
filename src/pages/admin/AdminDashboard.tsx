@@ -1,18 +1,9 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
-import Sidebar from "../../components/AdminSidebar/Sidebar.tsx";
-
-const statsInit = {
-  totalTests: 1999,
-  totalTestsChange: 37,
-  processing: 69,
-  processingChange: 6,
-  pending: 5,
-  pendingChange: -9,
-  urgent: 3,
-  urgentChange: 2,
-};
+import type React from "react"
+import { useState, useEffect } from "react"
+import { useAuth } from "../../hooks/useAuth"
+import Button from "../../components/Common/Button"
 
 const AdminDashboard: React.FC = () => {
   const [stats, setStats] = useState(statsInit);
