@@ -1,6 +1,7 @@
 // User and Authentication Types
 export interface User {
   accountId: number
+  name: string;  
   email: string
   role: string
   profile?: UserProfile
