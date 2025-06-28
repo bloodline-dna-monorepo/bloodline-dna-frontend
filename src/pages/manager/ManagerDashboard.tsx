@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useAuth } from "../../context/AuthContext"
 
-const ManagerDashboard: React.FC = () => {
+export const ManagerDashboard: React.FC = () => {
   const { user } = useAuth()
   const [stats, setStats] = useState({
     assignedOrders: 0,

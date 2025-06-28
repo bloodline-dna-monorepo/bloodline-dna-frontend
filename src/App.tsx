@@ -21,21 +21,37 @@ import Register from "./components/Auth/Register"
 // import ResetPassword from "./components/Auth/ResetPassword"
 
 // Customer Pages
+<<<<<<< Updated upstream
 import CustomerDashboard from "./pages/customer/CustomerDashboard"
 import Profile from "./pages/customer/Profile"
 import TestProcess from "./pages/customer/TestProcess"
 import HistoryServices from "./pages/customer/HistoryServices"
+=======
+import CustomerDashboard from './pages/customer/CustomerDashboard'
+import Profile from './pages/customer/Profile'
+import CustomerTestProcess from './pages/customer/TestProcess'
+import HistoryServices from './pages/customer/HistoryServices'
+>>>>>>> Stashed changes
 
 // Staff Pages
 import StaffDashboard from "./pages/staff/StaffDashboard"
 import TestRequests from "./pages/staff/TestRequests"
 import StaffTestProcess from "./pages/staff/TestProcess"
+<<<<<<< Updated upstream
 import ProcessDetail from "./pages/staff/ProcessDetail"
 import StaffProfile from "./pages/staff/StaffProfile"
 import StaffSettings from "./pages/staff/StaffSettings"
 
 // Manager Pages
 import ManagerDashboard from "./pages/manager/ManagerDashboard"
+=======
+import StaffProfile from "./pages/staff/StaffProfile"
+import StaffSettings from "./pages/staff/StaffSettings"
+import StaffTestRoutes from "./components/StaffSidebar/StaffTestRoutes"
+
+// Manager Pages
+import { ManagerDashboard } from './pages/manager/ManagerDashboard'
+>>>>>>> Stashed changes
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard"
@@ -112,6 +128,9 @@ const App: React.FC = () => {
       <AuthProvider>
         <div className="min-h-screen flex flex-col">
           <Routes>
+            {/* Staff Routes - Direct Access for Testing */}
+            <Route path="/staff/*" element={<StaffTestRoutes />} />
+
             {/* Public Routes with Header/Footer */}
             <Route
               path="/"
@@ -225,8 +244,13 @@ const App: React.FC = () => {
             <Route
               path="/customer/test-process"
               element={
+<<<<<<< Updated upstream
                 <ProtectedRoute allowedRoles={["Customer"]}>
                   <TestProcess />
+=======
+                <ProtectedRoute allowedRoles={['Customer']}>
+                  <CustomerTestProcess />
+>>>>>>> Stashed changes
                 </ProtectedRoute>
               }
             />
@@ -238,7 +262,10 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
             {/* Staff Routes */}
             <Route
               path="/staff/dashboard"
@@ -249,7 +276,11 @@ const App: React.FC = () => {
               }
             />
             <Route
+<<<<<<< Updated upstream
               path="/staff/test-requests"
+=======
+              path="/staff/requests"
+>>>>>>> Stashed changes
               element={
                 <ProtectedRoute allowedRoles={["Staff"]}>
                   <TestRequests />
@@ -257,7 +288,11 @@ const App: React.FC = () => {
               }
             />
             <Route
+<<<<<<< Updated upstream
               path="/staff/test-process"
+=======
+              path="/staff/tests"
+>>>>>>> Stashed changes
               element={
                 <ProtectedRoute allowedRoles={["Staff"]}>
                   <StaffTestProcess />
@@ -265,6 +300,7 @@ const App: React.FC = () => {
               }
             />
             <Route
+<<<<<<< Updated upstream
               path="/staff/process-detail/:id"
               element={
                 <ProtectedRoute allowedRoles={["Staff"]}>
@@ -273,6 +309,8 @@ const App: React.FC = () => {
               }
             />
             <Route
+=======
+>>>>>>> Stashed changes
               path="/staff/profile"
               element={
                 <ProtectedRoute allowedRoles={["Staff"]}>
@@ -288,7 +326,10 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
             {/* Manager Routes */}
             <Route
               path="/manager/dashboard"
