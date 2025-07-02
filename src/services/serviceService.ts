@@ -1,5 +1,5 @@
 import { apiClient } from '../utils/api'
-import type { ApiResponse, Service, ServiceResponse } from '../types/types'
+import type { ApiResponse, Service, ServiceResponse } from '../utils/types'
 
 class ServiceService {
   async getAllServices(): Promise<Service[]> {

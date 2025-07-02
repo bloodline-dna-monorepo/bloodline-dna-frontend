@@ -69,8 +69,8 @@ const Header: React.FC = () => {
                   onClick={handleProfileClick}
                   className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center text-white font-medium hover:bg-teal-700 transition-colors"
                 >
-                  {user?.profile?.fullName
-                    ? user.profile.fullName.charAt(0).toUpperCase()
+                  {user?.profile?.FullName
+                    ? user.profile.FullName.charAt(0).toUpperCase()
                     : user?.email?.charAt(0).toUpperCase() || "N"}
                 </button>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>

@@ -9,11 +9,17 @@ import type {
   User,
   ApiResponse,
   RegisterResponse
-} from '../types/types'
+} from '../utils/types'
 
 export const authService = {
   async login(data: LoginRequest): Promise<LoginResponse> {
     const response = await apiClient.post<ApiResponse<LoginResponse>>('/auth/login', data)
+    if (response.data.success) {
+      localStorage.setItem('accessToken', response.data.accessToken)
+      localStorage.setItem('refreshToken', response.data.refreshToken)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+    }
+
     return {
       user: response.data.user,
       accessToken: response.data.accessToken,
@@ -49,5 +55,14 @@ export const authService = {
   async getProfile(): Promise<User> {
     const response = await apiClient.get<ApiResponse<{ user: User }>>('/auth/profile')
     return response.data.data!.user
+  },
+  getCurrentUser(): User | null {
+    const userStr = localStorage.getItem('user')
+    return userStr ? JSON.parse(userStr) : null
+  },
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('accessToken')
+    const user = localStorage.getItem('user')
+    return !!(token && user)
   }
 }

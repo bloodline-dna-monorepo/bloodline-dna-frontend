@@ -20,25 +20,25 @@ import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 // import ResetPassword from "./components/Auth/ResetPassword"
 
-// Customer Pages
-import CustomerDashboard from './pages/customer/CustomerDashboard'
-import Profile from './pages/customer/Profile'
-import TestProcess from './pages/customer/TestProcess'
-import HistoryServices from './pages/customer/HistoryServices'
-
 // Staff Pages
 // import StaffDashboard from "./pages/staff/StaffDashboard"
 // import TestRequestDetails from "./pages/staff/TestRequestDetails"
 
 // Manager Pages
-import ManagerDashboard from './pages/manager/ManagerDashboard'
+// import ManagerDashboard from './pages/manager/ManagerDashboard'
 
-// Admin Pages
-import AdminDashboard from './pages/admin/AdminDashboard'
+// // Admin Pages
+// import AdminDashboard from './pages/admin/AdminDashboard'
 
 // Protected Route Component
 import { useAuth } from './hooks/useAuth'
-import RegistrationPage from './pages/customer/ServicesRegistration'
+import TestTracking from './pages/customer/TestTracking'
+import UserProfilePage from './pages/customer/UserProfile'
+import HistoryServices from './pages/customer/HistoryServices'
+
+// import TestTracking from 'pages/customer/TestTracking'
+// import HistoryServices from 'pages/customer/HistoryServices'
+// import UserProfile from 'pages/customer/UserProfile'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
@@ -193,18 +193,10 @@ const App: React.FC = () => {
             {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
             {/* Customer Routes */}
             <Route
-              path='/customer/dashboard'
-              element={
-                <ProtectedRoute allowedRoles={['Customer']}>
-                  <CustomerDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path='/customer/profile'
               element={
                 <ProtectedRoute allowedRoles={['Customer']}>
-                  <Profile />
+                  <UserProfilePage />
                 </ProtectedRoute>
               }
             />
@@ -212,7 +204,7 @@ const App: React.FC = () => {
               path='/customer/test-process'
               element={
                 <ProtectedRoute allowedRoles={['Customer']}>
-                  <TestProcess />
+                  <TestTracking />
                 </ProtectedRoute>
               }
             />
@@ -242,34 +234,34 @@ const App: React.FC = () => {
               }
             /> */}
             {/* Manager Routes */}
-            <Route
+            {/* <Route
               path='/manager/dashboard'
               element={
                 <ProtectedRoute allowedRoles={['Manager']}>
                   <ManagerDashboard />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             {/* Admin Routes */}
-            <Route
+            {/* <Route
               path='/admin/dashboard'
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             Service Registration
-            <Route
+            {/* <Route
               path='/service-registration/:serviceId'
               element={
                 <ProtectedRoute>
                   <RegistrationPage />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             {/* Fallback Routes */}
-            <Route path='/dashboard' element={<Navigate to='/customer/dashboard' replace />} />
+            <Route path='/dashboard' element={<Navigate to='/profile' replace />} />
             <Route path='/profile' element={<Navigate to='/customer/profile' replace />} />
             <Route
               path='/unauthorized'

@@ -6,12 +6,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
-import type { LoginRequest } from '../../types/types'
+import type { LoginRequest } from '../../utils/types'
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginRequest>({
-    email: '',
-    password: ''
+    Email: '',
+    PasswordHash: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -69,8 +69,8 @@ const Login: React.FC = () => {
             <Input
               label='Email address'
               type='email'
-              name='email'
-              value={formData.email}
+              name='Email'
+              value={formData.Email}
               onChange={handleChange}
               required
               autoComplete='email'
@@ -80,8 +80,8 @@ const Login: React.FC = () => {
             <Input
               label='Password'
               type='password'
-              name='password'
-              value={formData.password}
+              name='PasswordHash'
+              value={formData.PasswordHash}
               onChange={handleChange}
               required
               autoComplete='current-password'

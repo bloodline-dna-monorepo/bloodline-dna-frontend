@@ -3,7 +3,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authService } from '../services/authService'
-import type { LoginRequest, RegisterRequest, ChangePasswordRequest, User, RegisterResponse } from '../types/types'
+import type { LoginRequest, RegisterRequest, ChangePasswordRequest, User, RegisterResponse } from '../utils/types'
 
 interface AuthContextType {
   user: User | null
@@ -28,24 +28,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigate = useNavigate()
 
   useEffect(() => {
-    initializeAuth()
-  }, [])
-
-  const initializeAuth = async () => {
-    try {
-      const token = localStorage.getItem('accessToken')
-      if (token) {
-        const userData = await authService.getProfile()
-        setUser(userData)
-      }
-    } catch (error) {
-      console.error('Initialize auth error:', error)
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-    } finally {
-      setLoading(false)
+    // Check if user is already authenticated on app start
+    const currentUser = authService.getCurrentUser()
+    if (currentUser && authService.isAuthenticated()) {
+      setUser(currentUser)
     }
-  }
+    setLoading(false)
+  }, [])
 
   const login = async (data: LoginRequest) => {
     try {

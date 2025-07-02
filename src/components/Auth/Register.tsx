@@ -6,18 +6,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
-import type { RegisterRequest } from '../../types/types'
+import type { RegisterRequest } from '../../utils/types'
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullname: '',
-    phoneNumber: '',
-    address: '',
-    dateOfBirth: '',
-    signatureImage: ''
+    Email: '',
+    PasswordHash: '',
+    ConfirmPassword: '',
+    FullName: '',
+    PhoneNumber: '',
+    Address: '',
+    DateOfBirth: '',
+    SignatureImage: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -40,13 +40,13 @@ const Register: React.FC = () => {
     setError('')
 
     // Validation
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.PasswordHash !== formData.ConfirmPassword) {
       setError('Passwords do not match')
       setLoading(false)
       return
     }
 
-    if (formData.password.length < 8) {
+    if (formData.PasswordHash.length < 8) {
       setError('Password must be at least 8 characters long')
       setLoading(false)
       return
@@ -96,8 +96,8 @@ const Register: React.FC = () => {
             <Input
               label='Email address'
               type='email'
-              name='email'
-              value={formData.email}
+              name='Email'
+              value={formData.Email}
               onChange={handleChange}
               required
               autoComplete='email'
@@ -107,8 +107,8 @@ const Register: React.FC = () => {
             <Input
               label='Password'
               type='password'
-              name='password'
-              value={formData.password}
+              name='PasswordHash'
+              value={formData.PasswordHash}
               onChange={handleChange}
               required
               autoComplete='new-password'
@@ -118,8 +118,8 @@ const Register: React.FC = () => {
             <Input
               label='Confirm Password'
               type='password'
-              name='confirmPassword'
-              value={formData.confirmPassword}
+              name='ConfirmPassword'
+              value={formData.ConfirmPassword}
               onChange={handleChange}
               required
               autoComplete='new-password'
@@ -129,8 +129,8 @@ const Register: React.FC = () => {
             <Input
               label='Full Name'
               type='text'
-              name='fullname'
-              value={formData.fullname}
+              name='FullName'
+              value={formData.FullName}
               onChange={handleChange}
               required
               autoComplete='on'
@@ -140,8 +140,8 @@ const Register: React.FC = () => {
             <Input
               label='Phone Number'
               type='text'
-              name='phoneNumber'
-              value={formData.phoneNumber}
+              name='PhoneNumber'
+              value={formData.PhoneNumber}
               onChange={handleChange}
               required
               autoComplete='off'
@@ -151,8 +151,8 @@ const Register: React.FC = () => {
             <Input
               label='Address'
               type='text'
-              name='address'
-              value={formData.address}
+              name='Address'
+              value={formData.Address}
               onChange={handleChange}
               required
               autoComplete='on'
@@ -162,8 +162,8 @@ const Register: React.FC = () => {
             <Input
               label='Date of Birth'
               type='date'
-              name='dateOfBirth'
-              value={formData.dateOfBirth}
+              name='DateOfBirth'
+              value={formData.DateOfBirth}
               onChange={handleChange}
               required
               autoComplete='off'
@@ -174,7 +174,7 @@ const Register: React.FC = () => {
               <label className='block text-sm font-medium text-gray-700 mb-1'>Signature Image</label>
               <input
                 type='file'
-                name='signatureImage'
+                name='SignatureImage'
                 onChange={handleChange}
                 className='w-full px-4 py-2 border border-gray-300 rounded-md'
                 required
