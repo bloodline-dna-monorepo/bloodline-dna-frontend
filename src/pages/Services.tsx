@@ -5,7 +5,9 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
 import { useAuth } from '../hooks/useAuth'
-import type { Services } from '../utils/types'
+import type { Services, UserProfile } from '../utils/types'
+import { userService } from '../services/userService'
+import { testRequestService } from '../services/testRequestService'
 
 interface RegistrationModalProps {
   isOpen: boolean
@@ -29,6 +31,24 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
     signatureFile: null as File | null,
     agreeTerms: false
   })
+
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+
+  const fetchUserProfile = async () => {
+    try {
+      if (user?.accountId) {
+        const profile = await userService.getProfile()
+        setUserProfile(profile)
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error)
+    }
+  }
+  useEffect(() => {
+    console.log('Current user:', user)
+
+    fetchUserProfile()
+  }, [])
 
   // Load user data when modal opens
   useEffect(() => {
@@ -59,7 +79,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!formData.agreeTerms) {
@@ -67,10 +87,34 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       return
     }
 
-    // Here you would typically send the data to your backend
-    console.log('Registration data:', formData)
-    alert('Đăng ký thành công!')
-    onClose()
+    // Kiểm tra ngày hợp lệ nếu chọn "facility"
+    if (formData.collectionMethod === 'facility') {
+      const today = new Date()
+      const selectedDate = new Date(formData.appointmentDate)
+      const tomorrow = new Date(today)
+      tomorrow.setDate(today.getDate() + 1)
+
+      if (selectedDate < tomorrow) {
+        alert('Ngày đăng ký phải sau ngày hiện tại ít nhất 1 ngày!')
+        return
+      }
+    }
+
+    try {
+      const registrationData = {
+        serviceId: Services?.ServiceID!, // chắc chắn có vì modal chỉ mở khi chọn service
+        collectionMethod: formData.collectionMethod,
+        appointmentDate: formData.collectionMethod === 'facility' ? formData.appointmentDate : undefined
+      }
+
+      const result = await testRequestService.createTestRequest(registrationData)
+
+      alert(result.message || 'Đăng ký thành công!')
+      onClose()
+    } catch (error) {
+      console.error('Đăng ký thất bại:', error)
+      alert('Đăng ký thất bại. Vui lòng thử lại sau.')
+    }
   }
 
   if (!isOpen) return null
@@ -93,7 +137,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
 
         <form onSubmit={handleSubmit} className='p-6 space-y-6'>
           {/* Date Field - Only show for Administrative or when Facility is selected for Civil */}
-          {!isAdministrative && formData.collectionMethod === 'facility' && (
+          {formData.collectionMethod === 'facility' && (
             <div>
               <label className='block text-sm font-medium mb-2'>
                 Ngày đăng ký <span className='text-red-500'>*</span>
@@ -102,6 +146,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 type='date'
                 value={formData.appointmentDate}
                 onChange={(e) => handleInputChange('appointmentDate', e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
                 className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                 required
               />
@@ -152,7 +197,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
               required
             >
-              <option value=''>{Services?.ServiceName}</option>
+              {Services && <option value={Services.ServiceName}>{Services.ServiceName}</option>}
             </select>
           </div>
 
@@ -167,7 +212,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 </label>
                 <input
                   type='text'
-                  value={formData.fullName}
+                  value={userProfile?.FullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                   required
@@ -179,8 +224,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                   Ngày tháng năm sinh <span className='text-red-500'>*</span>
                 </label>
                 <input
-                  type='date'
-                  value={formData.birthDate}
+                  type='text'
+                  value={userProfile?.DateOfBirth?.slice(0, 10) || ''}
                   onChange={(e) => handleInputChange('birthDate', e.target.value)}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                   required
@@ -191,26 +236,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             <div className='grid grid-cols-2 gap-4 mb-4'>
               <div>
                 <label className='block text-sm font-medium mb-1'>
-                  Giới tính <span className='text-red-500'>*</span>
-                </label>
-                <select
-                  value={formData.gender}
-                  onChange={(e) => handleInputChange('gender', e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  required
-                >
-                  <option value='Nam'>Nam</option>
-                  <option value='Nữ'>Nữ</option>
-                </select>
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium mb-1'>
                   Số điện thoại <span className='text-red-500'>*</span>
                 </label>
                 <input
                   type='tel'
-                  value={formData.phoneNumber}
+                  value={userProfile?.PhoneNumber}
                   onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                   required
@@ -226,7 +256,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
               <div className='flex items-center gap-2'>
                 {formData.signatureFile ? (
                   <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
-                    <span className='text-sm'>{formData.signatureFile.name}</span>
+                    <span className='text-sm'>{userProfile?.SignatureImage}</span>
                     <button
                       type='button'
                       onClick={() => handleInputChange('signatureFile', null)}

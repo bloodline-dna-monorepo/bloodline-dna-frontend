@@ -82,10 +82,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem('refreshToken')
-      if (refreshToken) {
-        await authService.logout(refreshToken)
-      }
+      await authService.logout()
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
