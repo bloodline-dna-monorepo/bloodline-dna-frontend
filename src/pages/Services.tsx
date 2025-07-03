@@ -1,19 +1,317 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import type React from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
+import { useAuth } from '../hooks/useAuth'
 import type { Services } from '../utils/types'
+
+interface RegistrationModalProps {
+  isOpen: boolean
+  onClose: () => void
+  Services: Services | null
+  serviceType: 'Administrative' | 'Civil'
+}
+
+const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Services, serviceType }) => {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    appointmentDate: '',
+    collectionMethod: serviceType === 'Administrative' ? 'facility' : 'home',
+    selectedService: '',
+    fullName: '',
+    birthDate: '',
+    gender: 'Nam',
+    phoneNumber: '',
+    signatureFile: null as File | null,
+    agreeTerms: false
+  })
+
+  // Load user data when modal opens
+  useEffect(() => {
+    if (isOpen && user?.profile) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: user.profile?.FullName || '',
+        birthDate: user.profile?.DateOfBirth || '',
+        phoneNumber: user.profile?.PhoneNumber || '',
+        selectedService: Services?.ServiceName || ''
+      }))
+    }
+  }, [isOpen, user, Services])
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData((prev) => ({
+        ...prev,
+        signatureFile: e.target.files![0]
+      }))
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!formData.agreeTerms) {
+      alert('Vui lòng đồng ý với các điều khoản')
+      return
+    }
+
+    // Here you would typically send the data to your backend
+    console.log('Registration data:', formData)
+    alert('Đăng ký thành công!')
+    onClose()
+  }
+
+  if (!isOpen) return null
+
+  const isAdministrative = serviceType === 'Administrative'
+  const showDateField = isAdministrative || formData.collectionMethod === 'facility'
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
+      <div className='bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto'>
+        {/* Header */}
+        <div className='bg-gray-200 px-6 py-4 flex items-center'>
+          <button onClick={onClose} className='text-gray-600 hover:text-gray-800 mr-3'>
+            ← Quay lại
+          </button>
+          <h2 className='text-lg font-semibold'>
+            Đăng ký lịch xét nghiệm - {isAdministrative ? 'Hành chính' : 'Dân sự'}
+          </h2>
+        </div>
+
+        <form onSubmit={handleSubmit} className='p-6 space-y-6'>
+          {/* Date Field - Only show for Administrative or when Facility is selected for Civil */}
+          {!isAdministrative && formData.collectionMethod === 'facility' && (
+            <div>
+              <label className='block text-sm font-medium mb-2'>
+                Ngày đăng ký <span className='text-red-500'>*</span>
+              </label>
+              <input
+                type='date'
+                value={formData.appointmentDate}
+                onChange={(e) => handleInputChange('appointmentDate', e.target.value)}
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                required
+              />
+            </div>
+          )}
+
+          {/* Collection Method */}
+          <div>
+            <label className='block text-sm font-medium mb-2'>
+              Hình thức lấy mẫu <span className='text-red-500'>*</span>
+            </label>
+            <div className='space-y-2'>
+              {!isAdministrative && (
+                <label className='flex items-center'>
+                  <input
+                    type='radio'
+                    name='collectionMethod'
+                    value='home'
+                    checked={formData.collectionMethod === 'home'}
+                    onChange={(e) => handleInputChange('collectionMethod', e.target.value)}
+                    className='mr-2'
+                  />
+                  Tại nhà
+                </label>
+              )}
+              <label className='flex items-center'>
+                <input
+                  type='radio'
+                  name='collectionMethod'
+                  value='facility'
+                  checked={formData.collectionMethod === 'facility'}
+                  onChange={(e) => handleInputChange('collectionMethod', e.target.value)}
+                  className='mr-2'
+                />
+                Tại cơ sở
+              </label>
+            </div>
+          </div>
+
+          {/* Services Selection */}
+          <div>
+            <label className='block text-sm font-medium mb-2'>
+              Chọn dịch vụ <span className='text-red-500'>*</span>
+            </label>
+            <select
+              value={formData.selectedService}
+              onChange={(e) => handleInputChange('selectedService', e.target.value)}
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+              required
+            >
+              <option value=''>{Services?.ServiceName}</option>
+            </select>
+          </div>
+
+          {/* User Information Section */}
+          <div>
+            <h3 className='text-lg font-medium mb-4'>Thông tin người yêu cầu</h3>
+
+            <div className='grid grid-cols-2 gap-4 mb-4'>
+              <div>
+                <label className='block text-sm font-medium mb-1'>
+                  Họ và tên <span className='text-red-500'>*</span>
+                </label>
+                <input
+                  type='text'
+                  value={formData.fullName}
+                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  required
+                />
+              </div>
+
+              <div>
+                <label className='block text-sm font-medium mb-1'>
+                  Ngày tháng năm sinh <span className='text-red-500'>*</span>
+                </label>
+                <input
+                  type='date'
+                  value={formData.birthDate}
+                  onChange={(e) => handleInputChange('birthDate', e.target.value)}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  required
+                />
+              </div>
+            </div>
+
+            <div className='grid grid-cols-2 gap-4 mb-4'>
+              <div>
+                <label className='block text-sm font-medium mb-1'>
+                  Giới tính <span className='text-red-500'>*</span>
+                </label>
+                <select
+                  value={formData.gender}
+                  onChange={(e) => handleInputChange('gender', e.target.value)}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  required
+                >
+                  <option value='Nam'>Nam</option>
+                  <option value='Nữ'>Nữ</option>
+                </select>
+              </div>
+
+              <div>
+                <label className='block text-sm font-medium mb-1'>
+                  Số điện thoại <span className='text-red-500'>*</span>
+                </label>
+                <input
+                  type='tel'
+                  value={formData.phoneNumber}
+                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Signature Upload */}
+            <div>
+              <label className='block text-sm font-medium mb-1'>
+                Hình ảnh chữ ký <span className='text-red-500'>*</span>
+              </label>
+              <div className='flex items-center gap-2'>
+                {formData.signatureFile ? (
+                  <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
+                    <span className='text-sm'>{formData.signatureFile.name}</span>
+                    <button
+                      type='button'
+                      onClick={() => handleInputChange('signatureFile', null)}
+                      className='text-red-500 hover:text-red-700'
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
+                    <span className='text-sm'>chu-ky.png (100kb)</span>
+                    <button type='button' className='text-red-500 hover:text-red-700'>
+                      ✕
+                    </button>
+                  </div>
+                )}
+                <input
+                  type='file'
+                  onChange={handleFileChange}
+                  accept='image/*'
+                  className='hidden'
+                  id='signature-upload'
+                />
+                <label htmlFor='signature-upload' className='cursor-pointer text-blue-500 hover:text-blue-700 text-sm'>
+                  Chọn file
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* Terms and Conditions */}
+          <div>
+            <h3 className='text-lg font-medium mb-4'>Tôi xin cam kết</h3>
+            <div className='space-y-2 text-sm text-gray-700 mb-4'>
+              <p>1. Tôi tự nguyện đề nghị xét nghiệm ADN và chấp nhận chi phí xét nghiệm.</p>
+              <p>2. Những thông tin tôi đã khai trên đây là đúng và thật và không thay đổi.</p>
+              <p>3. Tôi không đổ nghĩa nhà, người quan đến phiền nhiễu, làm mất trật tự.</p>
+              <p>
+                4. Những trường hợp sản đẻ, người giám hộ tuy, nhận mẫu, nếu không thái hảo trung thực sẽ bị phạt giáp 2
+                lần số phí đã nộp.
+              </p>
+              <p>
+                5. Tôi đã đọc và chấp nhận các{' '}
+                <a href='#' className='text-blue-500 underline'>
+                  điều khoản của trung tâm GenUnity
+                </a>{' '}
+                và sử dụng ý đề Viện thực hiện các phân tích với các mẫu trên. Nếu vi phạm, tôi xin chịu hoàn toàn trách
+                nhiệm trước pháp luật.
+              </p>
+            </div>
+
+            <label className='flex items-start gap-2'>
+              <input
+                type='checkbox'
+                checked={formData.agreeTerms}
+                onChange={(e) => handleInputChange('agreeTerms', e.target.checked)}
+                className='mt-1'
+                required
+              />
+              <span className='text-sm'>Tôi đồng ý với các điều khoản và cam kết nêu trên</span>
+            </label>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type='submit'
+            className='w-full bg-teal-600 text-white py-3 rounded-md hover:bg-teal-700 transition-colors font-medium'
+          >
+            Gửi đăng ký
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
 
 const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
-  const [services, setServices] = useState<Services[]>([])
+  const [servicesList, setServicesList] = useState<Services[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedService, setSelectedService] = useState<Services | null>(null)
   const [showModal, setShowModal] = useState(false)
-  const [selectedMethod, setSelectedMethod] = useState<'home' | 'center' | ''>('')
 
+  const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
   const fetchServices = useCallback(async () => {
@@ -21,9 +319,9 @@ const Services: React.FC = () => {
       setLoading(true)
       setError('')
       const data = await serviceService.getServicesByType(activeTab)
-      setServices(Array.isArray(data) ? data : [])
-    } catch (error: any) {
-      setError('Failed to load services')
+      setServicesList(Array.isArray(data) ? data : [])
+    } catch (error) {
+      setError('Failed to load services' + error)
     } finally {
       setLoading(false)
     }
@@ -37,28 +335,21 @@ const Services: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  const handleRegisterClick = (service: Services) => {
-    setSelectedService(service)
-    setSelectedMethod('')
-    setShowModal(true)
-  }
-
-  const confirmRegister = () => {
-    if (selectedService && selectedMethod) {
-      navigate(`/service-registration/${selectedService.ServiceID}`, {
-        state: {
-          service: selectedService,
-          method: selectedMethod, // 'home' hoặc 'center'
-          type: activeTab // 'Civil' hoặc 'Administrative'
-        }
-      })
+  const handleRegisterClick = (Services: Services) => {
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      alert('Vui lòng đăng nhập để đăng ký dịch vụ')
+      navigate('/login')
+      return
     }
+
+    setSelectedService(Services)
+    setShowModal(true)
   }
 
   const closeModal = () => {
     setShowModal(false)
     setSelectedService(null)
-    setSelectedMethod('')
   }
 
   return (
@@ -83,7 +374,7 @@ const Services: React.FC = () => {
         </div>
       </div>
 
-      {/* Service list */}
+      {/* Services list */}
       <div className='max-w-7xl mx-auto px-4 py-16'>
         {loading ? (
           <div className='text-center py-12'>
@@ -100,28 +391,28 @@ const Services: React.FC = () => {
               Thử lại
             </button>
           </div>
-        ) : services.length === 0 ? (
+        ) : servicesList.length === 0 ? (
           <div className='text-center py-12'>
             <p className='text-gray-600'>Không có dịch vụ nào cho loại: {activeTab}.</p>
           </div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-            {services.map((service) => {
-              const basePrice = service.Price ?? 0
+            {servicesList.map((Services) => {
+              const basePrice = Services.Price ?? 0
               return (
                 <div
-                  key={service.ServiceID}
+                  key={Services.ServiceID}
                   className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
                 >
                   <div className='mb-6'>
-                    <h2 className='text-2xl font-bold mb-2'>{service.ServiceName}</h2>
-                    <p className='text-white/90'>{service.Description}</p>
+                    <h2 className='text-2xl font-bold mb-2'>{Services.ServiceName}</h2>
+                    <p className='text-white/90'>{Services.Description}</p>
                   </div>
 
                   <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                     <div>
                       <h3 className='font-semibold mb-2'>Số mẫu</h3>
-                      <p className='text-xl'>{service.SampleCount ?? 'Không xác định'}</p>
+                      <p className='text-xl'>{Services.SampleCount ?? 'Không xác định'}</p>
                     </div>
 
                     <div>
@@ -132,7 +423,7 @@ const Services: React.FC = () => {
                     <div>
                       <h3 className='font-semibold mb-2'>Đăng ký</h3>
                       <button
-                        onClick={() => handleRegisterClick(service)}
+                        onClick={() => handleRegisterClick(Services)}
                         className='inline-block mt-2 px-6 py-2 rounded-full font-medium transition-colors bg-white/20 text-white hover:bg-white/30 active:bg-white/40'
                       >
                         Đăng ký
@@ -146,60 +437,8 @@ const Services: React.FC = () => {
         )}
       </div>
 
-      {/* Modal chọn hình thức lấy mẫu */}
-      {showModal && selectedService && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-white rounded-lg p-6 w-full max-w-md shadow-xl'>
-            <h2 className='text-xl font-semibold mb-4'>
-              Chọn hình thức lấy mẫu - {activeTab === 'Civil' ? 'Dân sự' : 'Hành chính'}
-            </h2>
-
-            <p className='font-medium mb-4 text-gray-800'>
-              Dịch vụ: <span className='font-bold'>{selectedService.ServiceName}</span>
-            </p>
-
-            <div className='mb-6 space-y-3'>
-              <label className='flex items-center space-x-3'>
-                <input
-                  type='radio'
-                  name='method'
-                  value='home'
-                  checked={selectedMethod === 'home'}
-                  onChange={() => setSelectedMethod('home')}
-                  className='form-radio text-teal-600'
-                />
-                <span>Tại nhà</span>
-              </label>
-              <label className='flex items-center space-x-3'>
-                <input
-                  type='radio'
-                  name='method'
-                  value='center'
-                  checked={selectedMethod === 'center'}
-                  onChange={() => setSelectedMethod('center')}
-                  className='form-radio text-teal-600'
-                />
-                <span>Tại cơ sở</span>
-              </label>
-            </div>
-
-            <div className='flex justify-end space-x-3'>
-              <button onClick={closeModal} className='px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400'>
-                Hủy
-              </button>
-              <button
-                disabled={!selectedMethod}
-                onClick={confirmRegister}
-                className={`px-4 py-2 rounded text-white ${
-                  selectedMethod ? 'bg-teal-600 hover:bg-teal-700' : 'bg-gray-300 cursor-not-allowed'
-                }`}
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Registration Modal */}
+      <RegistrationModal isOpen={showModal} onClose={closeModal} Services={selectedService} serviceType={activeTab} />
     </div>
   )
 }
