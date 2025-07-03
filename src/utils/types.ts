@@ -1,4 +1,8 @@
-// User and Authentication Types
+export interface TestRequestData {
+  serviceId: number
+  collectionMethod: string
+  appointmentDate?: string
+} // User and Authentication Types
 export interface User {
   accountId: number
   name: string
@@ -68,6 +72,7 @@ export interface RegisterResponse {
 
 // Service Types
 export interface Services {
+  ServiceID: number
   ServiceName: string
   ServiceType: 'Administrative' | 'Civil'
   Description: string

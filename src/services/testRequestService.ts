@@ -1,17 +1,17 @@
 import { apiClient } from '../utils/api'
-import type { ApiResponse, ServiceRegistrationData, TestRequests } from '../utils/types'
+import type { ApiResponse, TestRequestData, TestRequests } from '../utils/types'
 
 interface CreateTestRequestResponse {
-  testRequestId: string
   message: string
 }
 
 export const testRequestService = {
   // Create test request (called ONLY after successful payment)
-  createTestRequest: async (
-    registrationData: ServiceRegistrationData
-  ): Promise<ApiResponse<CreateTestRequestResponse>> => {
-    return apiClient<CreateTestRequestResponse>('/test-requests', registrationData)
+  createTestRequest: async (registrationData: TestRequestData): Promise<CreateTestRequestResponse> => {
+    const response = await apiClient.post<CreateTestRequestResponse>('/test-requests', registrationData)
+    return {
+      message: response.data.message
+    }
   },
 
   // Get user's test requests
