@@ -41,13 +41,13 @@ const Register: React.FC = () => {
 
     // Validation
     if (formData.PasswordHash !== formData.ConfirmPassword) {
-      setError('Passwords do not match')
+      setError('Mật khẩu không khớp')
       setLoading(false)
       return
     }
 
     if (formData.PasswordHash.length < 8) {
-      setError('Password must be at least 8 characters long')
+      setError('Mật khẩu phải có ít nhất 8 ký tự')
       setLoading(false)
       return
     }
@@ -55,14 +55,14 @@ const Register: React.FC = () => {
     try {
       const response = await register(formData) // response.message
 
-      setSuccessMessage(response.message || 'Register successful! Redirecting...')
+      setSuccessMessage(response.message || 'Đăng ký thành công! Đang chuyển hướng...')
 
       // Chờ 2 giây rồi chuyển trang
       setTimeout(() => {
         navigate('/dashboard')
       }, 2000)
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Registration failed. Please try again.')
+      setError(error.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -75,11 +75,11 @@ const Register: React.FC = () => {
           <div className='mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-teal-100'>
             <span className='text-2xl'>🧬</span>
           </div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Create your account</h2>
+          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Tạo tài khoản của bạn</h2>
           <p className='mt-2 text-center text-sm text-gray-600'>
-            Or{' '}
+            Hoặc{' '}
             <Link to='/login' className='font-medium text-teal-600 hover:text-teal-500'>
-              sign in to your existing account
+              đăng nhập vào tài khoản đã có
             </Link>
           </p>
         </div>
@@ -94,84 +94,84 @@ const Register: React.FC = () => {
 
           <div className='space-y-4'>
             <Input
-              label='Email address'
+              label='Địa chỉ email'
               type='email'
               name='Email'
               value={formData.Email}
               onChange={handleChange}
               required
               autoComplete='email'
-              placeholder='Enter your email'
+              placeholder='Nhập email của bạn'
             />
 
             <Input
-              label='Password'
+              label='Mật khẩu'
               type='password'
               name='PasswordHash'
               value={formData.PasswordHash}
               onChange={handleChange}
               required
               autoComplete='new-password'
-              placeholder='Enter your password'
+              placeholder='Nhập mật khẩu của bạn'
             />
 
             <Input
-              label='Confirm Password'
+              label='Xác nhận mật khẩu'
               type='password'
               name='ConfirmPassword'
               value={formData.ConfirmPassword}
               onChange={handleChange}
               required
               autoComplete='new-password'
-              placeholder='Confirm your password'
+              placeholder='Xác nhận lại mật khẩu'
             />
 
             <Input
-              label='Full Name'
+              label='Họ và tên'
               type='text'
               name='FullName'
               value={formData.FullName}
               onChange={handleChange}
               required
               autoComplete='on'
-              placeholder='Full Name'
+              placeholder='Họ và tên'
             />
 
             <Input
-              label='Phone Number'
+              label='Số điện thoại'
               type='text'
               name='PhoneNumber'
               value={formData.PhoneNumber}
               onChange={handleChange}
               required
               autoComplete='off'
-              placeholder='Phone Number'
+              placeholder='Số điện thoại'
             />
 
             <Input
-              label='Address'
+              label='Địa chỉ'
               type='text'
               name='Address'
               value={formData.Address}
               onChange={handleChange}
               required
               autoComplete='on'
-              placeholder='Address'
+              placeholder='Địa chỉ'
             />
 
             <Input
-              label='Date of Birth'
+              label='Ngày sinh'
               type='date'
               name='DateOfBirth'
               value={formData.DateOfBirth}
               onChange={handleChange}
               required
               autoComplete='off'
-              placeholder='Date of Birth'
+              placeholder='Ngày sinh'
             />
 
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>Signature Image</label>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>Ảnh chữ ký</label>
               <input
                 type='file'
                 name='SignatureImage'
@@ -191,19 +191,19 @@ const Register: React.FC = () => {
               className='h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded'
             />
             <label htmlFor='agree-terms' className='ml-2 block text-sm text-gray-900'>
-              I agree to the{' '}
+              Tôi đồng ý với{' '}
               <Link to='/terms' className='text-teal-600 hover:text-teal-500'>
-                Terms and Conditions
+                Điều khoản sử dụng
               </Link>{' '}
-              and{' '}
+              và{' '}
               <Link to='/privacy' className='text-teal-600 hover:text-teal-500'>
-                Privacy Policy
+                Chính sách bảo mật
               </Link>
             </label>
           </div>
 
           <Button type='submit' className='w-full' loading={loading}>
-            Create Account
+            Tạo tài khoản
           </Button>
         </form>
       </div>

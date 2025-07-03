@@ -29,31 +29,31 @@ const DashboardSidebar: React.FC = () => {
     return location.pathname === path
   }
   const customerMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/profile', label: 'Profile', icon: UserIcon },
-    { path: '/customer/test-process', label: 'Test Process', icon: BeakerIcon },
-    { path: '/customer/history', label: 'History & Results', icon: DocumentTextIcon }
+    { path: '/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
+    { path: '/profile', label: 'Hồ sơ cá nhân', icon: UserIcon },
+    { path: '/customer/test-process', label: 'Quy trình xét nghiệm', icon: BeakerIcon },
+    { path: '/customer/history', label: 'Lịch sử & Kết quả', icon: DocumentTextIcon }
   ]
 
   const staffMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/test-requests', label: 'Test Requests', icon: BeakerIcon },
-    { path: '/profile', label: 'Profile', icon: UserIcon }
+    { path: '/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
+    { path: '/test-requests', label: 'Yêu cầu xét nghiệm', icon: BeakerIcon },
+    { path: '/profile', label: 'Hồ sơ cá nhân', icon: UserIcon }
   ]
 
   const managerMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/test-requests', label: 'Test Requests', icon: BeakerIcon },
-    { path: '/reports', label: 'Reports', icon: ChartBarIcon },
-    { path: '/profile', label: 'Profile', icon: UserIcon }
+    { path: '/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
+    { path: '/test-requests', label: 'Yêu cầu xét nghiệm', icon: BeakerIcon },
+    { path: '/reports', label: 'Báo cáo', icon: ChartBarIcon },
+    { path: '/profile', label: 'Hồ sơ cá nhân', icon: UserIcon }
   ]
 
   const adminMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/user-management', label: 'User Management', icon: UsersIcon },
-    { path: '/service-management', label: 'Service Management', icon: CogIcon },
-    { path: '/reports', label: 'Reports & Statistics', icon: ChartBarIcon },
-    { path: '/settings', label: 'Settings', icon: CogIcon }
+    { path: '/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
+    { path: '/user-management', label: 'Quản lý người dùng', icon: UsersIcon },
+    { path: '/service-management', label: 'Quản lý dịch vụ', icon: CogIcon },
+    { path: '/reports', label: 'Báo cáo & Thống kê', icon: ChartBarIcon },
+    { path: '/settings', label: 'Cài đặt', icon: CogIcon }
   ]
 
   let menuItems = customerMenuItems
@@ -65,7 +65,7 @@ const DashboardSidebar: React.FC = () => {
     <div className='w-64 bg-teal-600 text-white min-h-screen flex flex-col'>
       {/* Logo */}
       <div className='p-6 border-b border-teal-500'>
-        <div className='flex items-center space-x-3'>
+        <Link to='/' className='flex items-center space-x-3'>
           <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
             <span className='text-teal-600 font-bold text-lg'>G</span>
           </div>
@@ -73,7 +73,7 @@ const DashboardSidebar: React.FC = () => {
             <span className='text-sm font-bold'>Gen</span>
             <span className='text-sm font-bold text-teal-200'>Unity</span>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation */}
@@ -110,7 +110,7 @@ const DashboardSidebar: React.FC = () => {
           </div>
           <div className='flex-1 min-w-0'>
             <p className='text-sm font-medium text-white truncate'>
-              {user?.profile?.FullName || user?.email || 'User'}
+              {user?.profile?.FullName || user?.email || 'Người dùng'}
             </p>
             <p className='text-xs text-teal-200 truncate'>{user?.role}</p>
           </div>
@@ -120,7 +120,7 @@ const DashboardSidebar: React.FC = () => {
           className='flex items-center space-x-2 w-full px-4 py-2 text-sm text-teal-100 hover:bg-teal-500 hover:text-white rounded-lg transition-colors'
         >
           <ArrowRightOnRectangleIcon className='w-4 h-4' />
-          <span>Logout</span>
+          <span>Đăng xuất</span>
         </button>
       </div>
     </div>

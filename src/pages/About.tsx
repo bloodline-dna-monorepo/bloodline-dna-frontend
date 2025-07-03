@@ -3,27 +3,27 @@ import type React from "react"
 const About: React.FC = () => {
   const teamMembers = [
     {
-      name: "Dr. Emily Chen",
-      title: "Lead Geneticist",
-      description: "Specializes in genetic sequencing and analysis",
+      name: "Tiến sĩ Emily Chen",
+      title: "Trưởng nhóm Di truyền học",
+      description: "Chuyên về giải trình tự và phân tích gen",
       image: "/src/assets/about/m1.png",
     },
     {
       name: "Michael Davis",
-      title: "Laboratory Manager",
-      description: "Oversees laboratory operations and quality control",
+      title: "Quản lý Phòng thí nghiệm",
+      description: "Giám sát hoạt động phòng thí nghiệm và kiểm soát chất lượng",
       image: "/src/assets/about/m2.png",
     },
     {
       name: "Sarah Lee",
-      title: "Customer Relations Lead",
-      description: "Ensuring a seamless and supportive customer experience",
+      title: "Trưởng bộ phận Chăm sóc Khách hàng",
+      description: "Đảm bảo trải nghiệm khách hàng liền mạch và hỗ trợ tận tình",
       image: "/src/assets/about/m3.png",
     },
     {
-      name: "Dr. Alex Kim",
-      title: "Medical Advisor",
-      description: "Providing clinical expertise and medical guidance",
+      name: "Tiến sĩ Alex Kim",
+      title: "Cố vấn Y tế",
+      description: "Cung cấp chuyên môn lâm sàng và hướng dẫn y khoa",
       image: "/src/assets/about/m4.png",
     },
   ]
@@ -31,38 +31,38 @@ const About: React.FC = () => {
   const coreValues = [
     {
       icon: "🔬",
-      title: "Integrity & Accuracy",
+      title: "Chính trực & Chính xác",
       description:
-        "We uphold the highest standards of scientific rigor and ethical practices, ensuring every result is precise and trustworthy.",
+        "Chúng tôi duy trì tiêu chuẩn khoa học cao nhất và đạo đức nghề nghiệp, đảm bảo mọi kết quả đều chính xác và đáng tin cậy.",
     },
     {
       icon: "💝",
-      title: "Compassionate Care",
+      title: "Chăm sóc tận tâm",
       description:
-        "We provide empathetic support and clear communication, guiding our clients through their genetic journey with compassion.",
+        "Chúng tôi cung cấp sự hỗ trợ đồng cảm và giao tiếp rõ ràng, đồng hành cùng khách hàng trong hành trình di truyền một cách nhân ái.",
     },
     {
       icon: "🔒",
-      title: "Privacy & Security",
+      title: "Bảo mật & An toàn",
       description:
-        "Protecting your personal genetic information is our paramount responsibility, secured with industry-leading protocols.",
+        "Bảo vệ thông tin di truyền cá nhân của bạn là trách nhiệm hàng đầu của chúng tôi, với các giao thức bảo mật hàng đầu trong ngành.",
     },
     {
       icon: "🚀",
-      title: "Innovation",
+      title: "Đổi mới",
       description:
-        "Continuously advancing our scientific advancements to offer cutting-edge and comprehensive genetic insights.",
+        "Không ngừng nâng cao các tiến bộ khoa học để mang lại những hiểu biết di truyền tiên tiến và toàn diện.",
     },
     {
       icon: "⭐",
-      title: "Excellence",
-      description: "Striving for the highest quality in every aspect of our service, from testing to customer support.",
+      title: "Xuất sắc",
+      description: "Luôn hướng đến chất lượng cao nhất trong mọi khía cạnh từ xét nghiệm đến hỗ trợ khách hàng.",
     },
     {
       icon: "🤝",
-      title: "Community",
+      title: "Cộng đồng",
       description:
-        "Building a supportive community where individuals can connect and share their genetic heritage stories.",
+        "Xây dựng một cộng đồng hỗ trợ nơi mọi người có thể kết nối và chia sẻ câu chuyện di sản di truyền của mình.",
     },
   ]
 
@@ -71,10 +71,11 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-teal-600 to-purple-600 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">About Gen Unity</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">Về Gen Unity</h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto">
-            Pioneering DNA testing services with uncompromising accuracy, advanced technology, and compassionate care.
-            Empowering individuals with personalized genetic insights.
+            Dẫn đầu dịch vụ xét nghiệm DNA với độ chính xác tuyệt đối,
+             công nghệ tiên tiến và sự chăm sóc tận tâm. Trao quyền cho
+              cá nhân bằng những hiểu biết di truyền cá nhân hóa.
           </p>
         </div>
       </div>
@@ -84,22 +85,25 @@ const About: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission: Unlocking Genetic Potential</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Sứ Mệnh Của Chúng Tôi: Khai Phá Tiềm Năng Di Truyền</h2>
               <p className="text-gray-600 mb-6">
-                At Gen Unity, we believe that genetic information is a way that's easy to understand and act upon. Our
-                mission is to provide the highest quality DNA testing services with uncompromising accuracy, advanced
-                technology, and compassionate care.
+                Tại Gen Unity, chúng tôi tin rằng thông tin di truyền cần được 
+                truyền tải theo cách dễ hiểu và dễ áp dụng. Sứ mệnh của chúng tôi 
+                là cung cấp dịch vụ xét nghiệm DNA chất lượng cao nhất với độ chính 
+                xác tuyệt đối, công nghệ tiên tiến và sự chăm sóc tận tâm.
               </p>
               <p className="text-gray-600 mb-6">
-                We're committed to advancing genetic science while making it accessible and meaningful for individuals
-                and families. Through innovation and education, we empower people to make informed decisions about their
-                health, ancestry, and relationships, fostering a healthier and more informed future.
+                Chúng tôi cam kết thúc đẩy khoa học di truyền đồng thời làm cho 
+                nó trở nên dễ tiếp cận và có ý nghĩa với từng cá nhân và gia đình. 
+                Thông qua đổi mới và giáo dục, chúng tôi trao quyền cho mọi người đưa
+                 ra quyết định sáng suốt về sức khỏe, nguồn gốc tổ tiên và các mối quan
+                  hệ của họ, hướng đến một tương lai khỏe mạnh và hiểu biết hơn.
               </p>
             </div>
             <div className="flex justify-center">
               <img
                 src="/src/assets/about/our.png"
-                alt="Our Mission"
+                alt="Sứ Mệnh Của Chúng Tôi"
                 className="max-w-md w-full h-auto rounded-lg shadow-lg"
               />
             </div>
@@ -111,7 +115,7 @@ const About: React.FC = () => {
       <div className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Core Values</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Giá Trị Cốt Lõi Của Chúng Tôi</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -130,34 +134,34 @@ const About: React.FC = () => {
       <div className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Gen Unity?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Vì Sao Chọn Gen Unity?</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="text-center p-6">
               <div className="text-4xl mb-4">✅</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Certified Accuracy</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Độ Chính Xác Được Chứng Nhận</h3>
               <p className="text-gray-600">
-                We take pride in our accredited, state-of-the-art laboratory that ensures the highest levels of accuracy
-                and reliability in our results.
+                Chúng tôi tự hào với phòng thí nghiệm đạt chuẩn, hiện đại,
+                 đảm bảo kết quả chính xác và đáng tin cậy ở mức cao nhất.
               </p>
             </div>
 
             <div className="text-center p-6">
               <div className="text-4xl mb-4">🔒</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Unwavering Privacy</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Bảo Mật Tuyệt Đối</h3>
               <p className="text-gray-600">
-                Your genetic data is protected with state-of-the-art security measures and strict confidentiality
-                protocols.
+                Dữ liệu di truyền của bạn được bảo vệ bằng các biện pháp bảo 
+                mật tiên tiến và tuân thủ nghiêm ngặt các giao thức bảo mật.
               </p>
             </div>
 
             <div className="text-center p-6">
               <div className="text-4xl mb-4">👥</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Expert Support</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Hỗ Trợ Chuyên Gia</h3>
               <p className="text-gray-600">
-                Access to genetic counselors and customer service representatives who are ready to answer your questions
-                and provide support.
+                Được tư vấn bởi các chuyên gia di truyền và đội ngũ chăm sóc 
+                khách hàng sẵn sàng giải đáp mọi thắc mắc và hỗ trợ bạn.
               </p>
             </div>
           </div>
@@ -168,11 +172,12 @@ const About: React.FC = () => {
       <div className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Dedicated Team</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Gặp Gỡ Đội Ngũ Tận Tâm Của Chúng Tôi</h2>
             <p className="text-xl text-gray-600">
-              Our team of leading scientists, geneticists, and customer care specialists are dedicated to providing you
-              with the best possible experience and insights.
-            </p>
+              Đội ngũ nhà khoa học, chuyên gia di truyền và nhân viên chăm sóc 
+              khách hàng của chúng tôi luôn tận tâm mang đến trải nghiệm và 
+              thông tin giá trị nhất cho bạn.
+              </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -199,40 +204,38 @@ const About: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">State-of-the-Art Technology</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Công Nghệ Hiện Đại</h2>
               <p className="text-gray-600 mb-6">
-                Gen Unity utilizes the most advanced DNA testing technologies available, ensuring the highest levels of
-                accuracy and reliability in our results.
+                Gen Unity sử dụng công nghệ xét nghiệm DNA tiên tiến nhất hiện nay,
+                 đảm bảo độ chính xác và độ tin cậy ở mức cao nhất trong kết quả.
               </p>
-
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="text-teal-600 text-xl">✓</div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Next-Generation Sequencing</h4>
+                    <h4 className="font-semibold text-gray-900">Giải Trình Tự Thế Hệ Mới</h4>
                     <p className="text-gray-600">
-                      Our laboratory uses advanced NGS technology to analyze DNA with unprecedented accuracy and detail.
+                      Phòng thí nghiệm của chúng tôi sử dụng công nghệ NGS tiên tiến 
+                      để phân tích DNA với độ chính xác và chi tiết chưa từng có.
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start space-x-3">
                   <div className="text-teal-600 text-xl">✓</div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Automated Sample Processing</h4>
-                    <p className="text-gray-600">
-                      Robotic systems handle samples to minimize human error and maximize consistency in results.
+                    <h4 className="font-semibold text-gray-900">Xử Lý Mẫu Tự Động</h4>
+                    <p className="text-gray-600">Hệ thống robot xử lý mẫu giúp giảm 
+                      thiểu lỗi con người và tăng tính nhất quán trong kết quả.
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start space-x-3">
                   <div className="text-teal-600 text-xl">✓</div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Secure Digital Results Platform</h4>
-                    <p className="text-gray-600">
-                      Our secure online portal ensures your results are accessible only to you, with bank-level
-                      security.
+                    <h4 className="font-semibold text-gray-900">Nền Tảng Kết Quả Số Bảo Mật</h4>
+                    <p className="text-gray-600">Cổng thông tin trực tuyến của chúng 
+                      tôi đảm bảo kết quả chỉ bạn mới có thể truy cập, với mức bảo mật 
+                      tương đương ngân hàng.
                     </p>
                   </div>
                 </div>
@@ -251,25 +254,25 @@ const About: React.FC = () => {
       <div className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Partners & Accreditations</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Đối Tác & Chứng Nhận</h2>
             <p className="text-xl text-gray-600">
-              We collaborate with leading institutions and maintain the highest certifications to ensure quality and
-              reliability.
+              Chúng tôi hợp tác với các tổ chức hàng đầu và duy trì các 
+              chứng nhận cao nhất để đảm bảo chất lượng và độ tin cậy.
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
             <div className="flex justify-center">
-              <img src="/src/assets/about/fpt.png" alt="FPT University" className="h-16 object-contain" />
+              <img src="/src/assets/about/fpt.png" alt="Đại học FPT" className="h-16 object-contain" />
             </div>
             <div className="flex justify-center">
-              <img src="/src/assets/about/tuvu.png" alt="Tu Vu University" className="h-16 object-contain" />
+              <img src="/src/assets/about/tuvu.png" alt="Đại học Tư Vũ" className="h-16 object-contain" />
             </div>
             <div className="flex justify-center">
-              <img src="/src/assets/about/havard.png" alt="Harvard University" className="h-16 object-contain" />
+              <img src="/src/assets/about/havard.png" alt="Đại học Harvard" className="h-16 object-contain" />
             </div>
             <div className="flex justify-center">
-              <img src="/src/assets/about/yduoc.png" alt="Y Duoc University" className="h-16 object-contain" />
+              <img src="/src/assets/about/yduoc.png" alt="Đại học Y Dược" className="h-16 object-contain" />
             </div>
           </div>
         </div>
@@ -278,12 +281,12 @@ const About: React.FC = () => {
       {/* CTA Section */}
       <div className="py-20 bg-gradient-to-r from-teal-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to Unlock Your DNA Story?</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">Sẵn Sàng Khám Phá Câu Chuyện DNA Của Bạn?</h2>
           <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Join thousands of satisfied customers who have discovered life-changing insights about their health,
-            ancestry, and family connections with Gen Unity.
+          Hãy cùng hàng ngàn khách hàng hài lòng khám phá những thông tin 
+          thay đổi cuộc sống về sức khỏe, nguồn gốc và kết nối gia đình cùng Gen Unity.
           </p>
-
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="bg-white text-teal-600 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
               Learn More About Our Tests
@@ -291,15 +294,15 @@ const About: React.FC = () => {
             <div className="flex items-center justify-center space-x-6 text-white">
               <div className="flex items-center space-x-2">
                 <span className="text-2xl">📞</span>
-                <span>Free shipping nationwide</span>
+                <span>Miễn phí giao hàng toàn quốc</span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-2xl">✓</span>
-                <span>100% Privacy Guaranteed</span>
+                <span>Cam kết bảo mật 100%</span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-2xl">⏱️</span>
-                <span>Results in 3-5 Days</span>
+                <span>Nhận kết quả trong 3-5 ngày</span>
               </div>
             </div>
           </div>

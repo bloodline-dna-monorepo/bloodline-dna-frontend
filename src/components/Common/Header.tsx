@@ -44,21 +44,20 @@ const Header: React.FC = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Home
+              Trang chủ
             </Link>
             <Link to="/about" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              About
+              Giới thiệu
             </Link>
             <Link to="/services" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              DNA Services
+              Dịch vụ DNA
             </Link>
             <Link to="/guide-faq" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Guide & FAQ
+              Hướng dẫn & FAQ
             </Link>
             <Link to="/blog" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
               Blog
             </Link>
-            
           </nav>
 
           {/* Auth Section */}
@@ -74,19 +73,19 @@ const Header: React.FC = () => {
                     : user?.email?.charAt(0).toUpperCase() || "N"}
                 </button>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>
-                  Logout
+                  Đăng xuất
                 </Button>
               </div>
             ) : (
               <div className="flex items-center space-x-4">
                 <Link to="/login">
                   <Button variant="ghost" size="sm">
-                    Sign In
+                    Đăng nhập
                   </Button>
                 </Link>
                 <Link to="/register">
                   <Button variant="primary" size="sm">
-                    Sign Up
+                    Đăng ký
                   </Button>
                 </Link>
               </div>

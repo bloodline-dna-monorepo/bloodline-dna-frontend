@@ -38,7 +38,7 @@ const Login: React.FC = () => {
       navigate('/dashboard')
     } catch (error) {
       console.error('Login error:', error)
-      setError('Login failed. Please try again.')
+      setError('Đăng nhập thất bại. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -51,11 +51,11 @@ const Login: React.FC = () => {
           <div className='mx-auto h-16 w-16 bg-teal-100 rounded-full flex items-center justify-center'>
             <span className='text-2xl'>🧬</span>
           </div>
-          <h2 className='mt-6 text-3xl font-bold text-gray-900'>Sign in to your account</h2>
+          <h2 className='mt-6 text-3xl font-bold text-gray-900'>Đăng nhập vào tài khoản của bạn</h2>
           <p className='mt-2 text-sm text-gray-600'>
-            Or{' '}
+            Hoặc{' '}
             <Link to='/register' className='font-medium text-teal-600 hover:text-teal-500'>
-              create a new account
+              tạo tài khoản mới
             </Link>
           </p>
         </div>
@@ -67,25 +67,25 @@ const Login: React.FC = () => {
 
           <div className='space-y-4'>
             <Input
-              label='Email address'
+              label='Địa chỉ email'
               type='email'
               name='Email'
               value={formData.Email}
               onChange={handleChange}
               required
               autoComplete='email'
-              placeholder='Enter your email'
+              placeholder='Nhập email của bạn'
             />
 
             <Input
-              label='Password'
+              label='Mật khẩu'
               type='password'
               name='PasswordHash'
               value={formData.PasswordHash}
               onChange={handleChange}
               required
               autoComplete='current-password'
-              placeholder='Enter your password'
+              placeholder='Nhập mật khẩu của bạn'
             />
           </div>
 
@@ -98,19 +98,19 @@ const Login: React.FC = () => {
                 className='h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded'
               />
               <label htmlFor='remember-me' className='ml-2 block text-sm text-gray-900'>
-                Remember me
+                Ghi nhớ đăng nhập
               </label>
             </div>
 
             <div className='text-sm'>
               <Link to='/forgot-password' className='font-medium text-teal-600 hover:text-teal-500'>
-                Forgot your password?
+                Quên mật khẩu?
               </Link>
             </div>
           </div>
 
           <Button type='submit' className='w-full' loading={loading} disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </Button>
         </form>
       </div>

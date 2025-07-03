@@ -38,6 +38,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   },
 )
 
-Input.displayName = "Input"
+Input.displayName = "Trường nhập"
 
 export default Input
