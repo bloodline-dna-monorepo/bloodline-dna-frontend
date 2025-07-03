@@ -3,13 +3,17 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
-import type { Service } from '../utils/types'
+import type { Services } from '../utils/types'
 
 const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
-  const [services, setServices] = useState<Service[]>([])
+  const [services, setServices] = useState<Services[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [selectedService, setSelectedService] = useState<Services | null>(null)
+  const [showModal, setShowModal] = useState(false)
+  const [selectedMethod, setSelectedMethod] = useState<'home' | 'center' | ''>('')
+
   const navigate = useNavigate()
 
   const fetchServices = useCallback(async () => {
@@ -17,12 +21,7 @@ const Services: React.FC = () => {
       setLoading(true)
       setError('')
       const data = await serviceService.getServicesByType(activeTab)
-      if (Array.isArray(data)) {
-        setServices(data)
-      } else {
-        setServices([])
-        setError('Invalid data format from server')
-      }
+      setServices(Array.isArray(data) ? data : [])
     } catch (error: any) {
       setError('Failed to load services')
     } finally {
@@ -38,15 +37,33 @@ const Services: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  const handleRegisterClick = (service: Service) => {
-    // Điều hướng đến trang đăng ký với tham số serviceId
-    navigate(`/service-registration/${service.serviceId}`, {
-      state: { service } // Truyền dữ liệu dịch vụ vào state
-    })
+  const handleRegisterClick = (service: Services) => {
+    setSelectedService(service)
+    setSelectedMethod('')
+    setShowModal(true)
+  }
+
+  const confirmRegister = () => {
+    if (selectedService && selectedMethod) {
+      navigate(`/service-registration/${selectedService.ServiceID}`, {
+        state: {
+          service: selectedService,
+          method: selectedMethod, // 'home' hoặc 'center'
+          type: activeTab // 'Civil' hoặc 'Administrative'
+        }
+      })
+    }
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+    setSelectedService(null)
+    setSelectedMethod('')
   }
 
   return (
     <div className='min-h-screen bg-gray-50'>
+      {/* Header */}
       <div className='bg-gradient-to-r from-teal-600 to-purple-600 py-16'>
         <div className='max-w-7xl mx-auto px-4 text-center'>
           <h1 className='text-4xl font-bold text-white mb-4'>Dịch vụ Giám định ADN</h1>
@@ -66,6 +83,7 @@ const Services: React.FC = () => {
         </div>
       </div>
 
+      {/* Service list */}
       <div className='max-w-7xl mx-auto px-4 py-16'>
         {loading ? (
           <div className='text-center py-12'>
@@ -89,21 +107,21 @@ const Services: React.FC = () => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
             {services.map((service) => {
-              const basePrice = service.price ?? 0
+              const basePrice = service.Price ?? 0
               return (
                 <div
-                  key={service.serviceId}
+                  key={service.ServiceID}
                   className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
                 >
                   <div className='mb-6'>
-                    <h2 className='text-2xl font-bold mb-2'>{service.serviceName}</h2>
-                    <p className='text-white/90'>{service.description}</p>
+                    <h2 className='text-2xl font-bold mb-2'>{service.ServiceName}</h2>
+                    <p className='text-white/90'>{service.Description}</p>
                   </div>
 
                   <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                     <div>
                       <h3 className='font-semibold mb-2'>Số mẫu</h3>
-                      <p className='text-xl'>{service.sampleCount ?? 'Không xác định'}</p>
+                      <p className='text-xl'>{service.SampleCount ?? 'Không xác định'}</p>
                     </div>
 
                     <div>
@@ -127,6 +145,61 @@ const Services: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Modal chọn hình thức lấy mẫu */}
+      {showModal && selectedService && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-white rounded-lg p-6 w-full max-w-md shadow-xl'>
+            <h2 className='text-xl font-semibold mb-4'>
+              Chọn hình thức lấy mẫu - {activeTab === 'Civil' ? 'Dân sự' : 'Hành chính'}
+            </h2>
+
+            <p className='font-medium mb-4 text-gray-800'>
+              Dịch vụ: <span className='font-bold'>{selectedService.ServiceName}</span>
+            </p>
+
+            <div className='mb-6 space-y-3'>
+              <label className='flex items-center space-x-3'>
+                <input
+                  type='radio'
+                  name='method'
+                  value='home'
+                  checked={selectedMethod === 'home'}
+                  onChange={() => setSelectedMethod('home')}
+                  className='form-radio text-teal-600'
+                />
+                <span>Tại nhà</span>
+              </label>
+              <label className='flex items-center space-x-3'>
+                <input
+                  type='radio'
+                  name='method'
+                  value='center'
+                  checked={selectedMethod === 'center'}
+                  onChange={() => setSelectedMethod('center')}
+                  className='form-radio text-teal-600'
+                />
+                <span>Tại cơ sở</span>
+              </label>
+            </div>
+
+            <div className='flex justify-end space-x-3'>
+              <button onClick={closeModal} className='px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400'>
+                Hủy
+              </button>
+              <button
+                disabled={!selectedMethod}
+                onClick={confirmRegister}
+                className={`px-4 py-2 rounded text-white ${
+                  selectedMethod ? 'bg-teal-600 hover:bg-teal-700' : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                Tiếp tục
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
