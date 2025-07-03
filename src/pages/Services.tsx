@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
-import type { Service } from '../utils/types'
+import type { Services } from '../utils/types'
 
 const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
-  const [services, setServices] = useState<Service[]>([])
+  const [services, setServices] = useState<Services[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -38,9 +38,9 @@ const Services: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  const handleRegisterClick = (service: Service) => {
+  const handleRegisterClick = (service: Services) => {
     // Điều hướng đến trang đăng ký với tham số serviceId
-    navigate(`/service-registration/${service.serviceId}`, {
+    navigate(`/service-registration/${service.ServiceId}`, {
       state: { service } // Truyền dữ liệu dịch vụ vào state
     })
   }
@@ -89,21 +89,21 @@ const Services: React.FC = () => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
             {services.map((service) => {
-              const basePrice = service.price ?? 0
+              const basePrice = service.Price ?? 0
               return (
                 <div
-                  key={service.serviceId}
+                  key={service.ServiceId}
                   className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
                 >
                   <div className='mb-6'>
-                    <h2 className='text-2xl font-bold mb-2'>{service.serviceName}</h2>
-                    <p className='text-white/90'>{service.description}</p>
+                    <h2 className='text-2xl font-bold mb-2'>{service.ServiceName}</h2>
+                    <p className='text-white/90'>{service.Description}</p>
                   </div>
 
                   <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                     <div>
                       <h3 className='font-semibold mb-2'>Số mẫu</h3>
-                      <p className='text-xl'>{service.sampleCount ?? 'Không xác định'}</p>
+                      <p className='text-xl'>{service.SampleCount ?? 'Không xác định'}</p>
                     </div>
 
                     <div>

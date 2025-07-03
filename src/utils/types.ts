@@ -7,6 +7,14 @@ export interface User {
   profile?: UserProfile
 }
 
+export interface Feedback {
+  FeedbackID: string
+  CustomerFeedback: string;
+  DateFeedback: string;
+  RatingFeedback: number;
+  CommentFeedback: string;
+}
+
 export interface UserProfile {
   ProfileID: number
   AccountID: number
@@ -68,6 +76,7 @@ export interface RegisterResponse {
 
 // Service Types
 export interface Services {
+  ServiceId: string
   ServiceName: string
   ServiceType: 'Administrative' | 'Civil'
   Description: string
@@ -96,6 +105,8 @@ export interface SampleCategories {
 export interface TestRequests {
   RequestID: number
   CustomerID: number
+  CustomerName: string
+  StaffName: string
   ServiceID: number
   Status: 'Input Infor' | 'Pending' | 'Confirmed' | 'In Progress' | 'Completed'
   AssignedTo?: number
@@ -108,6 +119,7 @@ export interface TestRequests {
   ServiceType?: 'Administrative' | 'Civil'
   KitID?: string
   Appointment: string
+  
 }
 export interface History {
   TestRequestID: string
@@ -125,14 +137,15 @@ export interface History {
 }
 export interface TestResults {
   TestRequestID: string
+  CustomerName: string
   KitID?: string
   ServiceID: number
   ServiceType?: 'Administrative' | 'Civil'
   SampleCount: 2 | 3
   Result: string
   EnterBy: number
-  EnterDate: Date
-  ConfirmBy: string
+  SampleDate: string
+  StaffName: string
   Status: 'Pending' | 'Verified'
 }
 
