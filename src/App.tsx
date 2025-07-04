@@ -11,7 +11,6 @@ import Footer from './components/Common/Footer'
 // Public Pages
 import Home from './pages/Home'
 import About from './pages/About'
-import Services from './pages/Services'
 import GuideAndFAQ from './pages/GuideAndFAQ'
 import Blog from './pages/Blog'
 
@@ -35,6 +34,10 @@ import { useAuth } from './hooks/useAuth'
 import TestTracking from './pages/customer/TestTracking'
 import UserProfilePage from './pages/customer/UserProfile'
 import HistoryServices from './pages/customer/HistoryServices'
+import ManagerDashboard from 'pages/manager/ManagerDashboard'
+import TestRq from 'pages/manager/TestRq'
+import ManaFeedback from 'pages/manager/ManaFeedback'
+import Services from './pages/Services'
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -216,6 +219,43 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route 
+              path='/manager-dashboard'
+              element={
+                <ProtectedRoute allowedRoles={['Manager']}>
+                  <ManagerDashboard />
+                </ProtectedRoute>
+              }  
+            />
+
+            <Route 
+              path='/test-results'
+              element={
+                <ProtectedRoute allowedRoles={['Manager']}>
+                  <TestRq />
+                </ProtectedRoute>
+              }  
+            />
+
+            <Route 
+              path='/view-feedback'
+              element={
+                <ProtectedRoute allowedRoles={['Manager']}>
+                  <ManaFeedback />
+                </ProtectedRoute>
+              }  
+            />
+
+            <Route 
+              path='/profile'
+              element={
+                <ProtectedRoute allowedRoles={['Manager']}>
+                  <UserProfilePage />
+                </ProtectedRoute>
+              }  
+            />
+
             {/* Staff Routes
             <Route
               path="/staff/dashboard"
@@ -261,6 +301,8 @@ const App: React.FC = () => {
               }
             /> */}
             {/* Fallback Routes */}
+
+
             <Route path='/dashboard' element={<Navigate to='/profile' replace />} />
             <Route path='/profile' element={<Navigate to='/customer/profile' replace />} />
             <Route
