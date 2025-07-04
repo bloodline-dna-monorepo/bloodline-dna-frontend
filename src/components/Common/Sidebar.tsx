@@ -42,17 +42,16 @@ const DashboardSidebar: React.FC = () => {
   ]
 
   const managerMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
+    { path: '/managerDashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/test-requests', label: 'Test Requests', icon: BeakerIcon },
     { path: '/reports', label: 'Reports', icon: ChartBarIcon },
     { path: '/profile', label: 'Profile', icon: UserIcon }
   ]
 
   const adminMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
+    { path: '/adminDashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/user-management', label: 'User Management', icon: UsersIcon },
     { path: '/service-management', label: 'Service Management', icon: CogIcon },
-    { path: '/reports', label: 'Reports & Statistics', icon: ChartBarIcon },
     { path: '/settings', label: 'Settings', icon: CogIcon }
   ]
 

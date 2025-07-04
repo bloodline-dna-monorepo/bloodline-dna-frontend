@@ -35,6 +35,9 @@ import { useAuth } from './hooks/useAuth'
 import TestTracking from './pages/customer/TestTracking'
 import UserProfilePage from './pages/customer/UserProfile'
 import HistoryServices from './pages/customer/HistoryServices'
+import AdminDashboard from 'pages/admin/AdminDashboard'
+import AdminManager from 'pages/admin/AdminManager'
+import AdminRole from 'pages/admin/AdminRole'
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -216,6 +219,45 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route 
+              path='/adminDashboard'
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route 
+              path='/user-management'  
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <AdminRole />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route 
+              path='/service-management'  
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <AdminManager />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route 
+              path='/settings'  
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <UserProfilePage/>
+                </ProtectedRoute>
+              }
+            />
+
+            
+            
             {/* Staff Routes
             <Route
               path="/staff/dashboard"
@@ -272,6 +314,8 @@ const App: React.FC = () => {
               }
             />
             <Route path='*' element={<Navigate to='/' replace />} />
+
+
           </Routes>
         </div>
       </AuthProvider>
