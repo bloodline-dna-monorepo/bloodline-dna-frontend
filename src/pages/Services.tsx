@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
 import type { Service } from '../utils/types'
 
-const Service: React.FC = () => {
+const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
@@ -131,4 +131,4 @@ const Service: React.FC = () => {
   )
 }
 
-export default Service
+export default Services

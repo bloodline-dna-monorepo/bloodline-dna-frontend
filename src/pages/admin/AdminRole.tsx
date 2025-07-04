@@ -23,8 +23,7 @@ const AdminRole: React.FC = () => {
   const filtered = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase()) ||
-      u.phone.includes(search)
+      u.email.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -71,7 +70,6 @@ const AdminRole: React.FC = () => {
                             <td className="py-2 px-4">{u.name}</td>
                             <td className="py-2 px-4">
                             <div>{u.email}</div>
-                            <div className="text-xs text-gray-500">{u.phone}</div>
                             </td>
                             <td className="py-2 px-4">
                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${ROLE_COLORS[u.role as UserRole]}`}>
