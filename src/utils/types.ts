@@ -3,6 +3,7 @@ export interface User {
   accountId: number
   name: string
   email: string
+  phone: string
   role: string
   profile?: UserProfile
 }
@@ -68,8 +69,9 @@ export interface RegisterResponse {
 
 // Service Types
 export interface Services {
+  ServiceId: string
   ServiceName: string
-  ServiceType: 'Administrative' | 'Civil'
+  ServiceType: string
   Description: string
   Price: number
   SampleCount: 2 | 3
