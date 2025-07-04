@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
-import type { Services } from "utils/types";
+import type { Service } from "utils/types";
 import DashboardSidebar from "../../components/Common/Sidebar";
 
 const CATEGORY_OPTIONS = [
@@ -11,7 +11,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 const AdminManager: React.FC = () => {
-  const [services, setServices] = useState<Services[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [addForm, setAddForm] = useState({
@@ -69,7 +69,7 @@ const AdminManager: React.FC = () => {
       setServices((prev) =>
         prev.map((s) =>
           s.ServiceId === editForm.ServiceId
-            ? { ...s, ...updatedService } as Services
+            ? { ...s, ...updatedService } as Service
             : s
         )
       );

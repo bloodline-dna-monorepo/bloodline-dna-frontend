@@ -68,7 +68,7 @@ export interface RegisterResponse {
 }
 
 // Service Types
-export interface Services {
+export interface Service {
   ServiceId: string
   ServiceName: string
   ServiceType: string
@@ -79,7 +79,7 @@ export interface Services {
   UpdatedAt: Date
 }
 export interface ServiceResponse {
-  service: Services
+  service: Service
 }
 
 export interface SampleCategories {
