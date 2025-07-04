@@ -35,6 +35,11 @@ import { useAuth } from './hooks/useAuth'
 import TestTracking from './pages/customer/TestTracking'
 import UserProfilePage from './pages/customer/UserProfile'
 import HistoryServices from './pages/customer/HistoryServices'
+import StaffDashboard from './pages/staff/StaffDashboard'
+import TestRequests from './pages/staff/TestRequests'
+import TestProcess from './pages/staff/TestProcess'
+import StaffProfile from './pages/staff/StaffProfile'
+import StaffSettings from './pages/staff/StaffSettings'
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -216,7 +221,7 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-            {/* Staff Routes
+            Staff Routes
             <Route
               path="/staff/dashboard"
               element={
@@ -226,6 +231,38 @@ const App: React.FC = () => {
               }
             />
             <Route
+              path="/staff/test-requests"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <TestRequests />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/test-process"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <TestProcess />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/profile"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <StaffProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/settings"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <StaffSettings />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route
               path="/staff/test-request/:id"
               element={
                 <ProtectedRoute allowedRoles={["Staff"]}>

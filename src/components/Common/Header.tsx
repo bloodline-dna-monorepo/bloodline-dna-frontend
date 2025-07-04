@@ -18,11 +18,26 @@ const Header: React.FC = () => {
     }
   }
 
-  const handleProfileClick = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard")
-    }
+const handleProfileClick = () => {
+  if (!user) return
+
+  switch (user.role) {
+    case "Admin":
+      navigate("/admin/dashboard")
+      break
+    case "Manager":
+      navigate("/manager/dashboard")
+      break
+    case "Staff":
+      navigate("/staff/dashboard")
+      break
+    case "Customer":
+    default:
+      navigate("/customer/profile")
+      break
   }
+}
+
 
   return (
     <header className="bg-white shadow-sm border-b">

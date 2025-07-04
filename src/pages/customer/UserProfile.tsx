@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { userService } from '../../services/userService'
 import type { UserProfile } from '../../utils/types'
 import Button from '../../components/Common/Button'
-import DashboardSidebar from '../../components/Common/Sidebar'
+import Sidebar from '../../components/Common/Sidebar'
 
 interface PasswordChangeModalProps {
   isOpen: boolean
@@ -178,7 +178,7 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <div className='flex '>
-      <DashboardSidebar />
+      <Sidebar />
       <div className='max-w-full mx-auto p-6 ml-20'>
         <h1 className='text-2xl font-bold mb-8'>Thông tin cá nhân</h1>
 

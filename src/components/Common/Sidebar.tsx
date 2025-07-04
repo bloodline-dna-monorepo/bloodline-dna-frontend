@@ -29,16 +29,18 @@ const DashboardSidebar: React.FC = () => {
     return location.pathname === path
   }
   const customerMenuItems = [
-    { path: '/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
-    { path: '/profile', label: 'Hồ sơ cá nhân', icon: UserIcon },
+    { path: '/customer/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
+    { path: '/customer/profile', label: 'Hồ sơ cá nhân', icon: UserIcon },
     { path: '/customer/test-process', label: 'Quy trình xét nghiệm', icon: BeakerIcon },
     { path: '/customer/history', label: 'Lịch sử & Kết quả', icon: DocumentTextIcon }
   ]
 
   const staffMenuItems = [
-    { path: '/dashboard', label: 'Bảng điều khiển', icon: HomeIcon },
-    { path: '/test-requests', label: 'Yêu cầu xét nghiệm', icon: BeakerIcon },
-    { path: '/profile', label: 'Hồ sơ cá nhân', icon: UserIcon }
+    { path: "/staff/dashboard", label: "Dashboard", icon: HomeIcon },
+    { path: "/staff/test-requests", label: "Quản lý yêu cầu", icon: DocumentTextIcon },
+    { path: "/staff/test-process", label: "Quy trình xét nghiệm", icon: CogIcon },
+    { path: "/staff/profile", label: "Profile", icon: UserIcon },
+    { path: "/staff/settings", label: "Settings", icon: CogIcon },
   ]
 
   const managerMenuItems = [
@@ -58,6 +60,7 @@ const DashboardSidebar: React.FC = () => {
 
   let menuItems = customerMenuItems
   if (isAdmin) menuItems = adminMenuItems
+  else if (isCustomer) menuItems = customerMenuItems
   else if (isManager) menuItems = managerMenuItems
   else if (isStaff) menuItems = staffMenuItems
 

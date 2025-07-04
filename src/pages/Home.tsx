@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth'
 import Button from '../components/Common/Button'
 
 const Home: React.FC = () => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
 
   return (
     <div className='min-h-screen'>
@@ -18,8 +18,13 @@ const Home: React.FC = () => {
             <p className='text-xl md:text-2xl mb-8 text-teal-100'>Phân tích di truyền chính xác, đáng tin cậy và bảo mật cho mục đích hành chính và dân sự</p>
             <div className='flex flex-col sm:flex-row gap-4 justify-center'>
               {isAuthenticated ? (
-                <Link to='/dashboard'>
-                  <Button size='lg' className=' text-teal-600 hover:bg-gray-100'>
+                <Link to={
+                  user?.role === 'Admin' ? '/admin/dashboard' :
+                  user?.role === 'Manager' ? '/manager/dashboard' :
+                  user?.role === 'Staff' ? '/staff/dashboard' :
+                  '/customer/profile'
+                }>
+                  <Button size='lg' className='text-teal-600 hover:bg-gray-100'>
                     Vào Bảng Điều Khiển
                   </Button>
                 </Link>
