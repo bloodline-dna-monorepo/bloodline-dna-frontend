@@ -75,10 +75,10 @@ export interface RegisterResponse {
 }
 
 // Service Types
-export interface Services {
+export interface Service {
   ServiceId: string
   ServiceName: string
-  ServiceType: 'Administrative' | 'Civil'
+  ServiceType: string
   Description: string
   Price: number
   SampleCount: 2 | 3
@@ -86,7 +86,7 @@ export interface Services {
   UpdatedAt: Date
 }
 export interface ServiceResponse {
-  service: Services
+  service: Service
 }
 
 export interface SampleCategories {

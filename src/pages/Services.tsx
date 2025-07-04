@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
-import type { Services } from '../utils/types'
+import type { Service } from '../utils/types'
 
 const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
-  const [services, setServices] = useState<Services[]>([])
+  const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -38,7 +38,7 @@ const Services: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  const handleRegisterClick = (service: Services) => {
+  const handleRegisterClick = (service: Service) => {
     // Điều hướng đến trang đăng ký với tham số serviceId
     navigate(`/service-registration/${service.ServiceId}`, {
       state: { service } // Truyền dữ liệu dịch vụ vào state
