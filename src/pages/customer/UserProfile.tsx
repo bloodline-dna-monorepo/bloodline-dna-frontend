@@ -125,7 +125,6 @@ const UserProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-
   useEffect(() => {
     fetchUserProfile()
   }, [])

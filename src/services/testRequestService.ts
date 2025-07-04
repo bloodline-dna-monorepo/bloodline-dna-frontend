@@ -1,5 +1,5 @@
 import { apiClient } from '../utils/api'
-import type { ApiResponse, TestRequestData, TestRequests } from '../utils/types'
+import type { ApiResponse, TestProcess, TestRequestData, TestRequests } from '../utils/types'
 
 interface CreateTestRequestResponse {
   message: string
@@ -15,8 +15,9 @@ export const testRequestService = {
   },
 
   // Get user's test requests
-  getUserTestRequests: async (): Promise<ApiResponse<TestRequests[]>> => {
-    return apiClient<TestRequests[]>('/test-requests/user')
+  getUserTestRequests: async (): Promise<TestProcess[]> => {
+    const response = await apiClient.get<ApiResponse<TestProcess[]>>('/test-requests/testRequestCustomer')
+    return response.data.data
   },
 
   // Get test request by ID

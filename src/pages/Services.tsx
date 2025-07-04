@@ -87,7 +87,6 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       return
     }
 
-    // Kiểm tra ngày hợp lệ nếu chọn "facility"
     if (formData.collectionMethod === 'facility') {
       const today = new Date()
       const selectedDate = new Date(formData.appointmentDate)
@@ -102,7 +101,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
 
     try {
       const registrationData = {
-        serviceId: Services?.ServiceID!, // chắc chắn có vì modal chỉ mở khi chọn service
+        serviceId: Services?.ServiceID!,
         collectionMethod: formData.collectionMethod,
         appointmentDate: formData.collectionMethod === 'facility' ? formData.appointmentDate : undefined
       }
@@ -110,7 +109,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       const result = await testRequestService.createTestRequest(registrationData)
 
       alert(result.message || 'Đăng ký thành công!')
-      onClose()
+      // ❗ Thêm timeout 300ms để đảm bảo người dùng thấy alert trước khi đóng
+      setTimeout(() => {
+        onClose()
+      }, 300)
     } catch (error) {
       console.error('Đăng ký thất bại:', error)
       alert('Đăng ký thất bại. Vui lòng thử lại sau.')

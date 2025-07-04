@@ -11,6 +11,18 @@ export interface User {
   profile?: UserProfile
 }
 
+export interface TestProcess {
+  TestRequestID: number
+  ServiceName: string
+  SampleCount: number
+  ServiceType: string
+  CreatedAt: string
+  Appointment: string
+  CollectionMethod: string
+  AssignedTo: string
+  Status: String
+  KitID: string
+}
 export interface UserProfile {
   ProfileID: number
   AccountID: number
@@ -98,22 +110,7 @@ export interface SampleCategories {
 }
 
 // Test Request Types
-export interface TestRequests {
-  RequestID: number
-  CustomerID: number
-  ServiceID: number
-  Status: 'Input Infor' | 'Pending' | 'Confirmed' | 'In Progress' | 'Completed'
-  AssignedTo?: number
-  SampleType: string
-  CollectionMethod: 'Home' | 'Facility'
-  SampleCount: 2 | 3
-  CreatedAt: string
-  ConfirmDate?: string
-  ServiceName?: string
-  ServiceType?: 'Administrative' | 'Civil'
-  KitID?: string
-  Appointment: string
-}
+
 export interface History {
   TestRequestID: string
   KitID?: string
