@@ -11,7 +11,7 @@ import Footer from './components/Common/Footer'
 // Public Pages
 import Home from './pages/Home'
 import About from './pages/About'
-import Services from './pages/Services'
+import Service from './pages/Services'
 import GuideAndFAQ from './pages/GuideAndFAQ'
 import Blog from './pages/Blog'
 
@@ -38,6 +38,7 @@ import HistoryServices from './pages/customer/HistoryServices'
 import AdminDashboard from 'pages/admin/AdminDashboard'
 import AdminManager from 'pages/admin/AdminManager'
 import AdminRole from 'pages/admin/AdminRole'
+
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -134,7 +135,7 @@ const App: React.FC = () => {
                 <>
                   <Header />
                   <main className='flex-1'>
-                    <Services />
+                    <Service />
                   </main>
                   <Footer />
                 </>
