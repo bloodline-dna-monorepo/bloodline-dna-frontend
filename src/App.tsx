@@ -11,7 +11,6 @@ import Footer from './components/Common/Footer'
 // Public Pages
 import Home from './pages/Home'
 import About from './pages/About'
-import Services from './pages/Services'
 import GuideAndFAQ from './pages/GuideAndFAQ'
 import Blog from './pages/Blog'
 
@@ -218,6 +217,45 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route 
+              path='/manager-dashboard'
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <ManagerDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route 
+              path='/test-results'  
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <TestRq />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route 
+              path='/view-feedback'  
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <ManaFeedback />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route 
+              path='/profile'  
+              element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                  <UserProfilePage/>
+                </ProtectedRoute>
+              }
+            />
+
+            
+            
             {/* Staff Routes
             <Route
               path="/staff/dashboard"
@@ -282,6 +320,8 @@ const App: React.FC = () => {
               }
             />
             <Route path='*' element={<Navigate to='/' replace />} />
+
+
           </Routes>
         </div>
       </AuthProvider>

@@ -42,9 +42,9 @@ const DashboardSidebar: React.FC = () => {
   ]
 
   const managerMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/test-requests', label: 'Test Requests', icon: BeakerIcon },
-    { path: '/reports', label: 'Reports', icon: ChartBarIcon },
+    { path: '/manager-dashboard', label: 'Dashboard', icon: HomeIcon },
+    { path: '/test-results', label: 'Test Results', icon: BeakerIcon },
+    { path: '/view-feedback', label: 'View Feedback', icon: ChartBarIcon },
     { path: '/profile', label: 'Profile', icon: UserIcon }
   ]
 

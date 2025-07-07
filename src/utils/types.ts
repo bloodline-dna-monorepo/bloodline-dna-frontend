@@ -108,7 +108,7 @@ export interface RegisterResponse {
 export interface Services {
   ServiceID: number
   ServiceName: string
-  ServiceType: 'Administrative' | 'Civil'
+  ServiceType: string
   Description: string
   Price: number
   SampleCount: 2 | 3
@@ -116,7 +116,7 @@ export interface Services {
   UpdatedAt: Date
 }
 export interface ServiceResponse {
-  service: Services
+  service: Service
 }
 
 export interface SampleCategories {
@@ -149,14 +149,15 @@ export interface History {
 }
 export interface TestResults {
   TestRequestID: string
+  CustomerName: string
   KitID?: string
   ServiceID: number
   ServiceType?: 'Administrative' | 'Civil'
   SampleCount: 2 | 3
   Result: string
   EnterBy: number
-  EnterDate: Date
-  ConfirmBy: string
+  SampleDate: string
+  StaffName: string
   Status: 'Pending' | 'Verified'
 }
 
