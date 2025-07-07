@@ -8,7 +8,10 @@ import type {
   LoginResponse,
   User,
   ApiResponse,
-  RegisterResponse
+  RegisterResponse,
+  ChangePasswordReponse,
+  UpdateProfilereq,
+  UpdateProfilerep
 } from '../utils/types'
 
 export const authService = {
@@ -48,13 +51,20 @@ export const authService = {
     return response.data.data!
   },
 
-  async changePassword(data: ChangePasswordRequest): Promise<void> {
-    await apiClient.put('/auth/change-password', data)
+  async changePassword(data: ChangePasswordRequest): Promise<ChangePasswordReponse> {
+    const rep = await apiClient.put<ApiResponse<ChangePasswordReponse>>('/auth/change-password', data)
+    return {
+      message: rep.data.message
+    }
   },
 
   async getProfile(): Promise<User> {
     const response = await apiClient.get<ApiResponse<{ user: User }>>('/auth/profile')
     return response.data.data!.user
+  },
+  async updateProfile(data: UpdateProfilereq): Promise<UpdateProfilerep> {
+    const response = await apiClient.put<ApiResponse<UpdateProfilerep>>('/auth/profile', data)
+    return { message: response.data.message }
   },
   getCurrentUser(): User | null {
     const userStr = localStorage.getItem('user')

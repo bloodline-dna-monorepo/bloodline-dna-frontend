@@ -1,7 +1,10 @@
 import { apiClient } from '../utils/api'
-import type { ApiResponse, TestProcess, TestRequestData, TestRequests } from '../utils/types'
+import type { ApiResponse, TestProcess, TestRequestData, test } from '../utils/types'
 
 interface CreateTestRequestResponse {
+  message: string
+}
+interface CreateSampleResponse {
   message: string
 }
 
@@ -13,6 +16,12 @@ export const testRequestService = {
       message: response.data.message
     }
   },
+  createSampleCategory: async (testRequestId: number, formData: FormData): Promise<CreateSampleResponse> => {
+    const res = await apiClient.post<CreateSampleResponse>(`/test-requests/${testRequestId}/submit-sample`, formData)
+    return {
+      message: res.data.message
+    }
+  },
 
   // Get user's test requests
   getUserTestRequests: async (): Promise<TestProcess[]> => {
@@ -20,18 +29,18 @@ export const testRequestService = {
     return response.data.data
   },
 
-  // Get test request by ID
-  getTestRequestById: async (testRequestId: number): Promise<ApiResponse<TestRequests>> => {
-    return apiClient<TestRequests>(`/test-requests/${testRequestId}`)
-  },
+  // // Get test request by ID
+  // getTestRequestById: async (testRequestId: number): Promise<ApiResponse<TestRequests>> => {
+  //   return apiClient<TestRequests>(`/test-requests/${testRequestId}`)
+  // },
 
-  // Update test request status (for staff/admin)
-  updateTestRequestStatus: async (testRequestId: string, status: string): Promise<ApiResponse<TestRequests>> => {
-    return apiClient<TestRequests>(`/test-requests/${testRequestId}/status`, { status })
-  },
-
-  // Get test requests for feedback (completed tests)
-  getTestRequestsForFeedback: async (): Promise<ApiResponse<TestRequests[]>> => {
-    return apiClient<TestRequests[]>('/test-requests/feedback')
+  // Update test request status (for staff)
+  updateTestRequestStatus: async (testRequestId: string, status: string): Promise<ApiResponse<test>> => {
+    return apiClient.put<test>(`/test-requests/${testRequestId}/status`, { status })
   }
+
+  // // Get test requests for feedback (completed tests)
+  // getTestRequestsForFeedback: async (): Promise<ApiResponse<TestRequests[]>> => {
+  //   return apiClient<TestRequests[]>('/test-requests/feedback')
+  // }
 }

@@ -3,8 +3,7 @@
 import type React from 'react'
 import { useState, useEffect } from 'react'
 import { testRequestService } from '../../services/testRequestService'
-import type { TestProcess } from '../../utils/types'
-import Button from '../../components/Common/Button'
+import type { SampleInfo, TestProcess } from '../../utils/types'
 import DashboardSidebar from '../../components/Common/Sidebar'
 
 const TestTracking: React.FC = () => {
@@ -30,6 +29,7 @@ const TestTracking: React.FC = () => {
       setLoading(false)
     }
   }
+
   const getProgressPercentage = (status: string) => {
     switch (status) {
       case 'Input Infor':
@@ -47,8 +47,8 @@ const TestTracking: React.FC = () => {
     }
   }
 
-  const handleViewDetails = (TestRequests: TestProcess, atHome: boolean) => {
-    setSelectedTest(TestRequests)
+  const handleViewDetails = (test: TestProcess, atHome: boolean) => {
+    setSelectedTest(test)
     setIsAtHome(atHome)
     setIsDetailModalOpen(true)
   }
@@ -61,6 +61,15 @@ const TestTracking: React.FC = () => {
     <div className='flex'>
       <DashboardSidebar />
       <div className='max-w-6xl mx-auto p-6'>
+        {isDetailModalOpen && selectedTest && (
+          <TestInfoForm
+            sampleCount={selectedTest.SampleCount}
+            onClose={() => setIsDetailModalOpen(false)}
+            request={selectedTest}
+            onSubmitted={fetchTestRequests}
+          />
+        )}
+
         <h1 className='text-2xl font-bold mb-8'>Theo dõi xét nghiệm</h1>
 
         <div className='space-y-6'>
@@ -70,8 +79,7 @@ const TestTracking: React.FC = () => {
                 <div>
                   <h3 className='font-semibold text-lg'>{request.ServiceName}</h3>
                   <div className='text-sm text-gray-600 mt-1'>
-                    Mã kit: {request.KitID} • Loại {request.ServiceType === 'Civil' ? 'Dân Sự' : 'Hành Chính'} •
-                    {request.ServiceType === 'Civil' ? '2 mẫu' : '3 mẫu'}
+                    Mã kit: {request.KitID} • {request.SampleCount} mẫu
                   </div>
                 </div>
                 <div className='flex gap-2'>
@@ -124,10 +132,7 @@ const TestTracking: React.FC = () => {
                   ✍️ Điền thông tin
                 </button>
               ) : (
-                <button
-                  onClick={() => handleViewDetails(request, request.CollectionMethod === 'Home')}
-                  className='px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200'
-                >
+                <button className='px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200'>
                   👁 Xem chi tiết
                 </button>
               )}
@@ -140,6 +145,167 @@ const TestTracking: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ✅ Component phụ TestInfoForm nằm ngoài
+const TestInfoForm: React.FC<{
+  sampleCount: number
+  onClose: () => void
+  request: TestProcess
+  onSubmitted: () => void
+}> = ({ sampleCount, onClose, request, onSubmitted }) => {
+  const [samples, setSamples] = useState(
+    Array.from({ length: sampleCount }, () => ({
+      fullName: '',
+      birthYear: '',
+      gender: '',
+      relation: '',
+      sampleType: '',
+      idNumber: '',
+      file: ''
+    }))
+  )
+
+  const handleChange = (index: number, field: keyof SampleInfo, value: SampleInfo[keyof SampleInfo]) => {
+    const updated = [...samples]
+    updated[index][field] = value
+    setSamples(updated)
+  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      for (let i = 0; i < samples.length; i++) {
+        const sample = samples[i]
+
+        // ⚠️ Kiểm tra thiếu trường
+        if (
+          !sample.fullName.trim() ||
+          !sample.birthYear.trim() ||
+          !sample.gender.trim() ||
+          !sample.sampleType.trim() ||
+          !sample.idNumber.trim()
+        ) {
+          alert(`⚠️ Vui lòng nhập đầy đủ thông tin cho mẫu số ${i + 1}`)
+          return
+        }
+
+        if (!/^\d{12}$/.test(sample.idNumber)) {
+          alert(`⚠️ CMND/CCCD mẫu số ${i + 1} phải đúng 12 chữ số`)
+          return
+        }
+
+        const formData = new FormData()
+        formData.append('TesterName', sample.fullName)
+        formData.append('YOB', sample.birthYear)
+        formData.append('Gender', sample.gender)
+        formData.append('Relationship', sample.relation)
+        formData.append('SampleType', sample.sampleType)
+        formData.append('CMND', sample.idNumber)
+        if (sample.file) {
+          formData.append('File', sample.file)
+        }
+
+        await testRequestService.createSampleCategory(request.TestRequestID, formData)
+      }
+
+      alert('✅ Gửi mẫu thành công!')
+      onClose()
+      onSubmitted()
+    } catch (err) {
+      console.error('❌ Lỗi gửi mẫu:', err)
+      alert('Có lỗi xảy ra. Vui lòng thử lại.')
+    }
+  }
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center'>
+      <div className='bg-white w-full max-w-4xl rounded-lg p-6 shadow-lg max-h-[90vh] overflow-y-auto'>
+        <div className='flex justify-between items-center mb-4'>
+          <h2 className='text-xl font-bold'>Điền thông tin xét nghiệm</h2>
+          <button onClick={onClose} className='text-gray-500 hover:text-red-600 text-lg font-bold'>
+            ×
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          {samples.map((sample, i) => (
+            <div key={i} className='mb-6 border p-4 rounded'>
+              <h4 className='font-semibold mb-4'>Mẫu {i + 1}</h4>
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                <input
+                  className='border p-2 rounded'
+                  placeholder='Họ tên *'
+                  value={sample.fullName}
+                  onChange={(e) => handleChange(i, 'fullName', e.target.value)}
+                  required
+                />
+                <input
+                  className='border p-2 rounded'
+                  placeholder='Năm sinh *'
+                  value={sample.birthYear}
+                  onChange={(e) => handleChange(i, 'birthYear', e.target.value)}
+                  required
+                />
+                <select
+                  className='border p-2 rounded'
+                  value={sample.gender}
+                  onChange={(e) => handleChange(i, 'gender', e.target.value)}
+                  required
+                >
+                  <option value=''>Chọn giới tính *</option>
+                  <option value='Male'>Nam</option>
+                  <option value='Female'>Nữ</option>
+                  <option value='Khác'>Khác</option>
+                </select>
+
+                <input
+                  className='border p-2 rounded'
+                  placeholder='VD: Con, Cha, Mẹ,...'
+                  value={sample.relation}
+                  onChange={(e) => handleChange(i, 'relation', e.target.value)}
+                />
+                <select
+                  className='border p-2 rounded'
+                  value={sample.sampleType}
+                  onChange={(e) => handleChange(i, 'sampleType', e.target.value)}
+                  required
+                >
+                  <option value=''>Chọn loại mẫu *</option>
+                  <option value='Máu'>Máu</option>
+                  <option value='Nước bọt'>Nước bọt</option>
+                  <option value='Tóc'>Tóc</option>
+                </select>
+                <input
+                  className='border p-2 rounded'
+                  placeholder='CMND/CCCD/Passport *'
+                  value={sample.idNumber}
+                  onChange={(e) => handleChange(i, 'idNumber', e.target.value)}
+                  required
+                />
+
+                <input
+                  type='file'
+                  className='border p-2 rounded'
+                  value={sample.file}
+                  onChange={(e) => handleChange(i, 'file', e.target.value)}
+                />
+              </div>
+            </div>
+          ))}
+
+          <div className='mt-6 flex justify-end gap-2'>
+            <button type='button' onClick={onClose} className='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300'>
+              Hủy
+            </button>
+            <button type='submit' className='px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700'>
+              Xác nhận thông tin
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

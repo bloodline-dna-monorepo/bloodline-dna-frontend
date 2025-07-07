@@ -7,6 +7,7 @@ import { userService } from '../../services/userService'
 import type { UserProfile } from '../../utils/types'
 import Button from '../../components/Common/Button'
 import DashboardSidebar from '../../components/Common/Sidebar'
+import { authService } from '../../services/authService'
 
 interface PasswordChangeModalProps {
   isOpen: boolean
@@ -125,6 +126,10 @@ const UserProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [fullName, setFullName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [address, setAddress] = useState('')
   useEffect(() => {
     fetchUserProfile()
   }, [])
@@ -135,6 +140,12 @@ const UserProfilePage: React.FC = () => {
       if (user?.accountId) {
         const profile = await userService.getProfile()
         setUserProfile(profile)
+
+        // Gán dữ liệu vào input
+        setFullName(profile.FullName || '')
+        setPhoneNumber(profile.PhoneNumber || '')
+        setDateOfBirth(profile.DateOfBirth || '')
+        setAddress(profile.Address || '')
       }
     } catch (error) {
       console.error('Error fetching user profile:', error)
@@ -145,13 +156,18 @@ const UserProfilePage: React.FC = () => {
 
   const handlePasswordChange = async (currentPassword: string, newPassword: string, confirmPassword: string) => {
     try {
-      // API call would go here - need backend endpoint
-      console.log('Password change API call needed:', { currentPassword, newPassword, confirmPassword })
-      alert('Cần tạo API endpoint để đổi mật khẩu')
+      const data = {
+        password: currentPassword,
+        NewPassword: newPassword,
+        confirmNewPassword: confirmPassword
+      }
+
+      const response = await authService.changePassword(data)
+      alert(response.message || 'Đổi mật khẩu thành công')
       setIsPasswordModalOpen(false)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error changing password:', error)
-      alert('Có lỗi xảy ra khi đổi mật khẩu')
+      alert(error?.response?.data?.message || 'Có lỗi xảy ra khi đổi mật khẩu')
     }
   }
 
@@ -163,14 +179,22 @@ const UserProfilePage: React.FC = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      // API call would go here - need backend endpoint for profile update
-      console.log('Profile update API call needed')
-      alert('Cần tạo API endpoint để cập nhật profile')
-    } catch (error) {
+      const data = {
+        FullName: fullName,
+        PhoneNumber: phoneNumber,
+        DateOfBirth: dateOfBirth,
+        Address: address
+        // Signature: selectedFile, (nếu bạn muốn gửi chữ ký, cần FormData)
+      }
+
+      await userService.updateProfile(data)
+      alert('Cập nhật thông tin thành công!')
+      fetchUserProfile()
+    } catch (error: any) {
       console.error('Error updating profile:', error)
+      alert(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật thông tin')
     }
   }
-
   if (loading) {
     return <div className='flex justify-center items-center h-64'>Đang tải...</div>
   }
@@ -186,35 +210,47 @@ const UserProfilePage: React.FC = () => {
             <label className='block text-sm font-medium mb-2'>
               Họ và tên <span className='text-red-500'>*</span>
             </label>
-            <div className='text-lg font-medium'>{userProfile?.FullName || 'Nguyễn Văn A'}</div>
-          </div>
-
-          <div>
-            <label className='block text-sm font-medium mb-2'>
-              Email <span className='text-red-500'>*</span>
-            </label>
-            <div className='flex items-center gap-2'>
-              <span className='text-lg'>{userProfile?.Email || 'nguyenvana@gmail.com'}</span>
-              <span className='text-green-500 text-sm'>Can't update</span>
-            </div>
+            <input
+              type='text'
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className='w-full px-3 py-2 border border-gray-300 rounded-md'
+              required
+            />
           </div>
 
           <div>
             <label className='block text-sm font-medium mb-2'>
               Số điện thoại <span className='text-red-500'>*</span>
             </label>
-            <div className='text-lg'>{userProfile?.PhoneNumber || '0123456789'}</div>
+            <input
+              type='text'
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className='w-full px-3 py-2 border border-gray-300 rounded-md'
+              required
+            />{' '}
           </div>
 
           <div>
             <label className='block text-sm font-medium mb-2'>Ngày sinh</label>
-            <div className='text-lg'>{userProfile?.DateOfBirth || '01/01/1999'}</div>
+            <input
+              type='text'
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            />{' '}
           </div>
 
           <div className='md:col-span-2'>
             <label className='block text-sm font-medium mb-2'>Địa chỉ</label>
-            <div className='text-lg'>{userProfile?.Address || '123 Đường ABC, Quận 1, TP.HCM'}</div>
-            
+
+            <input
+              type='text'
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className='w-full px-3 py-2 border border-gray-300 rounded-md'
+            />
           </div>
 
           <div className='md:col-span-2'>
@@ -246,7 +282,7 @@ const UserProfilePage: React.FC = () => {
                 Chọn file
               </label>
             </div>
-           
+
             <Button onClick={handleUpdateProfile} className='mt-3 bg-black text-white hover:bg-gray-800'>
               Cập nhật
             </Button>
@@ -271,8 +307,6 @@ const UserProfilePage: React.FC = () => {
               Đổi mật khẩu
             </Button>
           </div>
-
-         
         </div>
 
         <PasswordChangeModal
