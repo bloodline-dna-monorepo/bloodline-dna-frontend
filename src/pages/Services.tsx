@@ -5,18 +5,18 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
 import { useAuth } from '../hooks/useAuth'
-import type { Services, UserProfile } from '../utils/types'
+import type { Services as ServiceType, UserProfile } from '../utils/types'
 import { userService } from '../services/userService'
-import { testRequestService } from '../services/testRequestService'
+import { paymentService } from '..//services/paymentService'
 
 interface RegistrationModalProps {
   isOpen: boolean
   onClose: () => void
-  Services: Services | null
+  Service: ServiceType | null
   serviceType: 'Administrative' | 'Civil'
 }
 
-const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Services, serviceType }) => {
+const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Service, serviceType }) => {
   const { user } = useAuth()
   const navigate = useNavigate()
 
@@ -58,10 +58,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
         fullName: user.profile?.FullName || '',
         birthDate: user.profile?.DateOfBirth || '',
         phoneNumber: user.profile?.PhoneNumber || '',
-        selectedService: Services?.ServiceName || ''
+        selectedService: Service?.ServiceName || ''
       }))
     }
-  }, [isOpen, user, Services])
+  }, [isOpen, user, Service])
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({
@@ -100,22 +100,19 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
     }
 
     try {
-      const registrationData = {
-        serviceId: Services?.ServiceID!,
+      // Create payment session instead of directly creating test request
+      const response = await paymentService.createPayment({
+        serviceId: Service?.ServiceID!,
         collectionMethod: formData.collectionMethod,
-        appointmentDate: formData.collectionMethod === 'facility' ? formData.appointmentDate : undefined
-      }
-
-      const result = await testRequestService.createTestRequest(registrationData)
-
-      alert(result.message || 'Đăng ký thành công!')
-      // ❗ Thêm timeout 300ms để đảm bảo người dùng thấy alert trước khi đóng
-      setTimeout(() => {
-        onClose()
-      }, 300)
+        appointmentDate: formData.collectionMethod ? formData.appointmentDate : undefined
+      })
+      console.log('CreatePayment response:', response)
+      // Close modal and redirect to payment page
+      onClose()
+      navigate(`/payment?sessionId=${response.data.sessionId}`)
     } catch (error) {
-      console.error('Đăng ký thất bại:', error)
-      alert('Đăng ký thất bại. Vui lòng thử lại sau.')
+      console.error('Tạo phiên thanh toán thất bại:', error)
+      alert('Không thể tạo phiên thanh toán. Vui lòng thử lại sau.')
     }
   }
 
@@ -199,7 +196,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
               required
             >
-              {Services && <option value={Services.ServiceName}>{Services.ServiceName}</option>}
+              {Service && <option value={Service.ServiceName}>{Service.ServiceName}</option>}
             </select>
           </div>
 
@@ -335,12 +332,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
   )
 }
 
-const Services: React.FC = () => {
+const ServicesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
-  const [servicesList, setServicesList] = useState<Services[]>([])
+  const [servicesList, setServicesList] = useState<ServiceType[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [selectedService, setSelectedService] = useState<Services | null>(null)
+  const [selectedService, setSelectedService] = useState<ServiceType | null>(null)
   const [showModal, setShowModal] = useState(false)
 
   const { isAuthenticated } = useAuth()
@@ -367,7 +364,7 @@ const Services: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  const handleRegisterClick = (Services: Services) => {
+  const handleRegisterClick = (Service: ServiceType) => {
     // Check if user is logged in
     if (!isAuthenticated) {
       alert('Vui lòng đăng nhập để đăng ký dịch vụ')
@@ -375,7 +372,7 @@ const Services: React.FC = () => {
       return
     }
 
-    setSelectedService(Services)
+    setSelectedService(Service)
     setShowModal(true)
   }
 
@@ -429,22 +426,22 @@ const Services: React.FC = () => {
           </div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-            {servicesList.map((Services) => {
-              const basePrice = Services.Price ?? 0
+            {servicesList.map((Service) => {
+              const basePrice = Service.Price ?? 0
               return (
                 <div
-                  key={Services.ServiceID}
+                  key={Service.ServiceID}
                   className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
                 >
                   <div className='mb-6'>
-                    <h2 className='text-2xl font-bold mb-2'>{Services.ServiceName}</h2>
-                    <p className='text-white/90'>{Services.Description}</p>
+                    <h2 className='text-2xl font-bold mb-2'>{Service.ServiceName}</h2>
+                    <p className='text-white/90'>{Service.Description}</p>
                   </div>
 
                   <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                     <div>
                       <h3 className='font-semibold mb-2'>Số mẫu</h3>
-                      <p className='text-xl'>{Services.SampleCount ?? 'Không xác định'}</p>
+                      <p className='text-xl'>{Service.SampleCount ?? 'Không xác định'}</p>
                     </div>
 
                     <div>
@@ -455,7 +452,7 @@ const Services: React.FC = () => {
                     <div>
                       <h3 className='font-semibold mb-2'>Đăng ký</h3>
                       <button
-                        onClick={() => handleRegisterClick(Services)}
+                        onClick={() => handleRegisterClick(Service)}
                         className='inline-block mt-2 px-6 py-2 rounded-full font-medium transition-colors bg-white/20 text-white hover:bg-white/30 active:bg-white/40'
                       >
                         Đăng ký
@@ -470,9 +467,9 @@ const Services: React.FC = () => {
       </div>
 
       {/* Registration Modal */}
-      <RegistrationModal isOpen={showModal} onClose={closeModal} Services={selectedService} serviceType={activeTab} />
+      <RegistrationModal isOpen={showModal} onClose={closeModal} Service={selectedService} serviceType={activeTab} />
     </div>
   )
 }
 
-export default Services
+export default ServicesPage

@@ -35,6 +35,8 @@ import { useAuth } from './hooks/useAuth'
 import TestTracking from './pages/customer/TestTracking'
 import UserProfilePage from './pages/customer/UserProfile'
 import HistoryServices from './pages/customer/HistoryServices'
+import Payment from './pages/Payment'
+import PaymentReturn from './pages/PaymentReturn'
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -251,15 +253,23 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             /> */}
-            Service Registration
-            {/* <Route
-              path='/service-registration/:serviceId'
+            {/* Payment route (after service registration) */}
+            <Route
+              path='/payment'
               element={
                 <ProtectedRoute>
-                  <RegistrationPage />
+                  <Payment />
                 </ProtectedRoute>
               }
-            /> */}
+            />
+            <Route
+              path='/payment/return'
+              element={
+                <ProtectedRoute>
+                  <PaymentReturn />
+                </ProtectedRoute>
+              }
+            />
             {/* Fallback Routes */}
             <Route path='/dashboard' element={<Navigate to='/profile' replace />} />
             <Route path='/profile' element={<Navigate to='/customer/profile' replace />} />

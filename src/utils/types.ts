@@ -20,7 +20,7 @@ export interface TestProcess {
   Appointment: string
   CollectionMethod: string
   AssignedTo: string
-  Status: String
+  Status: string
   KitID: string
 }
 export interface UserProfile {
@@ -151,22 +151,18 @@ export interface FileUpload {
 }
 
 // Payment Types
-export interface PaymentTransaction {
-  TransactionID: number
-  RegistrationID: number
-  Amount: number
-  PaymentMethod: string
-  Status: string
-  TransactionReference?: string
-  PaymentDate?: string
-  CreatedAt: string
+export interface Payment {
+  BankType: string
+  CardNumber: number
+  CardName: string
 }
 
-export interface PaymentRequest {
-  registrationId: number
-  amount: number
-  paymentMethod: string
-  returnUrl: string
+export interface PaymentBodyRequest {
+  Price: number
+  ServiceName: string
+  ServiceID: number
+  SampleCount: 2 | 3
+  ServiceType: 'Administrative' | 'Civil'
 }
 
 // API Response Types
