@@ -1,8 +1,30 @@
+export interface SampleInfo {
+  fullName: string
+  birthYear: string
+  gender: string
+  relation: string
+  sampleType: string
+  idNumber: string
+  file: ''
+}
+
 export interface TestRequestData {
   serviceId: number
   collectionMethod: string
   appointmentDate?: string
 } // User and Authentication Types
+export interface ChangePasswordReponse {
+  message: string
+}
+export interface UpdateProfilereq {
+  FullName: string
+  PhoneNumber: string
+  DateOfBirth: string
+  Address: string
+}
+export interface UpdateProfilerep {
+  message: string
+}
 export interface User {
   accountId: number
   name: string
@@ -66,9 +88,9 @@ export interface RegisterRequest {
 }
 
 export interface ChangePasswordRequest {
-  oldPassword: string
-  newPassword: string
-  confirmPassword: string
+  password: string
+  NewPassword: string
+  confirmNewPassword: string
 }
 
 export interface LoginResponse {
