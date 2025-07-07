@@ -569,15 +569,15 @@ const StaffProfile: React.FC = () => {
                                                     <div className="flex-1 bg-gray-200 rounded-full h-2">
                                                         <div
                                                             className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.score < 3 ? 'bg-red-500' :
-                                                                    passwordStrength.score < 5 ? 'bg-yellow-500' :
-                                                                        'bg-green-500'
+                                                                passwordStrength.score < 5 ? 'bg-yellow-500' :
+                                                                    'bg-green-500'
                                                                 }`}
                                                             style={{ width: `${(passwordStrength.score / 6) * 100}%` }}
                                                         />
                                                     </div>
                                                     <span className={`text-xs font-medium ${passwordStrength.score < 3 ? 'text-red-500' :
-                                                            passwordStrength.score < 5 ? 'text-yellow-500' :
-                                                                'text-green-500'
+                                                        passwordStrength.score < 5 ? 'text-yellow-500' :
+                                                            'text-green-500'
                                                         }`}>
                                                         {passwordStrength.feedback}
                                                     </span>
@@ -600,12 +600,12 @@ const StaffProfile: React.FC = () => {
                                                 value={passwordData.confirmPassword}
                                                 onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
                                                 className={`w-full px-3 py-2 pr-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 ${passwordData.confirmPassword && passwordData.newPassword &&
-                                                        passwordData.confirmPassword !== passwordData.newPassword
-                                                        ? 'border-red-300 bg-red-50'
-                                                        : passwordData.confirmPassword && passwordData.newPassword &&
-                                                            passwordData.confirmPassword === passwordData.newPassword
-                                                            ? 'border-green-300 bg-green-50'
-                                                            : 'border-gray-300'
+                                                    passwordData.confirmPassword !== passwordData.newPassword
+                                                    ? 'border-red-300 bg-red-50'
+                                                    : passwordData.confirmPassword && passwordData.newPassword &&
+                                                        passwordData.confirmPassword === passwordData.newPassword
+                                                        ? 'border-green-300 bg-green-50'
+                                                        : 'border-gray-300'
                                                     }`}
                                                 required
                                             />

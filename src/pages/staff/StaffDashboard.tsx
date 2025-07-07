@@ -110,8 +110,8 @@ const StaffDashboard: React.FC = () => {
                             {recentActivities.map((activity) => (
                                 <div key={activity.id} className='flex items-start space-x-4 p-4 hover:bg-gray-50 rounded-lg transition-colors'>
                                     <div className={`w-3 h-3 rounded-full mt-2 ${activity.type === 'success' ? 'bg-green-500' :
-                                            activity.type === 'processing' ? 'bg-blue-500' :
-                                                'bg-gray-500'
+                                        activity.type === 'processing' ? 'bg-blue-500' :
+                                            'bg-gray-500'
                                         }`} />
                                     <div className='flex-1 min-w-0'>
                                         <div className='flex items-center justify-between'>
