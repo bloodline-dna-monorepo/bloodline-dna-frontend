@@ -54,6 +54,14 @@ export interface User {
   profile?: UserProfile
 }
 
+export interface Feedback {
+  FeedbackID: string
+  CustomerFeedback: string;
+  DateFeedback: string;
+  RatingFeedback: number;
+  CommentFeedback: string;
+}
+
 export interface TestProcess {
   TestRequestID: number
   ServiceName: string
@@ -130,6 +138,7 @@ export interface Services {
   ServiceID: number
   ServiceName: string
   ServiceType: string
+
   Description: string
   Price: number
   SampleCount: number
@@ -151,9 +160,38 @@ export interface SampleCategories {
   Relationship: string
   SignatureImage: string
 }
-
+export interface TestProcess {
+  TestRequestID: number
+  ServiceName: string
+  SampleCount: number
+  ServiceType: string
+  CreatedAt: string
+  Appointment: string
+  CollectionMethod: string
+  AssignedTo: string
+  Status: string
+  KitID: string
+}
 // Test Request Types
-
+export interface TestRequests {
+  RequestID: number
+  CustomerID: number
+  CustomerName: string
+  StaffName: string
+  ServiceID: number
+  Status: 'Input Infor' | 'Pending' | 'Confirmed' | 'In Progress' | 'Completed'
+  AssignedTo?: number
+  SampleType: string
+  CollectionMethod: 'Home' | 'Facility'
+  SampleCount: 2 | 3
+  CreatedAt: string
+  ConfirmDate?: string
+  ServiceName?: string
+  ServiceType?: 'Administrative' | 'Civil'
+  KitID?: string
+  Appointment: string
+  
+}
 export interface History {
   TestRequestID: string
   KitID?: string
@@ -170,6 +208,7 @@ export interface History {
 }
 export interface TestResults {
   TestRequestID: string
+
   CustomerName: string
   KitID?: string
   ServiceID: number
@@ -178,6 +217,8 @@ export interface TestResults {
   Result: string
   EnterBy: number
   SampleDate: string
+
+
   StaffName: string
   Status: 'Pending' | 'Verified'
 }
