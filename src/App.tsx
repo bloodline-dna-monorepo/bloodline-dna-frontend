@@ -26,7 +26,6 @@ import ManageRequests from "./pages/staff/ManageRequests"
 import ConfirmedRequests from "./pages/staff/ConfirmedRequests"
 import TestProcess from "./pages/staff/TestProcess"
 import TestProcessCenter from "./pages/staff/TestProcessCenter"
-import StaffProfile from "./pages/staff/StaffProfile"
 // import TestRequestDetails from "./pages/staff/TestRequestDetails"
 
 // Manager Pages
@@ -166,6 +165,20 @@ const App: React.FC = () => {
                 </>
               }
             />
+            
+            <Route
+              path='/staff/dashboard'
+              element={
+                <>
+                  <Header />
+                  <main className='flex-1'>
+                    <Blog />
+                  </main>
+                  <Footer />
+                </>
+              }
+            />
+
             {/* <Route
               path="/service/:id"
               element={
@@ -223,32 +236,62 @@ const App: React.FC = () => {
             />
             {/* Staff Routes - Temporary bypass for testing */}
             <Route
-              path="/staff/dashboard"
-              element={<StaffDashboard />}
+              path="/staff-dashboard"
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <StaffDashboard />
+                </ProtectedRoute>
+              }
             />
             <Route
-              path="/staff/manage-requests"
-              element={<ManageRequests />}
+              path="/staff-test-requests"
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>  
+                  <ManageRequests />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/staff/manage-requests/not-confirmed"
-              element={<ManageRequests />}
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <ManageRequests />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/staff/manage-requests/confirmed"
-              element={<ConfirmedRequests />}
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <ConfirmedRequests />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/test-process"
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <TestProcess />
+                </ProtectedRoute>
+                }
             />
             <Route
-              path="/staff/test-process/:requestId"
-              element={<TestProcess />}
+              path="/test-process-center"
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <TestProcessCenter />
+                </ProtectedRoute>
+              }
             />
+
             <Route
-              path="/staff/test-process-center/:requestId"
-              element={<TestProcessCenter />}
-            />
-            <Route
-              path="/staff/profile"
-              element={<StaffProfile />}
+              path="/staff-profile"
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <UserProfilePage />
+                </ProtectedRoute>
+              }
             />
             {/* <Route
               path="/staff/test-request/:id"

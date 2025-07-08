@@ -11,9 +11,11 @@ import {
   UsersIcon,
   ChartBarIcon,
   CogIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '../../hooks/useAuth'
+import { CheckCircleIcon, PlusCircleIcon } from 'lucide-react'
 
 const DashboardSidebar: React.FC = () => {
   const { user, logout, isAdmin, isManager, isStaff, isCustomer } = useAuth()
@@ -36,9 +38,16 @@ const DashboardSidebar: React.FC = () => {
   ]
 
   const staffMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/test-requests', label: 'Test Requests', icon: BeakerIcon },
-    { path: '/profile', label: 'Profile', icon: UserIcon }
+    { path: '/staff-dashboard', label: 'Dashboard', icon: HomeIcon },
+    { path: '/staff-test-requests', label: 'Test Requests', icon: BeakerIcon },
+    { path: '/staff-profile', label: 'Profile', icon: UserIcon,
+      subItems: [
+                { path: '/staff/manage-requests/not-confirmed', label: '+ Chưa xác nhận', icon: PlusCircleIcon },
+                { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
+            ]
+    },
+    { path: '/test-process', label: 'Test Process', icon: CogIcon},
+    { path: '/test-process-center', label: 'Test Process Center', icon: CpuChipIcon }
   ]
 
   const managerMenuItems = [
