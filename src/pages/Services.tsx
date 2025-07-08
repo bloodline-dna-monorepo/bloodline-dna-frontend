@@ -7,16 +7,17 @@ import { serviceService } from '../services/serviceService'
 import { useAuth } from '../hooks/useAuth'
 import type { Services as ServiceType, UserProfile } from '../utils/types'
 import { userService } from '../services/userService'
-import { paymentService } from '..//services/paymentService'
+import { paymentService } from '../services/paymentService'
+import type { CreatePaymentUrlRequest } from '../utils/types'
 
 interface RegistrationModalProps {
   isOpen: boolean
   onClose: () => void
-  Service: ServiceType | null
+  Services: ServiceType | null
   serviceType: 'Administrative' | 'Civil'
 }
 
-const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Service, serviceType }) => {
+const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Services, serviceType }) => {
   const { user } = useAuth()
   const navigate = useNavigate()
 
@@ -33,6 +34,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
   })
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const fetchUserProfile = async () => {
     try {
@@ -44,24 +46,25 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       console.error('Error fetching user profile:', error)
     }
   }
-  useEffect(() => {
-    console.log('Current user:', user)
 
-    fetchUserProfile()
-  }, [])
+  useEffect(() => {
+    if (isOpen) {
+      fetchUserProfile()
+    }
+  }, [isOpen, user])
 
   // Load user data when modal opens
   useEffect(() => {
-    if (isOpen && user?.profile) {
+    if (isOpen && userProfile) {
       setFormData((prev) => ({
         ...prev,
-        fullName: user.profile?.FullName || '',
-        birthDate: user.profile?.DateOfBirth || '',
-        phoneNumber: user.profile?.PhoneNumber || '',
-        selectedService: Service?.ServiceName || ''
+        fullName: userProfile.FullName || '',
+        birthDate: userProfile.DateOfBirth?.slice(0, 10) || '',
+        phoneNumber: userProfile.PhoneNumber || '',
+        selectedService: Services?.ServiceName || ''
       }))
     }
-  }, [isOpen, user, Service])
+  }, [isOpen, userProfile, Services])
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({
@@ -87,6 +90,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       return
     }
 
+    if (formData.collectionMethod === 'facility' && !formData.appointmentDate) {
+      alert('Vui lòng chọn ngày đăng ký')
+      return
+    }
+
     if (formData.collectionMethod === 'facility') {
       const today = new Date()
       const selectedDate = new Date(formData.appointmentDate)
@@ -99,34 +107,65 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       }
     }
 
+    if (!Services) {
+      alert('Không tìm thấy thông tin dịch vụ')
+      return
+    }
+
+    setIsSubmitting(true)
+
     try {
-      // Create payment session instead of directly creating test request
-      const response = await paymentService.createPayment({
-        serviceId: Service?.ServiceID!,
-        collectionMethod: formData.collectionMethod,
-        appointmentDate: formData.collectionMethod ? formData.appointmentDate : undefined
-      })
-      console.log('CreatePayment response:', response)
-      // Close modal and redirect to payment page
-      onClose()
-      navigate(`/payment?sessionId=${response.data.sessionId}`)
-    } catch (error) {
-      console.error('Tạo phiên thanh toán thất bại:', error)
-      alert('Không thể tạo phiên thanh toán. Vui lòng thử lại sau.')
+      // Prepare payment data with proper validation
+      const paymentData: CreatePaymentUrlRequest = {
+        amount: Services.Price,
+        orderInfo: `Đăng ký dịch vụ ${Services.ServiceName} - ${Services.ServiceType}`,
+        serviceId: Services.ServiceID
+      }
+
+      console.log('Sending payment request:', paymentData)
+
+      // Create VNPAY payment URL
+      const paymentResponse = await paymentService.createPaymentUrl(paymentData)
+
+      if (paymentResponse.success && paymentResponse.paymentUrl) {
+        // Store registration data and service info for after payment
+        const registrationData = {
+          serviceId: Services.ServiceID,
+          collectionMethod: formData.collectionMethod,
+          appointmentDate: formData.appointmentDate
+        } // Declare registrationData here
+        const navigationState = {
+          registrationData
+        }
+
+        // Store data in sessionStorage as backup
+        localStorage.setItem('pendingRegistration', JSON.stringify(navigationState))
+
+        console.log('Redirecting to VNPAY:', paymentResponse.paymentUrl)
+
+        // Redirect to VNPAY payment page
+        window.location.href = paymentResponse.paymentUrl
+      } else {
+        throw new Error(paymentResponse.message || 'Không thể tạo liên kết thanh toán')
+      }
+    } catch (error: any) {
+      console.error('Lỗi khi tạo thanh toán:', error)
+      alert(error.message || 'Có lỗi xảy ra khi tạo thanh toán. Vui lòng thử lại sau.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   if (!isOpen) return null
 
   const isAdministrative = serviceType === 'Administrative'
-  const showDateField = isAdministrative || formData.collectionMethod === 'facility'
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
       <div className='bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto'>
         {/* Header */}
         <div className='bg-gray-200 px-6 py-4 flex items-center'>
-          <button onClick={onClose} className='text-gray-600 hover:text-gray-800 mr-3'>
+          <button onClick={onClose} className='text-gray-600 hover:text-gray-800 mr-3' disabled={isSubmitting}>
             ← Quay lại
           </button>
           <h2 className='text-lg font-semibold'>
@@ -145,9 +184,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 type='date'
                 value={formData.appointmentDate}
                 onChange={(e) => handleInputChange('appointmentDate', e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]} // Tomorrow
                 className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                 required
+                disabled={isSubmitting}
               />
             </div>
           )}
@@ -167,6 +207,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                     checked={formData.collectionMethod === 'home'}
                     onChange={(e) => handleInputChange('collectionMethod', e.target.value)}
                     className='mr-2'
+                    disabled={isSubmitting}
                   />
                   Tại nhà
                 </label>
@@ -179,6 +220,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                   checked={formData.collectionMethod === 'facility'}
                   onChange={(e) => handleInputChange('collectionMethod', e.target.value)}
                   className='mr-2'
+                  disabled={isSubmitting}
                 />
                 Tại cơ sở
               </label>
@@ -195,8 +237,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
               onChange={(e) => handleInputChange('selectedService', e.target.value)}
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
               required
+              disabled={isSubmitting}
             >
-              {Service && <option value={Service.ServiceName}>{Service.ServiceName}</option>}
+              {Services && <option value={Services.ServiceName}>{Services.ServiceName}</option>}
             </select>
           </div>
 
@@ -211,10 +254,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 </label>
                 <input
                   type='text'
-                  value={userProfile?.FullName}
+                  value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-100'
                   required
+                  readOnly
                 />
               </div>
 
@@ -223,11 +267,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                   Ngày tháng năm sinh <span className='text-red-500'>*</span>
                 </label>
                 <input
-                  type='text'
-                  value={userProfile?.DateOfBirth?.slice(0, 10) || ''}
+                  type='date'
+                  value={formData.birthDate}
                   onChange={(e) => handleInputChange('birthDate', e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-100'
                   required
+                  readOnly
                 />
               </div>
             </div>
@@ -239,10 +284,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 </label>
                 <input
                   type='tel'
-                  value={userProfile?.PhoneNumber}
+                  value={formData.phoneNumber}
                   onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-100'
                   required
+                  readOnly
                 />
               </div>
             </div>
@@ -253,23 +299,13 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 Hình ảnh chữ ký <span className='text-red-500'>*</span>
               </label>
               <div className='flex items-center gap-2'>
-                {formData.signatureFile ? (
+                {userProfile?.SignatureImage ? (
                   <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
-                    <span className='text-sm'>{userProfile?.SignatureImage}</span>
-                    <button
-                      type='button'
-                      onClick={() => handleInputChange('signatureFile', null)}
-                      className='text-red-500 hover:text-red-700'
-                    >
-                      ✕
-                    </button>
+                    <span className='text-sm'>{userProfile.SignatureImage}</span>
                   </div>
                 ) : (
                   <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
-                    <span className='text-sm'>chu-ky.png (100kb)</span>
-                    <button type='button' className='text-red-500 hover:text-red-700'>
-                      ✕
-                    </button>
+                    <span className='text-sm'>Chưa có chữ ký</span>
                   </div>
                 )}
                 <input
@@ -278,8 +314,14 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                   accept='image/*'
                   className='hidden'
                   id='signature-upload'
+                  disabled={isSubmitting}
                 />
-                <label htmlFor='signature-upload' className='cursor-pointer text-blue-500 hover:text-blue-700 text-sm'>
+                <label
+                  htmlFor='signature-upload'
+                  className={`cursor-pointer text-blue-500 hover:text-blue-700 text-sm ${
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
                   Chọn file
                 </label>
               </div>
@@ -314,6 +356,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 onChange={(e) => handleInputChange('agreeTerms', e.target.checked)}
                 className='mt-1'
                 required
+                disabled={isSubmitting}
               />
               <span className='text-sm'>Tôi đồng ý với các điều khoản và cam kết nêu trên</span>
             </label>
@@ -322,9 +365,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
           {/* Submit Button */}
           <button
             type='submit'
-            className='w-full bg-teal-600 text-white py-3 rounded-md hover:bg-teal-700 transition-colors font-medium'
+            disabled={isSubmitting}
+            className={`w-full py-3 rounded-md font-medium transition-colors ${
+              isSubmitting ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-teal-600 text-white hover:bg-teal-700'
+            }`}
           >
-            Gửi đăng ký
+            {isSubmitting ? 'Đang xử lý...' : 'Gửi đăng ký'}
           </button>
         </form>
       </div>
@@ -349,8 +395,8 @@ const ServicesPage: React.FC = () => {
       setError('')
       const data = await serviceService.getServicesByType(activeTab)
       setServicesList(Array.isArray(data) ? data : [])
-    } catch (error) {
-      setError('Failed to load services' + error)
+    } catch (error: any) {
+      setError('Failed to load services: ' + (error.message || error))
     } finally {
       setLoading(false)
     }
@@ -364,7 +410,7 @@ const ServicesPage: React.FC = () => {
     return new Intl.NumberFormat('vi-VN').format(price) + ' đ'
   }
 
-  const handleRegisterClick = (Service: ServiceType) => {
+  const handleRegisterClick = (Services: ServiceType) => {
     // Check if user is logged in
     if (!isAuthenticated) {
       alert('Vui lòng đăng nhập để đăng ký dịch vụ')
@@ -372,7 +418,7 @@ const ServicesPage: React.FC = () => {
       return
     }
 
-    setSelectedService(Service)
+    setSelectedService(Services)
     setShowModal(true)
   }
 
@@ -426,22 +472,22 @@ const ServicesPage: React.FC = () => {
           </div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-            {servicesList.map((Service) => {
-              const basePrice = Service.Price ?? 0
+            {servicesList.map((Services) => {
+              const basePrice = Services.Price ?? 0
               return (
                 <div
-                  key={Service.ServiceID}
+                  key={Services.ServiceID}
                   className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
                 >
                   <div className='mb-6'>
-                    <h2 className='text-2xl font-bold mb-2'>{Service.ServiceName}</h2>
-                    <p className='text-white/90'>{Service.Description}</p>
+                    <h2 className='text-2xl font-bold mb-2'>{Services.ServiceName}</h2>
+                    <p className='text-white/90'>{Services.Description}</p>
                   </div>
 
                   <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                     <div>
                       <h3 className='font-semibold mb-2'>Số mẫu</h3>
-                      <p className='text-xl'>{Service.SampleCount ?? 'Không xác định'}</p>
+                      <p className='text-xl'>{Services.SampleCount ?? 'Không xác định'}</p>
                     </div>
 
                     <div>
@@ -452,7 +498,7 @@ const ServicesPage: React.FC = () => {
                     <div>
                       <h3 className='font-semibold mb-2'>Đăng ký</h3>
                       <button
-                        onClick={() => handleRegisterClick(Service)}
+                        onClick={() => handleRegisterClick(Services)}
                         className='inline-block mt-2 px-6 py-2 rounded-full font-medium transition-colors bg-white/20 text-white hover:bg-white/30 active:bg-white/40'
                       >
                         Đăng ký
@@ -467,7 +513,7 @@ const ServicesPage: React.FC = () => {
       </div>
 
       {/* Registration Modal */}
-      <RegistrationModal isOpen={showModal} onClose={closeModal} Service={selectedService} serviceType={activeTab} />
+      <RegistrationModal isOpen={showModal} onClose={closeModal} Services={selectedService} serviceType={activeTab} />
     </div>
   )
 }

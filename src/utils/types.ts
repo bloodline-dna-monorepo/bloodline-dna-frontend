@@ -1,3 +1,24 @@
+// Payment Types - Updated with proper typing
+export interface CreatePaymentUrlRequest {
+  amount: number
+  orderInfo: string
+  serviceId?: number
+}
+
+export interface CreatePaymentUrlResponse {
+  success: boolean
+  paymentUrl?: string
+  message: string
+}
+
+export interface PaymentResultState {
+  registrationData: TestRequestData
+  serviceInfo: {
+    serviceName: string
+    serviceType: string
+    amount: number
+  }
+}
 export interface SampleInfo {
   fullName: string
   birthYear: string
@@ -111,12 +132,12 @@ export interface Services {
   ServiceType: string
   Description: string
   Price: number
-  SampleCount: 2 | 3
+  SampleCount: number
   CreatedAt: Date
   UpdatedAt: Date
 }
 export interface ServiceResponse {
-  service: Service
+  service: Services
 }
 
 export interface SampleCategories {
@@ -173,7 +194,6 @@ export interface FileUpload {
   CreatedAt: string
 }
 
-// Payment Types
 export interface Payment {
   BankType: string
   CardNumber: number
@@ -199,4 +219,12 @@ export interface ApiResponse<T> extends LoginResponse {
 export interface Role {
   RoleID: number
   RoleName: string
+}
+
+export interface Feedback {
+  TestResultID: number
+  Rating: number
+  Comment: string
+  FullName: string
+  CreatedAt: Date
 }

@@ -11,9 +11,12 @@ interface CreateSampleResponse {
 export const testRequestService = {
   // Create test request (called ONLY after successful payment)
   createTestRequest: async (registrationData: TestRequestData): Promise<CreateTestRequestResponse> => {
-    const response = await apiClient.post<CreateTestRequestResponse>('/test-requests', registrationData)
-    return {
-      message: response.data.message
+    try {
+      const response = await apiClient.post<CreateTestRequestResponse>('/test-requests', registrationData)
+      return response.data
+    } catch (error) {
+      console.error('Error creating test request:', error)
+      throw new Error( 'Không thể tạo yêu cầu xét nghiệm')
     }
   },
   createSampleCategory: async (testRequestId: number, formData: FormData): Promise<CreateSampleResponse> => {

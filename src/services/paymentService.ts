@@ -1,66 +1,64 @@
-import { apiClient } from '../utils/api'
-import type { Services, TestRequestData } from '../utils/types'
+import { apiClient } from "../utils/api"
 
-// Định nghĩa các kiểu dữ liệu
-
-interface PaymentSession {
-  sessionId: string
-  userId: number
-  serviceId: number
-  collectionMethod: string
-  appointmentDate?: string
+export interface CreatePaymentUrlRequest {
   amount: number
-  createdAt: Date
+  orderInfo: string
+  serviceId?: number
 }
 
-interface PaymentResponse {
+export interface CreatePaymentUrlResponse {
   success: boolean
+  paymentUrl?: string
   message: string
-  data: {
-    paymentUrl: string
-    sessionId: string
-    service: Services // Thay 'any' bằng kiểu Service
-  }
 }
 
-interface PaymentReturnResponse {
-  success: boolean
-  message: string
-  data: {
-    testRequest: TestRequestData // Thay 'any' bằng kiểu TestRequest
-    transactionId?: string
-    paymentStatus: 'success' | 'failed'
-    responseCode?: string
-  }
+export const paymentService = {
+  createPaymentUrl: async (data: CreatePaymentUrlRequest): Promise<CreatePaymentUrlResponse> => {
+    try {
+      // Validation
+      if (!data.amount || typeof data.amount !== "number" || data.amount <= 0) {
+        throw new Error("Amount must be a positive number")
+      }
+
+      if (!data.orderInfo || typeof data.orderInfo !== "string" || data.orderInfo.trim().length === 0) {
+        throw new Error("Order info is required")
+      }
+
+      console.log("Sending payment request:", data)
+
+      const response = await apiClient.post<CreatePaymentUrlResponse>("/payments/create-vnpay-url", {
+        amount: Math.round(data.amount), // Ensure integer
+        orderInfo: data.orderInfo.trim(),
+        serviceId: data.serviceId,
+      })
+
+      console.log("Payment response:", response.data)
+
+      if (!response.data.success) {
+        throw new Error(response.data.message || "Failed to create payment URL")
+      }
+
+      return response.data
+    } catch (error: any) {
+      console.error("Payment service error:", error)
+
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message)
+      } else if (error.message) {
+        throw new Error(error.message)
+      } else {
+        throw new Error("Không thể tạo liên kết thanh toán")
+      }
+    }
+  },
+
+  verifyPayment: async (transactionId: string): Promise<any> => {
+    try {
+      const response = await apiClient.get(`/payments/verify/${transactionId}`)
+      return response.data
+    } catch (error: any) {
+      console.error("Payment verification error:", error)
+      throw new Error(error.response?.data?.message || "Không thể xác minh thanh toán")
+    }
+  },
 }
-
-interface PaymentSessionResponse {
-  success: boolean
-  data: {
-    session: PaymentSession // Thay 'any' bằng kiểu PaymentSession
-    service: Services // Thay 'any' bằng kiểu Service
-  }
-}
-
-class PaymentService {
-  // Tạo phiên thanh toán
-  async createPayment(data: TestRequestData): Promise<PaymentResponse> {
-    const response = await apiClient.post('/payment/create', data)
-    return response.data as PaymentResponse
-  }
-
-  // Xử lý kết quả trả về từ VNPay
-  async handleVNPayReturn(params: Record<string, string>): Promise<PaymentReturnResponse> {
-    const queryString = new URLSearchParams(params).toString()
-    const response = await apiClient.get(`/payment/vnpay-return?${queryString}`)
-    return response.data
-  }
-
-  // Lấy thông tin phiên thanh toán
-  async getPaymentSession(sessionId: string): Promise<PaymentSessionResponse> {
-    const response = await apiClient.get(`/payment/session/${sessionId}`)
-    return response.data as PaymentSessionResponse
-  }
-}
-
-export const paymentService = new PaymentService()

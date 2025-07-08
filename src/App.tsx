@@ -13,7 +13,7 @@ import Home from './pages/Home'
 import About from './pages/About'
 import GuideAndFAQ from './pages/GuideAndFAQ'
 import Blog from './pages/Blog'
-
+import ServicesPage from './pages/Services'
 // Auth Pages
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
@@ -34,8 +34,11 @@ import { useAuth } from './hooks/useAuth'
 import TestTracking from './pages/customer/TestTracking'
 import UserProfilePage from './pages/customer/UserProfile'
 import HistoryServices from './pages/customer/HistoryServices'
-import Payment from './pages/Payment'
-import PaymentReturn from './pages/PaymentReturn'
+
+import ManagerDashboard from './pages/manager/ManagerDashboard'
+import TestResultManage from './pages/manager/TestResultManage'
+import ManaFeedback from './pages/manager/ManaFeedback'
+import PaymentResult from './pages/PaymentResult'
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -87,7 +90,6 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       case 'Staff':
         return <Navigate to='/staff/dashboard' replace />
       case 'Customer':
-      default:
         return <Navigate to='/customer/dashboard' replace />
     }
   }
@@ -132,7 +134,7 @@ const App: React.FC = () => {
                 <>
                   <Header />
                   <main className='flex-1'>
-                    <Services />
+                    <ServicesPage />
                   </main>
                   <Footer />
                 </>
@@ -218,44 +220,43 @@ const App: React.FC = () => {
               }
             />
 
-            <Route 
-              path='/manager-dashboard'
+            <Route
+              path='/manager/manager-dashboard'
               element={
-                <ProtectedRoute allowedRoles={['Admin']}>
+                <ProtectedRoute allowedRoles={['Manager']}>
                   <ManagerDashboard />
                 </ProtectedRoute>
               }
             />
 
-            <Route 
-              path='/test-results'  
+            <Route
+              path='/manager/test-results'
               element={
-                <ProtectedRoute allowedRoles={['Admin']}>
-                  <TestRq />
+                <ProtectedRoute allowedRoles={['Manager']}>
+                  <TestResultManage />
                 </ProtectedRoute>
               }
             />
 
-            <Route 
-              path='/view-feedback'  
+            <Route
+              path='/manager/view-feedback'
               element={
-                <ProtectedRoute allowedRoles={['Admin']}>
+                <ProtectedRoute allowedRoles={['Manager']}>
                   <ManaFeedback />
                 </ProtectedRoute>
               }
             />
 
-            <Route 
-              path='/profile'  
+            <Route
+              path='/profile'
               element={
-                <ProtectedRoute allowedRoles={['Admin']}>
-                  <UserProfilePage/>
+                <ProtectedRoute>
+                  <UserProfilePage />
                 </ProtectedRoute>
               }
             />
-
-            
-            
+            {/* Payment Result Route */}
+            <Route path='/payment/result' element={<PaymentResult />} />
             {/* Staff Routes
             <Route
               path="/staff/dashboard"
@@ -291,26 +292,10 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             /> */}
-            {/* Payment route (after service registration) */}
-            <Route
-              path='/payment'
-              element={
-                <ProtectedRoute>
-                  <Payment />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/payment/return'
-              element={
-                <ProtectedRoute>
-                  <PaymentReturn />
-                </ProtectedRoute>
-              }
-            />
+
             {/* Fallback Routes */}
             <Route path='/dashboard' element={<Navigate to='/profile' replace />} />
-            <Route path='/profile' element={<Navigate to='/customer/profile' replace />} />
+            <Route path='/profile' element={<Navigate to='/profile' replace />} />
             <Route
               path='/unauthorized'
               element={
@@ -320,8 +305,6 @@ const App: React.FC = () => {
               }
             />
             <Route path='*' element={<Navigate to='/' replace />} />
-
-
           </Routes>
         </div>
       </AuthProvider>
