@@ -135,7 +135,13 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
           appointmentDate: formData.appointmentDate
         } // Declare registrationData here
         const navigationState = {
-          registrationData
+          registrationData,
+          serviceInfo: {
+            serviceID: Services.ServiceID,
+            serviceName: Services.ServiceName,
+            serviceType: Services.ServiceType,
+            amount: Services.Price
+          }
         }
 
         // Store data in sessionStorage as backup

@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { testRequestService } from '../services/testRequestService'
 import { useAuth } from '../hooks/useAuth'
@@ -25,10 +25,14 @@ const PaymentResult: React.FC = () => {
   const [customerName, setCustomerName] = useState('')
   const [serviceDetails, setServiceDetails] = useState<ServiceDetails | null>(null)
 
-  useEffect(() => {
-    handlePaymentResult()
-  }, [])
+  const hasHandledRef = useRef(false)
 
+  useEffect(() => {
+    if (!hasHandledRef.current) {
+      hasHandledRef.current = true
+      handlePaymentResult()
+    }
+  }, [])
   const handlePaymentResult = async (): Promise<void> => {
     try {
       const responseCode = searchParams.get('vnp_ResponseCode')
@@ -44,7 +48,6 @@ const PaymentResult: React.FC = () => {
           const parsed = JSON.parse(storedData)
           registrationData = parsed.registrationData
           serviceInfo = parsed.serviceInfo
-          localStorage.removeItem('pendingRegistration')
         } catch (parseError) {
           console.error('Error parsing stored data:', parseError)
         }
@@ -61,7 +64,7 @@ const PaymentResult: React.FC = () => {
             console.log('Creating test request with data:', registrationData)
             const result = await testRequestService.createTestRequest(registrationData)
             console.log('Test request created successfully:', result)
-
+            localStorage.removeItem('pendingRegistration')
             setServiceDetails({
               serviceName: serviceInfo.serviceName,
               serviceType: serviceInfo.serviceType,
