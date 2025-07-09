@@ -19,6 +19,7 @@ export interface PaymentResultState {
     amount: number
   }
 }
+
 export interface SampleInfo {
   fullName: string
   birthYear: string
@@ -26,40 +27,38 @@ export interface SampleInfo {
   relation: string
   sampleType: string
   idNumber: string
-  file: ''
+  file: string
 }
 
 export interface TestRequestData {
   serviceId: number
   collectionMethod: string
   appointmentDate?: string
-} // User and Authentication Types
+}
+
+// User and Authentication Types
 export interface ChangePasswordReponse {
   message: string
 }
+
 export interface UpdateProfilereq {
   FullName: string
   PhoneNumber: string
   DateOfBirth: string
   Address: string
 }
+
 export interface UpdateProfilerep {
   message: string
 }
+
 export interface User {
   accountId: number
   name: string
   email: string
   role: string
   profile?: UserProfile
-}
-
-export interface Feedback {
-  FeedbackID: string
-  CustomerFeedback: string;
-  DateFeedback: string;
-  RatingFeedback: number;
-  CommentFeedback: string;
+  PhoneNumber?: string
 }
 
 export interface TestProcess {
@@ -74,6 +73,7 @@ export interface TestProcess {
   Status: string
   KitID: string
 }
+
 export interface UserProfile {
   ProfileID: number
   AccountID: number
@@ -90,6 +90,7 @@ export interface LoginRequest {
   Email: string
   PasswordHash: string
 }
+
 export interface test {
   id: string
   serviceId: string
@@ -105,6 +106,7 @@ export interface test {
   technician: string
   cost: number
 }
+
 export interface RegisterRequest {
   Email: string
   PasswordHash: string
@@ -129,6 +131,7 @@ export interface LoginResponse {
   accessToken: string
   refreshToken: string
 }
+
 export interface RegisterResponse {
   message: string
 }
@@ -138,13 +141,13 @@ export interface Services {
   ServiceID: number
   ServiceName: string
   ServiceType: string
-
   Description: string
   Price: number
   SampleCount: number
   CreatedAt: Date
   UpdatedAt: Date
 }
+
 export interface ServiceResponse {
   service: Services
 }
@@ -160,18 +163,7 @@ export interface SampleCategories {
   Relationship: string
   SignatureImage: string
 }
-export interface TestProcess {
-  TestRequestID: number
-  ServiceName: string
-  SampleCount: number
-  ServiceType: string
-  CreatedAt: string
-  Appointment: string
-  CollectionMethod: string
-  AssignedTo: string
-  Status: string
-  KitID: string
-}
+
 // Test Request Types
 export interface TestRequests {
   RequestID: number
@@ -190,8 +182,8 @@ export interface TestRequests {
   ServiceType?: 'Administrative' | 'Civil'
   KitID?: string
   Appointment: string
-  
 }
+
 export interface History {
   TestRequestID: string
   KitID?: string
@@ -206,21 +198,22 @@ export interface History {
   ConfirmDate: string
   Status: 'Pending' | 'Verified'
 }
-export interface TestResults {
-  TestRequestID: string
 
+export interface TestResults {
+  TestResultID: number
+  TestRequestID: string
   CustomerName: string
   KitID?: string
   ServiceID: number
-  ServiceType?: 'Administrative' | 'Civil'
+  ServiceType: string
   SampleCount: 2 | 3
   Result: string
   EnterBy: number
   SampleDate: string
-
-
   StaffName: string
-  Status: 'Pending' | 'Verified'
+  Status: 'Pending' | 'Verified' | 'Rejected'
+  CreatedAt: string
+  UpdatedAt: string
 }
 
 // File Upload Types
@@ -263,9 +256,40 @@ export interface Role {
 }
 
 export interface Feedback {
+  FeedbackID: number
   TestResultID: number
   Rating: number
   Comment: string
   FullName: string
-  CreatedAt: Date
+  CreatedAt: string
+}
+
+// Dashboard Types
+export interface DashboardStats {
+  totalUsers: number
+  totalTests: number
+  totalServices: number
+  revenue: number
+  avgRating: number
+  completed: number
+  pending: number
+  feedback: number
+  monthlyRevenue: number[] // ví dụ: 6 tháng gần nhất
+  serviceDistribution: {
+    [serviceType: string]: number // ví dụ: "Civil": 10, "Administrative": 5
+  }
+}
+export interface BlogPostAdd {
+  Title: string
+  Description: string
+  Image: string
+}
+// Blog Types
+export interface BlogPost {
+  BlogID: number
+  Author: string
+  Title: string
+  Description: string
+  Image: string
+  CreatedAt: string
 }

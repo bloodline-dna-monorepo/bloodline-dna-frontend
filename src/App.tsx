@@ -38,12 +38,11 @@ import HistoryServices from './pages/customer/HistoryServices'
 import ManagerDashboard from './pages/manager/ManagerDashboard'
 import TestResultManage from './pages/manager/TestResultManage'
 import ManaFeedback from './pages/manager/ManaFeedback'
+import BlogManagement from './pages/manager/BlogManagement'
 import PaymentResult from './pages/PaymentResult'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminManager from './pages/admin/AdminManager'
 import AdminRole from './pages/admin/AdminRole'
-import Services from './pages/Services'
-
 
 // import TestTracking from 'pages/customer/TestTracking'
 // import HistoryServices from 'pages/customer/HistoryServices'
@@ -253,6 +252,15 @@ const App: React.FC = () => {
             />
 
             <Route
+              path='/manager/blog-management'
+              element={
+                <ProtectedRoute allowedRoles={['Manager']}>
+                  <BlogManagement />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
               path='/profile'
               element={
                 <ProtectedRoute>
@@ -263,7 +271,7 @@ const App: React.FC = () => {
             {/* Payment Result Route */}
             <Route path='/payment/result' element={<PaymentResult />} />
 
-            <Route 
+            <Route
               path='/adminDashboard'
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
@@ -272,8 +280,8 @@ const App: React.FC = () => {
               }
             />
 
-            <Route 
-              path='/user-management'  
+            <Route
+              path='/admin/user-management'
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <AdminRole />
@@ -281,8 +289,8 @@ const App: React.FC = () => {
               }
             />
 
-            <Route 
-              path='/service-management'  
+            <Route
+              path='/admin/service-management'
               element={
                 <ProtectedRoute allowedRoles={['Admin']}>
                   <AdminManager />
@@ -290,17 +298,6 @@ const App: React.FC = () => {
               }
             />
 
-            <Route 
-              path='/settings'  
-              element={
-                <ProtectedRoute allowedRoles={['Admin']}>
-                  <UserProfilePage/>
-                </ProtectedRoute>
-              }
-            />
-
-            
-            
             {/* Staff Routes
             <Route
               path="/staff/dashboard"
@@ -349,8 +346,6 @@ const App: React.FC = () => {
               }
             />
             <Route path='*' element={<Navigate to='/' replace />} />
-
-
           </Routes>
         </div>
       </AuthProvider>

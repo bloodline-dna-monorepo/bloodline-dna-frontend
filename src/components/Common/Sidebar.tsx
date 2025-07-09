@@ -11,13 +11,15 @@ import {
   UsersIcon,
   ChartBarIcon,
   CogIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '../../hooks/useAuth'
 
 const DashboardSidebar: React.FC = () => {
   const { user, logout, isAdmin, isManager, isStaff, isCustomer } = useAuth()
   const location = useLocation()
+
   const handleLogout = async () => {
     try {
       await logout()
@@ -25,9 +27,11 @@ const DashboardSidebar: React.FC = () => {
       console.log(error)
     }
   }
+
   const isActive = (path: string) => {
     return location.pathname === path
   }
+
   const customerMenuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/profile', label: 'Profile', icon: UserIcon },
@@ -43,16 +47,17 @@ const DashboardSidebar: React.FC = () => {
 
   const managerMenuItems = [
     { path: '/manager/manager-dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/manager/test-results', label: 'Test Results', icon: BeakerIcon },
-    { path: '/manager/view-feedback', label: 'View Feedback', icon: ChartBarIcon },
-    { path: '/profile', label: 'Profile', icon: UserIcon }
+    { path: '/manager/test-results', label: 'Quản lý kết quả xét nghiệm', icon: BeakerIcon },
+    { path: '/manager/view-feedback', label: 'Xem phản hồi', icon: ChartBarIcon },
+    { path: '/manager/blog-management', label: 'Quản lý Blog', icon: PencilSquareIcon },
+    { path: '/profile', label: 'Thông tin cá nhân', icon: UserIcon }
   ]
 
   const adminMenuItems = [
     { path: '/adminDashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/user-management', label: 'User Management', icon: UsersIcon },
-    { path: '/service-management', label: 'Service Management', icon: CogIcon },
-    { path: '/settings', label: 'Settings', icon: CogIcon }
+    { path: '/admin/user-management', label: 'User Management', icon: UsersIcon },
+    { path: '/admin/service-management', label: 'Service Management', icon: CogIcon },
+    { path: '/profile', label: 'Profile', icon: CogIcon }
   ]
 
   let menuItems = customerMenuItems
@@ -65,13 +70,15 @@ const DashboardSidebar: React.FC = () => {
       {/* Logo */}
       <div className='p-6 border-b border-teal-500'>
         <div className='flex items-center space-x-3'>
-          <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-            <span className='text-teal-600 font-bold text-lg'>G</span>
-          </div>
-          <div className='flex flex-col'>
-            <span className='text-sm font-bold'>Gen</span>
-            <span className='text-sm font-bold text-teal-200'>Unity</span>
-          </div>
+          <Link to='/' className='flex items-center space-x-2'>
+            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
+              <span className='text-teal-600 font-bold text-lg'>G</span>
+            </div>
+            <div className='flex flex-col'>
+              <span className='text-sm font-bold'>Gen</span>
+              <span className='text-sm font-bold text-teal-200'>Unity</span>
+            </div>
+          </Link>
         </div>
       </div>
 

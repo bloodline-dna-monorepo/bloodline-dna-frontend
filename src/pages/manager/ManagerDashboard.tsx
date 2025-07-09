@@ -1,43 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+'use client'
+
+import type React from 'react'
+import { useEffect, useState } from 'react'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { Bar, Doughnut } from 'react-chartjs-2'
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
+import { managerService } from '../../services/managerService'
+import type { DashboardStats } from '../../utils/types'
+
 Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 const ManagerDashboard: React.FC = () => {
-  const [data, setData] = useState({
+  const [data, setData] = useState<DashboardStats>({
+    totalUsers: 0,
     totalTests: 0,
+    totalServices: 0,
     revenue: 0,
-    avgRating: '0.0',
+    avgRating: 0,
     completed: 0,
     pending: 0,
     feedback: 0,
-    bar: [0, 0, 0, 0, 0, 0],
-    doughnut: [0, 0, 0, 0, 0] // Khởi tạo mảng với các giá trị mặc định
+    monthlyRevenue: [], // hoặc [0, 0, 0, 0, 0, 0] nếu cần 6 tháng
+    serviceDistribution: {} // hoặc { Civil: 0, Administrative: 0 }
   })
 
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null) // Error state for error handling
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('/api/dashboard/manager')
-        if (res.data) {
-          setData({
-            totalTests: 1200,
-            revenue: 50000000,
-            avgRating: '4.3',
-            completed: 980,
-            pending: 220,
-            feedback: 136,
-            bar: [8000000, 10000000, 9000000, 7500000, 11000000, 9500000],
-            doughnut: [450, 300, 200, 100, 150]
-          })
-        } else {
-          setError('Không có dữ liệu từ server')
-        }
+        setLoading(true)
+        const stats = await managerService.getDashboardStats()
+        setData(stats)
       } catch (error) {
         setError('Lỗi khi lấy dữ liệu dashboard')
         console.error('Lỗi lấy dữ liệu dashboard:', error)
@@ -53,7 +48,7 @@ const ManagerDashboard: React.FC = () => {
     datasets: [
       {
         label: 'Doanh thu',
-        data: data.bar,
+        data: data.monthlyRevenue,
         backgroundColor: '#42a5f5',
         borderRadius: 8,
         barThickness: 32
@@ -62,53 +57,63 @@ const ManagerDashboard: React.FC = () => {
   }
 
   const doughnutData = {
-    labels: ['ADN Cha con', 'ADN 2', 'ADN 3', 'ADN 4', 'Khác'],
+    labels: ['ADN cha con', 'ADN 2', 'ADN 3', 'ADN 4', 'Khác'],
     datasets: [
       {
-        data: data.doughnut,
+        data: data.serviceDistribution,
         backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#bdbdbd'],
         borderWidth: 2
       }
     ]
   }
+  const totalDoughnut = Object.values(data.serviceDistribution).reduce((a, b) => a + b, 0)
 
-  // Kiểm tra và xử lý tổng của doughnut
-  const totalDoughnut =
-    Array.isArray(data.doughnut) && data.doughnut.length ? data.doughnut.reduce((a, b) => a + b, 0) : 0 // Nếu data.doughnut không phải là mảng hoặc mảng rỗng, trả về 0
-
-  // Sử dụng data.doughnut với giá trị mặc định
   const serviceDetails = [
     {
       color: '#42a5f5',
-      label: 'ADN Cha con',
-      value: totalDoughnut || 0,
-      percent: totalDoughnut ? `${Math.round((data.doughnut[0] / totalDoughnut) * 100)}%` : '0%'
+      label: 'ADN cha con',
+      value: data.serviceDistribution[0] || 0,
+      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[0] / totalDoughnut) * 100)}%` : '0%'
     },
     {
       color: '#66bb6a',
       label: 'ADN 2',
-      value: totalDoughnut || 0,
-      percent: totalDoughnut ? `${Math.round((data.doughnut[1] / totalDoughnut) * 100)}%` : '0%'
+      value: data.serviceDistribution[1] || 0,
+      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[1] / totalDoughnut) * 100)}%` : '0%'
     },
     {
       color: '#ffa726',
       label: 'ADN 3',
-      value: totalDoughnut || 0,
-      percent: totalDoughnut ? `${Math.round((data.doughnut[2] / totalDoughnut) * 100)}%` : '0%'
+      value: data.serviceDistribution[2] || 0,
+      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[2] / totalDoughnut) * 100)}%` : '0%'
     },
     {
       color: '#ab47bc',
       label: 'ADN 4',
-      value: totalDoughnut || 0,
-      percent: totalDoughnut ? `${Math.round((data.doughnut[3] / totalDoughnut) * 100)}%` : '0%'
+      value: data.serviceDistribution[3] || 0,
+      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[3] / totalDoughnut) * 100)}%` : '0%'
     },
     {
       color: '#bdbdbd',
       label: 'Khác',
-      value: totalDoughnut || 0,
-      percent: totalDoughnut ? `${Math.round((data.doughnut[4] / totalDoughnut) * 100)}%` : '0%'
+      value: data.serviceDistribution[4] || 0,
+      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[4] / totalDoughnut) * 100)}%` : '0%'
     }
   ]
+
+  if (loading) {
+    return (
+      <div className='flex min-h-screen bg-gray-100'>
+        <DashboardSidebar />
+        <div className='flex-1 flex items-center justify-center'>
+          <div className='text-center'>
+            <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto'></div>
+            <p className='mt-4 text-gray-600'>Đang tải dữ liệu...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='flex min-h-screen bg-gray-100'>
@@ -121,7 +126,6 @@ const ManagerDashboard: React.FC = () => {
           </span>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className='bg-red-100 p-4 rounded-xl mb-4'>
             <p className='text-red-600 font-semibold'>{error}</p>
@@ -129,14 +133,13 @@ const ManagerDashboard: React.FC = () => {
         )}
 
         <div className='grid grid-cols-2 md:grid-cols-6 gap-4 mb-4'>
-          {/* Display the data */}
           <div className='bg-white rounded-2xl p-4 flex flex-col items-center shadow'>
             <span className='text-gray-500 text-sm'>Tổng xét nghiệm</span>
-            <span className='text-2xl font-bold mt-2'>{data.totalTests}</span>
+            <span className='text-2xl font-bold mt-2'>{data.totalTests.toLocaleString()}</span>
           </div>
           <div className='bg-white rounded-2xl p-4 flex flex-col items-center shadow'>
             <span className='text-gray-500 text-sm'>Doanh thu</span>
-            <span className='text-2xl font-bold mt-2'>{data.revenue} ₫</span>
+            <span className='text-2xl font-bold mt-2'>{data.revenue.toLocaleString()} ₫</span>
           </div>
           <div className='bg-white rounded-2xl p-4 flex flex-col items-center shadow'>
             <span className='text-gray-500 text-sm'>Đánh giá trung bình</span>
@@ -161,6 +164,7 @@ const ManagerDashboard: React.FC = () => {
             <span className='font-semibold mb-2'>Doanh thu 6 tháng gần nhất</span>
             <div className='flex-1'>
               <Bar
+                key={JSON.stringify(barData)}
                 data={barData}
                 options={{
                   plugins: { legend: { display: false } },
@@ -186,6 +190,7 @@ const ManagerDashboard: React.FC = () => {
             <div className='flex items-center h-52'>
               <div className='relative w-40 h-40'>
                 <Doughnut
+                  key={JSON.stringify(doughnutData)}
                   data={doughnutData}
                   options={{
                     plugins: { legend: { display: false } },
