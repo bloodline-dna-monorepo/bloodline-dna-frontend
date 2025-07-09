@@ -15,6 +15,7 @@ import {
   PencilSquareIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '../../hooks/useAuth'
+import { CheckCircleIcon, PlusCircleIcon } from 'lucide-react'
 
 const DashboardSidebar: React.FC = () => {
   const { user, logout, isAdmin, isManager, isStaff, isCustomer } = useAuth()
@@ -33,15 +34,19 @@ const DashboardSidebar: React.FC = () => {
   }
 
   const customerMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/profile', label: 'Profile', icon: UserIcon },
     { path: '/customer/test-process', label: 'Test Process', icon: BeakerIcon },
     { path: '/customer/history', label: 'History & Results', icon: DocumentTextIcon }
   ]
 
   const staffMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/test-requests', label: 'Test Requests', icon: BeakerIcon },
+    { path: '/staff/dashboard', label: 'Dashboard', icon: HomeIcon },
+    { path: '/staff/manage-requests', label: 'Test Requests', icon: BeakerIcon,
+      subItems: [
+                { path: '/staff/manage-requests/not-confirmed', label: '+ Chưa xác nhận', icon: PlusCircleIcon },
+                { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
+            ]
+    },
     { path: '/profile', label: 'Profile', icon: UserIcon }
   ]
 
@@ -81,6 +86,7 @@ const DashboardSidebar: React.FC = () => {
           </Link>
         </div>
       </div>
+
 
       {/* Navigation */}
       <nav className='flex-1 py-6'>

@@ -20,9 +20,9 @@ const Home: React.FC = () => {
             </p>
             <div className='flex flex-col sm:flex-row gap-4 justify-center'>
               {isAuthenticated ? (
-                <Link to='/dashboard'>
-                  <Button size='lg' className='bg-white text-teal-600 hover:bg-gray-100'>
-                    Go to Dashboard
+                <Link to='/services'>
+                  <Button size='lg' className=' text-teal-600 hover:bg-gray-100'>
+                    View Services
                   </Button>
                 </Link>
               ) : (
