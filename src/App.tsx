@@ -224,11 +224,19 @@ const App: React.FC = () => {
             {/* Staff Routes - Temporary bypass for testing */}
             <Route
               path="/staff/dashboard"
-              element={<StaffDashboard />}
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <StaffDashboard />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/staff/manage-requests"
-              element={<ManageRequests />}
+              element={
+                <ProtectedRoute allowedRoles={['Staff']}>
+                  <ManageRequests />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/staff/manage-requests/not-confirmed"
