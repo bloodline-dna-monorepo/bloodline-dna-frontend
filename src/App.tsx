@@ -202,7 +202,7 @@ const App: React.FC = () => {
             <Route
               path='/profile'
               element={
-                <ProtectedRoute allowedRoles={['Customer']}>
+                <ProtectedRoute>
                   <UserProfilePage />
                 </ProtectedRoute>
               }
@@ -251,14 +251,7 @@ const App: React.FC = () => {
               }
             />
 
-            <Route
-              path='/profile'
-              element={
-                <ProtectedRoute>
-                  <UserProfilePage />
-                </ProtectedRoute>
-              }
-            />
+            
             {/* Payment Result Route */}
             <Route path='/payment/result' element={<PaymentResult />} />
             {/* Staff Routes

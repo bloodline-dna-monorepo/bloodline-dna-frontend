@@ -30,15 +30,14 @@ const DashboardSidebar: React.FC = () => {
     return location.pathname === path
   }
   const customerMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/profile', label: 'Profile', icon: UserIcon },
     { path: '/customer/test-process', label: 'Test Process', icon: BeakerIcon },
     { path: '/customer/history', label: 'History & Results', icon: DocumentTextIcon }
   ]
 
   const staffMenuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/manage-requests', label: 'Test Requests', icon: BeakerIcon,
+    { path: '/staff/dashboard', label: 'Dashboard', icon: HomeIcon },
+    { path: '/staff/manage-requests', label: 'Test Requests', icon: BeakerIcon,
       subItems: [
                 { path: '/staff/manage-requests/not-confirmed', label: '+ Chưa xác nhận', icon: PlusCircleIcon },
                 { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
@@ -70,17 +69,18 @@ const DashboardSidebar: React.FC = () => {
   return (
     <div className='w-64 bg-teal-600 text-white min-h-screen flex flex-col'>
       {/* Logo */}
-      <div className='p-6 border-b border-teal-500'>
-        <div className='flex items-center space-x-3'>
-          <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-            <span className='text-teal-600 font-bold text-lg'>G</span>
+      <div className="p-6 border-b border-teal-500">
+        <Link to="/" className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <span className="text-teal-600 font-bold text-lg">G</span>
           </div>
-          <div className='flex flex-col'>
-            <span className='text-sm font-bold'>Gen</span>
-            <span className='text-sm font-bold text-teal-200'>Unity</span>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold">Gen</span>
+            <span className="text-sm font-bold text-teal-200">Unity</span>
           </div>
-        </div>
+        </Link>
       </div>
+
 
       {/* Navigation */}
       <nav className='flex-1 py-6'>
