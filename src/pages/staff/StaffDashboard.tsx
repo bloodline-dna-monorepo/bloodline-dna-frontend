@@ -5,7 +5,7 @@ import {
     CheckCircleIcon,
     UsersIcon
 } from '@heroicons/react/24/outline'
-import StaffSidebar from '../../components/StaffSidebar/StaffSidebar'
+import DashboardSidebar from '../../components/Common/Sidebar'
 
 const StaffDashboard: React.FC = () => {
     // Sample data - replace with actual data from your API
@@ -69,7 +69,7 @@ const StaffDashboard: React.FC = () => {
 
     return (
         <div className='flex min-h-screen bg-gray-50'>
-            <StaffSidebar />
+            <DashboardSidebar/>
 
             <div className='flex-1 p-8'>
                 {/* Header */}

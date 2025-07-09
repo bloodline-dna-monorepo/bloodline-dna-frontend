@@ -4,8 +4,9 @@ import {
     MagnifyingGlassIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline'
-import StaffSidebar from '../../components/StaffSidebar/StaffSidebar'
+
 import { useNavigate } from 'react-router-dom'
+import DashboardSidebar from '../../components/Common/Sidebar'
 
 const ConfirmedRequests: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('')
@@ -82,7 +83,7 @@ const ConfirmedRequests: React.FC = () => {
 
     return (
         <div className='flex min-h-screen bg-gray-50'>
-            <StaffSidebar />
+            <DashboardSidebar />
 
             <div className='flex-1 p-8'>
                 {/* Header */}

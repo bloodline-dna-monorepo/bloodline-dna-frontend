@@ -5,8 +5,8 @@ import {
     XMarkIcon,
     CheckIcon
 } from '@heroicons/react/24/outline'
-import StaffSidebar from '../../components/StaffSidebar/StaffSidebar'
 import { useParams, useNavigate } from 'react-router-dom'
+import DashboardSidebar from '../../components/Common/Sidebar'
 
 const TestProcess: React.FC = () => {
     const { requestId } = useParams()
@@ -164,7 +164,7 @@ const TestProcess: React.FC = () => {
 
     return (
         <div className='flex min-h-screen bg-gray-50'>
-            <StaffSidebar />
+            <DashboardSidebar/>
 
             <div className='flex-1 p-8'>
                 {/* Header */}
