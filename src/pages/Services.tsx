@@ -23,7 +23,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
 
   const [formData, setFormData] = useState({
     appointmentDate: '',
-    collectionMethod: serviceType === 'Administrative' ? 'facility' : 'home',
+    collectionMethod: serviceType === 'Administrative' ? 'Facility' : 'Home',
     selectedService: '',
     fullName: '',
     birthDate: '',
@@ -90,12 +90,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       return
     }
 
-    if (formData.collectionMethod === 'facility' && !formData.appointmentDate) {
+    if (formData.collectionMethod === 'Facility' && !formData.appointmentDate) {
       alert('Vui lòng chọn ngày đăng ký')
       return
     }
 
-    if (formData.collectionMethod === 'facility') {
+    if (formData.collectionMethod === 'Facility') {
       const today = new Date()
       const selectedDate = new Date(formData.appointmentDate)
       const tomorrow = new Date(today)
@@ -181,7 +181,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
 
         <form onSubmit={handleSubmit} className='p-6 space-y-6'>
           {/* Date Field - Only show for Administrative or when Facility is selected for Civil */}
-          {formData.collectionMethod === 'facility' && (
+          {formData.collectionMethod === 'Facility' && (
             <div>
               <label className='block text-sm font-medium mb-2'>
                 Ngày đăng ký <span className='text-red-500'>*</span>
@@ -209,8 +209,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                   <input
                     type='radio'
                     name='collectionMethod'
-                    value='home'
-                    checked={formData.collectionMethod === 'home'}
+                    value='Home'
+                    checked={formData.collectionMethod === 'Home'}
                     onChange={(e) => handleInputChange('collectionMethod', e.target.value)}
                     className='mr-2'
                     disabled={isSubmitting}
@@ -222,8 +222,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 <input
                   type='radio'
                   name='collectionMethod'
-                  value='facility'
-                  checked={formData.collectionMethod === 'facility'}
+                  value='Facility'
+                  checked={formData.collectionMethod === 'Facility'}
                   onChange={(e) => handleInputChange('collectionMethod', e.target.value)}
                   className='mr-2'
                   disabled={isSubmitting}

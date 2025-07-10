@@ -33,7 +33,21 @@ const Register: React.FC = () => {
       [name]: value
     }))
   }
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
 
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const base64String = reader.result as string
+      setFormData((prev) => ({
+        ...prev,
+        SignatureImage: base64String // Gán base64 vào formData
+      }))
+    }
+
+    reader.readAsDataURL(file) // Chuyển ảnh thành base64
+  }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -61,8 +75,8 @@ const Register: React.FC = () => {
       setTimeout(() => {
         navigate('/dashboard')
       }, 2000)
-    } catch (error: any) {
-      setError(error.response?.data?.message || 'Registration failed. Please try again.')
+    } catch (error) {
+      setError('Registration failed. Please try again.' + error)
     } finally {
       setLoading(false)
     }
@@ -175,7 +189,8 @@ const Register: React.FC = () => {
               <input
                 type='file'
                 name='SignatureImage'
-                onChange={handleChange}
+                accept='image/*'
+                onChange={handleImageChange} // ✅ ĐÚNG
                 className='w-full px-4 py-2 border border-gray-300 rounded-md'
                 required
               />

@@ -25,7 +25,10 @@ class AdminService {
       throw error
     }
   }
-
+  async getUserById(id: number): Promise<User> {
+    const response = await apiClient.get<ApiResponse<User>>(`/admin/users/${id}`)
+    return response.data.data!
+  }
   async updateUserRole(userId: number, roleId: number): Promise<void> {
     try {
       await apiClient.put(`/admin/users/${userId}/role`, { roleId })

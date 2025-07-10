@@ -2,7 +2,8 @@
 
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
+import XMarkIcon from '@ant-design/icons'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { adminService } from '../../services/adminService'
 import type { User } from '../../utils/types'
@@ -19,6 +20,8 @@ const AdminRole: React.FC = () => {
   const [users, setUsers] = useState<User[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   useEffect(() => {
     fetchUsers()
@@ -50,7 +53,7 @@ const AdminRole: React.FC = () => {
 
   const handleRoleChange = async (userId: number, newRole: UserRole) => {
     try {
-      const roleMap = { Customer: 1, Manager: 2, Staff: 3 }
+      const roleMap = { Customer: 4, Manager: 2, Staff: 3 }
       await adminService.updateUserRole(userId, roleMap[newRole])
       setUsers((prev) => prev.map((user) => (user.accountId === userId ? { ...user, role: newRole } : user)))
     } catch (error) {
@@ -58,15 +61,30 @@ const AdminRole: React.FC = () => {
     }
   }
 
-  const handleDeleteUser = async (userId: number) => {
-    if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
-      try {
-        await adminService.deleteUser(userId)
-        setUsers((prev) => prev.filter((user) => user.accountId !== userId))
-      } catch (error) {
-        console.error('Error deleting user:', error)
-      }
+  // const handleDeleteUser = async (userId: number) => {
+  //   if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+  //     try {
+  //       await adminService.deleteUser(userId)
+  //       setUsers((prev) => prev.filter((user) => user.accountId !== userId))
+  //     } catch (error) {
+  //       console.error('Error deleting user:', error)
+  //     }
+  //   }
+  // }
+
+  const handleViewUser = async (userId: number) => {
+    try {
+      const user = await adminService.getUserById(userId)
+      setSelectedUser(user)
+      setShowDetailModal(true)
+    } catch (error) {
+      console.error('Error fetching user details:', error)
     }
+  }
+
+  const handleCloseDetailModal = () => {
+    setShowDetailModal(false)
+    setSelectedUser(null)
   }
 
   return (
@@ -86,7 +104,7 @@ const AdminRole: React.FC = () => {
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
-                <button
+                {/* <button
                   onClick={handleSearch}
                   className='border rounded px-4 py-2 flex items-center gap-2 hover:bg-gray-50'
                 >
@@ -96,7 +114,7 @@ const AdminRole: React.FC = () => {
                     <rect x='5' y='9' width='10' height='2' rx='1' fill='#222' />
                     <rect x='7' y='13' width='6' height='2' rx='1' fill='#222' />
                   </svg>
-                </button>
+                </button> */}
               </div>
             </div>
 
@@ -134,12 +152,14 @@ const AdminRole: React.FC = () => {
                         </td>
                         <td className='py-3 px-4'>
                           <div className='flex items-center gap-3'>
-                            <button className='text-gray-600 hover:text-blue-600' title='Xem'>
+                            <button
+                              className='text-gray-600 hover:text-blue-600'
+                              title='Xem'
+                              onClick={() => handleViewUser(u.accountId)}
+                            >
                               <EyeOutlined />
                             </button>
-                            <button className='text-gray-600 hover:text-blue-600' title='Chỉnh sửa'>
-                              <EditOutlined />
-                            </button>
+
                             {u.role !== 'Admin' ? (
                               <select
                                 className='border rounded px-2 py-1 text-xs bg-white'
@@ -154,13 +174,13 @@ const AdminRole: React.FC = () => {
                               <span className='text-sm text-gray-500'></span>
                             )}
 
-                            <button
+                            {/* <button
                               className='text-red-500 hover:text-red-700'
                               title='Xóa'
                               onClick={() => handleDeleteUser(u.accountId)}
                             >
                               <DeleteOutlined />
-                            </button>
+                            </button> */}
                           </div>
                         </td>
                       </tr>
@@ -178,6 +198,90 @@ const AdminRole: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* User Detail Modal */}
+        {showDetailModal && selectedUser && (
+          <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50'>
+            <div className='relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white'>
+              <div className='mt-3'>
+                {/* Modal Header */}
+                <div className='flex items-center justify-between pb-4 border-b'>
+                  <h3 className='text-lg font-semibold text-gray-900'>Chi tiết người dùng</h3>
+                  <button onClick={handleCloseDetailModal} className='text-gray-400 hover:text-gray-600'>
+                    <XMarkIcon className='h-6 w-6' />
+                  </button>
+                </div>
+
+                {/* User Details */}
+                <div className='mt-6 space-y-6'>
+                  {/* Basic Info */}
+                  <div className='bg-gray-50 p-4 rounded-lg'>
+                    <h4 className='text-sm font-medium text-gray-700 mb-3'>Thông tin cơ bản</h4>
+                    <div className='grid grid-cols-2 gap-4 text-sm'>
+                      <div>
+                        <span className='text-gray-600'>Vai trò:</span>
+                        <span
+                          className={`ml-2 px-2 py-1 rounded text-xs font-semibold ${ROLE_COLORS[selectedUser.role as UserRole]}`}
+                        >
+                          {selectedUser.role}
+                        </span>
+                      </div>
+                      <div>
+                        <span className='text-gray-600'>Họ và tên:</span>
+                        <span className='ml-2 font-medium'>{selectedUser.name || 'Chưa cập nhật'}</span>
+                      </div>
+                      <div>
+                        <span className='text-gray-600'>Email:</span>
+                        <span className='ml-2 font-medium'>{selectedUser.email}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Profile Info */}
+                  {selectedUser.profile && (
+                    <div className='bg-gray-50 p-4 rounded-lg'>
+                      <h4 className='text-sm font-medium text-gray-700 mb-3'>Thông tin chi tiết</h4>
+                      <div className='grid grid-cols-1 gap-3 text-sm'>
+                        <div>
+                          <span className='text-gray-600'>Số điện thoại:</span>
+                          <span className='ml-2 font-medium'>
+                            {selectedUser.profile.PhoneNumber || 'Chưa cập nhật'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className='text-gray-600'>Địa chỉ:</span>
+                          <span className='ml-2 font-medium'>{selectedUser.profile.Address || 'Chưa cập nhật'}</span>
+                        </div>
+                        <div>
+                          <span className='text-gray-600'>Ngày sinh:</span>
+                          <span className='ml-2 font-medium'>
+                            {selectedUser.profile.DateOfBirth
+                              ? new Date(selectedUser.profile.DateOfBirth).toLocaleDateString('vi-VN')
+                              : 'Chưa cập nhật'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className='text-gray-600'>Giới tính:</span>
+                          <span className='ml-2 font-medium'>{selectedUser.profile.Gender || 'Chưa cập nhật'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Actions */}
+                  <div className='flex justify-end space-x-3 pt-4 border-t'>
+                    <button
+                      onClick={handleCloseDetailModal}
+                      className='px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200'
+                    >
+                      Đóng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   )

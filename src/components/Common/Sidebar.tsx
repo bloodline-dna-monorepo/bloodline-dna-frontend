@@ -2,6 +2,7 @@
 
 import type React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import type { MenuItem } from '../../utils/types'
 
 import {
   HomeIcon,
@@ -33,24 +34,27 @@ const DashboardSidebar: React.FC = () => {
     return location.pathname === path
   }
 
-  const customerMenuItems = [
+  const customerMenuItems: MenuItem[] = [
     { path: '/profile', label: 'Profile', icon: UserIcon },
     { path: '/customer/test-process', label: 'Test Process', icon: BeakerIcon },
     { path: '/customer/history', label: 'History & Results', icon: DocumentTextIcon }
   ]
 
-  const staffMenuItems = [
+  const staffMenuItems: MenuItem[] = [
     { path: '/staff/dashboard', label: 'Dashboard', icon: HomeIcon },
-    { path: '/staff/manage-requests', label: 'Test Requests', icon: BeakerIcon,
+    {
+      path: '/staff/manage-requests',
+      label: 'Test Requests',
+      icon: BeakerIcon,
       subItems: [
-                { path: '/staff/manage-requests/not-confirmed', label: '+ Chưa xác nhận', icon: PlusCircleIcon },
-                { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
-            ]
+        { path: '/staff/manage-requests/not-confirmed', label: '+ Chưa xác nhận', icon: PlusCircleIcon },
+        { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
+      ]
     },
     { path: '/profile', label: 'Profile', icon: UserIcon }
   ]
 
-  const managerMenuItems = [
+  const managerMenuItems: MenuItem[] = [
     { path: '/manager/manager-dashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/manager/test-results', label: 'Quản lý kết quả xét nghiệm', icon: BeakerIcon },
     { path: '/manager/view-feedback', label: 'Xem phản hồi', icon: ChartBarIcon },
@@ -58,7 +62,7 @@ const DashboardSidebar: React.FC = () => {
     { path: '/profile', label: 'Thông tin cá nhân', icon: UserIcon }
   ]
 
-  const adminMenuItems = [
+  const adminMenuItems: MenuItem[] = [
     { path: '/adminDashboard', label: 'Dashboard', icon: HomeIcon },
     { path: '/admin/user-management', label: 'User Management', icon: UsersIcon },
     { path: '/admin/service-management', label: 'Service Management', icon: CogIcon },
@@ -87,7 +91,6 @@ const DashboardSidebar: React.FC = () => {
         </div>
       </div>
 
-
       {/* Navigation */}
       <nav className='flex-1 py-6'>
         <ul className='space-y-2 px-4'>
@@ -104,6 +107,29 @@ const DashboardSidebar: React.FC = () => {
                   <Icon className='w-5 h-5' />
                   <span className='font-medium'>{item.label}</span>
                 </Link>
+                {/* Render subItems nếu có */}
+                {item.subItems && (
+                  <ul className='ml-8 mt-1 space-y-1'>
+                    {item.subItems.map((sub) => {
+                      const SubIcon = sub.icon
+                      return (
+                        <li key={sub.path}>
+                          <Link
+                            to={sub.path}
+                            className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                              isActive(sub.path)
+                                ? 'bg-teal-700 text-white'
+                                : 'text-teal-100 hover:bg-teal-500 hover:text-white'
+                            }`}
+                          >
+                            <SubIcon className='w-4 h-4' />
+                            <span>{sub.label}</span>
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
               </li>
             )
           })}

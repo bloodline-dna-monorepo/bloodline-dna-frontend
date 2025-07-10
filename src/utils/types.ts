@@ -27,9 +27,21 @@ export interface SampleInfo {
   relation: string
   sampleType: string
   idNumber: string
-  file: string
+  file: string | null
 }
 
+export interface UserinfoID {
+  accountId: number
+  role: string
+  FullName?: string
+  Email?: string
+  PhoneNumber?: string
+  Address?: string
+  DateOfBirth?: string
+  Gender?: string
+  SignatureImage?: string
+  CreatedAt?: string
+}
 export interface TestRequestData {
   serviceId: number
   collectionMethod: string
@@ -63,15 +75,19 @@ export interface User {
 
 export interface TestProcess {
   TestRequestID: number
+  AccountID: number
+  ServiceID: number
   ServiceName: string
-  SampleCount: number
-  ServiceType: string
-  CreatedAt: string
+  ServiceType: 'Administrative' | 'Civil'
+  CollectionMethod: 'Home' | 'Facility'
   Appointment: string
-  CollectionMethod: string
-  AssignedTo: string
   Status: string
-  KitID: string
+  AssignedTo?: number
+  CreatedAt: string
+  UpdatedAt: string
+  SampleCount: number
+  Price?: number
+  KitID?: string
 }
 
 export interface UserProfile {
@@ -292,4 +308,104 @@ export interface BlogPost {
   Description: string
   Image: string
   CreatedAt: string
+}
+
+export interface SubMenuItem {
+  path: string
+  label: string
+  icon: React.ElementType
+}
+
+export interface MenuItem {
+  path: string
+  label: string
+  icon: React.ElementType
+  subItems?: SubMenuItem[]
+}
+
+export interface TestRequestDetail {
+  TestRequestID: number
+  AccountID: number
+  ServiceID: number
+  CollectionMethod: string
+  Appointment: string | null
+  Status: string
+  CreatedAt: string
+  UpdatedAt: string
+  AssignedTo: number | null
+  ServiceName: string
+  ServiceType: string
+  Price: number
+  SampleCount: number
+  CustomerName: string
+  CustomerEmail: string
+  CustomerPhone: string | null
+  CustomerAddress: string | null
+  TestSubjects: string
+  KitID: string | null
+  StaffName: string | null
+}
+
+export interface DashboardStaffStats {
+  totalRequests: number
+  pendingRequests: number
+  completedRequests: number
+  totalCustomers: number
+  completionRate: number
+}
+
+export interface RecentRequest {
+  TestRequestID: number
+  CustomerName: string
+  Status: string
+  CreatedAt: string
+}
+
+export interface TestResultData {
+  result: string
+}
+
+export interface TestRequestDetail {
+  TestRequestID: number
+  AccountID: number
+  ServiceID: number
+  CollectionMethod: string
+  Appointment: string | null
+  Status: string
+  CreatedAt: string
+  UpdatedAt: string
+  AssignedTo: number | null
+  ServiceName: string
+  ServiceType: string
+  Price: number
+  SampleCount: number
+  CustomerName: string
+  CustomerEmail: string
+  CustomerPhone: string | null
+  CustomerAddress: string | null
+  TestSubjects: string
+  KitID: string | null
+  StaffName: string | null
+}
+
+export interface SampleDetail {
+  SampleCategoryID: number
+  TestRequestID: number
+  TesterName: string
+  CMND: string
+  YOB: number
+  Gender: string
+  Relationship: string
+  SampleType: string
+  Status: string
+  SignatureImage: string | null
+}
+
+export interface TestRequestFullDetail extends TestRequestDetail {
+  samples: SampleDetail[]
+  paymentInfo?: {
+    amount: number
+  }
+  cusData: UserProfile
+  staffData: UserProfile
 }
