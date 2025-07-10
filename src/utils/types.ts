@@ -278,9 +278,7 @@ export interface DashboardStats {
   pending: number
   feedback: number
   monthlyRevenue: number[] // ví dụ: 6 tháng gần nhất
-  serviceDistribution: {
-    [serviceType: string]: number // ví dụ: "Civil": 10, "Administrative": 5
-  }
+  serviceDistribution: number[]
 }
 export interface BlogPostAdd {
   Title: string

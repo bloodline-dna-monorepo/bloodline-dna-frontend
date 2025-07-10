@@ -38,10 +38,9 @@ const DashboardSidebar: React.FC = () => {
 
   let menuItems: MenuItem[] = []
 if (isAdmin) menuItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: HomeIcon },
+  { path: '/admin-dashboard', label: 'Dashboard', icon: HomeIcon },
   { path: '/user-management', label: 'User Management', icon: UsersIcon },
   { path: '/service-management', label: 'Service Management', icon: CogIcon },
-  { path: '/reports', label: 'Reports & Statistics', icon: ChartBarIcon },
   { path: '/settings', label: 'Settings', icon: CogIcon }
 ]
 else if (isManager) menuItems = [
