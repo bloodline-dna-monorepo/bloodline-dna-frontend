@@ -205,6 +205,7 @@ export interface TestResults {
   CustomerName: string
   KitID?: string
   ServiceID: number
+  ServiceName: string
   ServiceType: string
   SampleCount: 2 | 3
   Result: string
