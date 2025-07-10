@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     EyeIcon,
     CheckCircleIcon,
@@ -6,58 +6,59 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline'
 import DashboardSidebar from '../../components/Common/Sidebar'
+import type { TestRequests } from 'utils/types'
+import axios from 'axios'
 
 const ManageRequests: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedRequest, setSelectedRequest] = useState<typeof unconfirmedRequests[0] | null>(null)
+    const [selectedRequest, setSelectedRequest] = useState<TestRequests | null>(null)
     const [showModal, setShowModal] = useState(false)
+    const [services, setServices] = useState<TestRequests[]>([])    
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
     // Sample data - replace with actual data from your API
-    const unconfirmedRequests = [
-        {
-            id: 1,
-            customerName: 'Nguyễn Văn A',
-            testType: 'Xét nghiệm ADN Cha - Con',
-            requestDate: '2/3/2024',
-            location: 'Tại Nhà',
-            status: 'Chờ xử lý',
-            priority: 'Cao',
-            phone: '0123456789',
-            email: 'nguyenvana@gmail.com',
-            sampleCount: 2,
-            testSubjects: 'Nguyễn Văn A (Cha)\nNguyễn Văn B (Con)',
-            currentStatus: 'Đã xác nhận',
-            testLocation: 'Tại nhà'
-        },
-        {
-            id: 3,
-            customerName: 'Lê Thị C',
-            testType: 'Xét nghiệm di truyền',
-            requestDate: '2/3/2024',
-            location: 'Tại Trung Tâm',
-            status: 'Chờ xử lý',
-            priority: 'Trung bình',
-            phone: '0987654321',
-            email: 'lethic@gmail.com',
-            sampleCount: 1,
-            testSubjects: 'Lê Thị C',
-            currentStatus: 'Chờ xử lý',
-            testLocation: 'Tại trung tâm'
+    useEffect(() => {
+        const fetchServices = async () => {
+        setLoading(true)
+        try {
+            const res = await axios.get('/api/services', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+            })
+            
+            if (Array.isArray(res.data.services)) {
+                setServices(res.data.services)
+                } else {
+                setServices([])
+                setError('Dữ liệu trả về không hợp lệ')
+                }
+            
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Lỗi khi tải danh sách dịch vụ')
+        } finally {
+            setLoading(false)
         }
-    ]
+        }
 
-    const filteredRequests = unconfirmedRequests.filter(request =>
-        request.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        request.testType.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+        fetchServices()
+    }, [])
 
-    const handleViewRequest = (requestId: number) => {
-        const request = unconfirmedRequests.find(req => req.id === requestId)
+    const filteredRequests = services.filter(request =>
+        request.CustomerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        request.ServiceName?.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+
+   const handleViewRequest = (requestId: number) => {
+        const request = services.find(service => service.ServiceID === requestId)
         if (request) {
             setSelectedRequest(request)
             setShowModal(true)
         }
     }
+
+
 
     const handleConfirmRequest = (requestId: number) => {
         console.log('Confirming request:', requestId)
@@ -132,37 +133,37 @@ const ManageRequests: React.FC = () => {
                                 </thead>
                                 <tbody className='bg-white divide-y divide-gray-200'>
                                     {filteredRequests.map((request) => (
-                                        <tr key={request.id} className='hover:bg-gray-50'>
+                                        <tr key={request.RequestID} className='hover:bg-gray-50'>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
-                                                {request.id}
+                                                {request.RequestID}
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                                                {request.customerName}
+                                                {request.CustomerName}
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                                                {request.testType}
+                                                {request.ServiceName}
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                                                {request.requestDate}
+                                                {request.CreatedAt}
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                                                {request.location}
+                                                {request.CollectionMethod}
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap'>
                                                 <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>
-                                                    {request.status}
+                                                    {request.Status}
                                                 </span>
                                             </td>
                                             <td className='px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2'>
                                                 <button
-                                                    onClick={() => handleViewRequest(request.id)}
+                                                    onClick={() => handleViewRequest(request.RequestID)}
                                                     className='text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100'
                                                     title='Xem chi tiết'
                                                 >
                                                     <EyeIcon className='h-5 w-5' />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleConfirmRequest(request.id)}
+                                                    onClick={() => handleConfirmRequest(request.RequestID)}
                                                     className='text-green-400 hover:text-green-600 p-1 rounded-full hover:bg-green-100'
                                                     title='Xác nhận'
                                                 >
@@ -215,28 +216,28 @@ const ManageRequests: React.FC = () => {
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Mã yêu cầu
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.id}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.RequestID}</p>
                                             </div>
 
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Loại xét nghiệm
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.testType}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.ServiceName}</p>
                                             </div>
 
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Số điện thoại
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.phone}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.Phone}</p>
                                             </div>
 
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Số lượng mẫu
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.sampleCount}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.SampleCount}</p>
                                             </div>
 
                                             <div>
@@ -244,7 +245,7 @@ const ManageRequests: React.FC = () => {
                                                     Trạng thái
                                                 </label>
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    {selectedRequest.currentStatus}
+                                                    {selectedRequest.Status}
                                                 </span>
                                             </div>
                                         </div>
@@ -255,21 +256,21 @@ const ManageRequests: React.FC = () => {
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Khách hàng
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.customerName}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.CustomerName}</p>
                                             </div>
 
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Ngày yêu cầu
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.requestDate}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.CreatedAt}</p>
                                             </div>
 
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Email
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.email}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.Email}</p>
                                             </div>
 
                                             <div>
@@ -277,7 +278,7 @@ const ManageRequests: React.FC = () => {
                                                     Người xét nghiệm
                                                 </label>
                                                 <p className="text-sm text-gray-900 whitespace-pre-line">
-                                                    {selectedRequest.testSubjects}
+                                                    {selectedRequest.StaffName}
                                                 </p>
                                             </div>
 
@@ -285,7 +286,7 @@ const ManageRequests: React.FC = () => {
                                                 <label className="block text-sm font-medium text-gray-500 mb-1">
                                                     Địa điểm
                                                 </label>
-                                                <p className="text-sm text-gray-900">{selectedRequest.testLocation}</p>
+                                                <p className="text-sm text-gray-900">{selectedRequest.CollectionMethod}</p>
                                             </div>
                                         </div>
                                     </div>

@@ -171,6 +171,8 @@ export interface TestRequests {
   CustomerName: string
   StaffName: string
   ServiceID: number
+  Phone: string
+  Email: string
   Status: 'Input Infor' | 'Pending' | 'Confirmed' | 'In Progress' | 'Completed'
   AssignedTo?: number
   SampleType: string

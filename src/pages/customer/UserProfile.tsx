@@ -8,6 +8,7 @@ import type { UserProfile } from "../../utils/types"
 import Button from "../../components/Common/Button"
 import DashboardSidebar from "../../components/Common/Sidebar"
 import { authService } from "../../services/authService"
+import dayjs from "dayjs"
 
 interface PasswordChangeModalProps {
   isOpen: boolean
@@ -146,7 +147,7 @@ const UserProfilePage: React.FC = () => {
         // Gán dữ liệu vào input
         setFullName(profile.FullName || "")
         setPhoneNumber(profile.PhoneNumber || "")
-        setDateOfBirth(profile.DateOfBirth || "")
+        setDateOfBirth(profile.DateOfBirth ? dayjs(profile.DateOfBirth).format('YYYY-MM-DD') : "")
         setAddress(profile.Address || "")
         setGender(profile.Gender || "Nam")
       }
@@ -263,7 +264,7 @@ const UserProfilePage: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium mb-2">Ngày sinh</label>
                 <input
-                  type="text"
+                  type="date"
                   value={dateOfBirth}
                   onChange={(e) => setDateOfBirth(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
