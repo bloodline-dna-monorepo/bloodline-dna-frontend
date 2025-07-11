@@ -229,7 +229,7 @@ export interface TestResults {
   Result: string
   EnterBy: number
   SampleDate: string
-  StaffName: string
+  EnteredByName: string
   Status: 'Pending' | 'Verified' | 'Rejected'
   CreatedAt: string
   UpdatedAt: string
@@ -409,4 +409,46 @@ export interface TestRequestFullDetail extends TestRequestDetail {
   }
   cusData: UserProfile
   staffData: UserProfile
+}
+
+export interface FeedbackCus {
+  feedbackId: number
+  testResultId: number
+  accountId: number
+  comment: string
+  rating: number
+  createdAt: string
+}
+// New type for pending feedback requests
+export interface FeedbackRequest {
+  TestRequestID: number
+  ServiceName: string
+  KitID?: string
+  CompletionDate: string
+  CollectionMethod: 'Home' | 'Facility'
+  Status: string
+  TestResultID: number // Added this to link to TestResults for feedback submission
+  ServiceType: string // Added ServiceType for display
+}
+export interface PendingFeedbackRequest {
+  TestRequestID: number
+  ServiceName: string
+  KitID?: string
+  CompletionDate: string
+  CollectionMethod: 'Home' | 'Facility'
+  Status: string
+  TestResultID: number // Added this to link to TestResults for feedback submission
+}
+
+export interface SubmittedFeedbackRequest {
+  FeedbackID: number
+  Rating: number
+  Comment: string
+  CreatedAt: string
+  TestRequestID: number
+  ServiceName: string
+  KitID?: string
+  CompletionDate: string
+  CollectionMethod: 'Home' | 'Facility'
+  Status: string
 }

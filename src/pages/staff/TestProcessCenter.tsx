@@ -423,7 +423,7 @@ const TestProcessCenter: React.FC = () => {
                             </div>
                             <div className='ml-4 text-center'>
                               <div className='w-20 h-20 border border-gray-300 flex items-center justify-center text-xs'>
-                                Vân tay người thứ {index + 1}
+                                <img src={sample.SignatureImage || undefined} alt='' />
                               </div>
                             </div>
                           </div>
@@ -447,18 +447,24 @@ const TestProcessCenter: React.FC = () => {
                     <div className='grid grid-cols-3 gap-8 text-center'>
                       <div>
                         <div className='font-bold mb-2'>NGƯỜI THU MẪU</div>
-                        <div className='text-xs mb-4'>(Ký, ghi rõ họ tên)</div>
-                        <div className='w-20 h-20 border border-gray-300 mx-auto flex items-center justify-center text-xs'>
-                          Ngón tay phải
+                        <div className='text-xs mb-4'>
+                          <img
+                            src={requestData.staffData.SignatureImage}
+                            alt=''
+                            className='w-32 h-32 border rounded object-contain mx-auto'
+                          />
                         </div>
                       </div>
-                      <div>
-                        <div className='font-bold mb-2'>NGƯỜI ĐƯỢC LẤY MẪU</div>
-                        <div className='text-xs mb-4'>(Ký, ghi rõ họ tên)</div>
-                      </div>
+
                       <div>
                         <div className='font-bold mb-2'>NGƯỜI YÊU CẦU XÉT NGHIỆM</div>
-                        <div className='text-xs mb-4'>(Ký, ghi rõ họ tên)</div>
+                        <div className='text-xs mb-4'>
+                          <img
+                            src={requestData.cusData.SignatureImage}
+                            alt=''
+                            className='w-32 h-32 border rounded object-contain mx-auto'
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -521,6 +527,7 @@ const TestProcessCenter: React.FC = () => {
                         onChange={(e) => handleResultChange('result', e.target.value)}
                         rows={8}
                         className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500'
+                        required
                       />
                     </div>
 

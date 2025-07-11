@@ -23,6 +23,7 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { register } = useAuth()
   const navigate = useNavigate()
@@ -64,9 +65,13 @@ const Register: React.FC = () => {
 
     try {
       await validationSchema.validate(formData, { abortEarly: false })
+      setFieldErrors({})
     } catch (err: any) {
-      const firstError = err.errors?.[0] || 'Validation failed.'
-      setError(firstError)
+      const errors: Record<string, string> = {}
+      err.inner.forEach((e: Yup.ValidationError) => {
+        if (e.path) errors[e.path] = e.message
+      })
+      setFieldErrors(errors)
       setLoading(false)
       return
     }
@@ -91,7 +96,10 @@ const Register: React.FC = () => {
           </div>
           <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Create your account</h2>
           <p className='mt-2 text-center text-sm text-gray-600'>
-            Or <Link to='/login' className='font-medium text-teal-600 hover:text-teal-500'>sign in</Link>
+            Or{' '}
+            <Link to='/login' className='font-medium text-teal-600 hover:text-teal-500'>
+              sign in
+            </Link>
           </p>
         </div>
 
@@ -100,20 +108,79 @@ const Register: React.FC = () => {
             {successMessage}
           </div>
         )}
-        {error && (
-          <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md'>
-            {error}
-          </div>
-        )}
+        {error && <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md'>{error}</div>}
 
         <form className='space-y-4' onSubmit={handleSubmit}>
-          <Input label='Email address' type='email' name='Email' value={formData.Email} onChange={handleChange} required placeholder='Enter your email' />
-          <Input label='Password' type='password' name='PasswordHash' value={formData.PasswordHash} onChange={handleChange} required placeholder='Enter your password' />
-          <Input label='Confirm Password' type='password' name='ConfirmPassword' value={formData.ConfirmPassword} onChange={handleChange} required placeholder='Confirm your password' />
-          <Input label='Full Name' type='text' name='FullName' value={formData.FullName} onChange={handleChange} required placeholder='Full Name' />
-          <Input label='Phone Number' type='text' name='PhoneNumber' value={formData.PhoneNumber} onChange={handleChange} required placeholder='Phone Number' />
-          <Input label='Address' type='text' name='Address' value={formData.Address} onChange={handleChange} required placeholder='Address' />
-          <Input label='Date of Birth' type='date' name='DateOfBirth' value={formData.DateOfBirth} onChange={handleChange} required placeholder='Date of Birth' />
+          <Input
+            label='Email address'
+            type='email'
+            name='Email'
+            value={formData.Email}
+            onChange={handleChange}
+            required
+            placeholder='Enter your email'
+            error={fieldErrors.Email}
+          />
+          <Input
+            label='Password'
+            type='password'
+            name='PasswordHash'
+            value={formData.PasswordHash}
+            onChange={handleChange}
+            required
+            placeholder='Enter your password'
+            error={fieldErrors.PasswordHash}
+          />
+          <Input
+            label='Confirm Password'
+            type='password'
+            name='ConfirmPassword'
+            value={formData.ConfirmPassword}
+            onChange={handleChange}
+            required
+            placeholder='Confirm your password'
+            error={fieldErrors.ConfirmPassword}
+          />
+          <Input
+            label='Full Name'
+            type='text'
+            name='FullName'
+            value={formData.FullName}
+            onChange={handleChange}
+            required
+            placeholder='Full Name'
+            error={fieldErrors.FullName}
+          />
+          <Input
+            label='Phone Number'
+            type='text'
+            name='PhoneNumber'
+            value={formData.PhoneNumber}
+            onChange={handleChange}
+            required
+            placeholder='Phone Number'
+            error={fieldErrors.PhoneNumber}
+          />
+          <Input
+            label='Address'
+            type='text'
+            name='Address'
+            value={formData.Address}
+            onChange={handleChange}
+            required
+            placeholder='Address'
+            error={fieldErrors.Address}
+          />
+          <Input
+            label='Date of Birth'
+            type='date'
+            name='DateOfBirth'
+            value={formData.DateOfBirth}
+            onChange={handleChange}
+            required
+            placeholder='Date of Birth'
+            error={fieldErrors.DateOfBirth}
+          />
 
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-1'>Signature Image</label>
@@ -128,14 +195,28 @@ const Register: React.FC = () => {
           </div>
 
           <div className='flex items-center'>
-            <input id='agree-terms' name='agree-terms' type='checkbox' required className='h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded' />
+            <input
+              id='agree-terms'
+              name='agree-terms'
+              type='checkbox'
+              required
+              className='h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded'
+            />
             <label htmlFor='agree-terms' className='ml-2 block text-sm text-gray-900'>
-              I agree to the <Link to='/terms' className='text-teal-600 hover:text-teal-500'>Terms</Link> and{' '}
-              <Link to='/privacy' className='text-teal-600 hover:text-teal-500'>Privacy Policy</Link>
+              I agree to the{' '}
+              <Link to='/terms' className='text-teal-600 hover:text-teal-500'>
+                Terms
+              </Link>{' '}
+              and{' '}
+              <Link to='/privacy' className='text-teal-600 hover:text-teal-500'>
+                Privacy Policy
+              </Link>
             </label>
           </div>
 
-          <Button type='submit' className='w-full' loading={loading}>Create Account</Button>
+          <Button type='submit' className='w-full' loading={loading}>
+            Create Account
+          </Button>
         </form>
       </div>
     </div>

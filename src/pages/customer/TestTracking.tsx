@@ -423,9 +423,9 @@ const TestInfoForm: React.FC<{
                   required
                 >
                   <option value=''>Chọn loại mẫu</option>
-                  <option value='Blood'>Máu</option>
-                  <option value='Saliva'>Nước bọt</option>
-                  <option value='Hair'>Tóc</option>
+                  <option value='Máu'>Máu</option>
+                  <option value='Nước Bọt'>Nước bọt</option>
+                  <option value='Tóc'>Tóc</option>
                 </select>
               </div>
 
