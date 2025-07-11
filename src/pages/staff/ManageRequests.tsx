@@ -1,28 +1,52 @@
-'use client'
-
-import type React from 'react'
-import { useState, useEffect } from 'react'
-import { EyeIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import {
+  EyeIcon,
+  CheckCircleIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import DashboardSidebar from '../../components/Common/Sidebar'
-import { type TestRequestDetail } from '../../utils/types'
-import { staffService } from '../../services/staffService'
+import axios from 'axios'
+
+interface TestRequest {
+  RequestID: number
+  CustomerName: string
+  ServiceName: string
+  CreatedAt: string
+  CollectionMethod: string
+  Status: string
+  Phone: string
+  Email: string
+  SampleCount: number
+  StaffName: string
+}
 
 const ManageRequests: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedRequest, setSelectedRequest] = useState<TestRequestDetail | null>(null)
+  const [selectedRequest, setSelectedRequest] = useState<TestRequest | null>(null)
   const [showModal, setShowModal] = useState(false)
-  const [requests, setRequests] = useState<TestRequestDetail[]>([])
-  const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
+  const [services, setServices] = useState<TestRequest[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchRequests = async () => {
+      setLoading(true)
       try {
-        const data = await staffService.getUnconfirmedRequests()
-        setRequests(data)
-      } catch (error) {
-        console.error('Error fetching unconfirmed requests:', error)
+        const res = await axios.get('/api/services', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+
+        if (Array.isArray(res.data.services)) {
+          setServices(res.data.services)
+        } else {
+          setError('Dữ liệu trả về không hợp lệ')
+          setServices([])
+        }
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Lỗi khi tải dữ liệu')
       } finally {
         setLoading(false)
       }
@@ -31,43 +55,28 @@ const ManageRequests: React.FC = () => {
     fetchRequests()
   }, [])
 
-  const filteredRequests = requests.filter(
-    (request) =>
-      request.CustomerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      request.TestRequestID.toString().includes(searchQuery.toLowerCase()) ||
-      request.ServiceName?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRequests = services.filter(
+    (req) =>
+      req.CustomerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      req.ServiceName?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const handleViewRequest = async (requestId: number) => {
-    try {
-      const request = await staffService.getRequestById(requestId)
-      setSelectedRequest(request)
+  const handleViewRequest = (id: number) => {
+    const found = services.find((r) => r.RequestID === id)
+    if (found) {
+      setSelectedRequest(found)
       setShowModal(true)
-    } catch (error) {
-      console.error('Error fetching request details:', error)
     }
   }
 
-  const handleConfirmRequest = async (requestId: number) => {
-    try {
-      await staffService.confirmRequest(requestId)
-      // Remove the confirmed request from the list
-      setRequests(requests.filter((req) => req.TestRequestID !== requestId))
-      alert('Yêu cầu đã được xác nhận thành công!')
-    } catch (error) {
-      console.error('Error confirming request:', error)
-      alert('Có lỗi xảy ra khi xác nhận yêu cầu!')
-    }
+  const handleConfirmRequest = (id: number) => {
+    console.log('Confirming request:', id)
+    // TODO: call backend confirm API here
   }
 
   const closeModal = () => {
-    setShowModal(false)
     setSelectedRequest(null)
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    setShowModal(false)
   }
 
   if (loading) {
@@ -100,7 +109,7 @@ const ManageRequests: React.FC = () => {
         {/* Header */}
         <div className='mb-8'>
           <h1 className='text-2xl font-bold text-gray-900 mb-2 flex items-center'>
-            <XMarkIcon className='w-6 h-6 mr-2' />
+            <MagnifyingGlassIcon className='w-6 h-6 mr-2' />
             Quản lý yêu cầu xét nghiệm
           </h1>
         </div>
@@ -109,19 +118,21 @@ const ManageRequests: React.FC = () => {
         <div className='bg-white rounded-lg shadow-sm border border-gray-200'>
           <div className='p-6'>
             <div className='mb-6'>
-              <h2 className='text-lg font-semibold text-gray-900 mb-4'>Danh sách yêu cầu chưa xác nhận</h2>
+              <h2 className='text-lg font-semibold text-gray-900 mb-4'>
+                Danh sách yêu cầu chưa xác nhận
+              </h2>
 
-              {/* Search Bar */}
+              {/* Search */}
               <div className='relative'>
                 <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
                   <MagnifyingGlassIcon className='h-5 w-5 text-gray-400' />
                 </div>
                 <input
                   type='text'
-                  placeholder='Tìm kiếm theo tên khách hàng, mã yêu cầu...'
+                  placeholder='Tìm kiếm theo tên khách hàng, loại dịch vụ...'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className='block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm'
+                  className='block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm'
                 />
               </div>
             </div>
@@ -131,67 +142,56 @@ const ManageRequests: React.FC = () => {
               <table className='min-w-full divide-y divide-gray-200'>
                 <thead className='bg-gray-50'>
                   <tr>
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Mã yêu cầu
                     </th>
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Khách hàng
                     </th>
-
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Loại xét nghiệm
                     </th>
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Ngày yêu cầu
                     </th>
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Địa điểm
                     </th>
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Trạng thái
                     </th>
-                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>
                       Thao tác
                     </th>
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y divide-gray-200'>
-                  {filteredRequests.map((request) => (
-                    <tr key={request.TestRequestID} className='hover:bg-gray-50'>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
-                        {request.TestRequestID}
-                      </td>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                        {request.CustomerName || 'Nguyen Van A'}
-                      </td>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                        {request.ServiceName} - {request.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}
-                      </td>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                        {formatDate(request.CreatedAt)}
-                      </td>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                        {request.CollectionMethod === 'Home' ? 'Tại Nhà' : 'Tại Trung Tâm'}
-                      </td>
-                      <td className='px-6 py-4 whitespace-nowrap'>
+                  {filteredRequests.map((r) => (
+                    <tr key={r.RequestID} className='hover:bg-gray-50'>
+                      <td className='px-6 py-4 text-sm font-medium text-gray-900'>{r.RequestID}</td>
+                      <td className='px-6 py-4 text-sm text-gray-900'>{r.CustomerName}</td>
+                      <td className='px-6 py-4 text-sm text-gray-900'>{r.ServiceName}</td>
+                      <td className='px-6 py-4 text-sm text-gray-900'>{r.CreatedAt}</td>
+                      <td className='px-6 py-4 text-sm text-gray-900'>{r.CollectionMethod}</td>
+                      <td className='px-6 py-4'>
                         <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>
-                          Chờ xác nhận
+                          {r.Status}
                         </span>
                       </td>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2'>
+                      <td className='px-6 py-4 text-sm font-medium space-x-2'>
                         <button
-                          onClick={() => handleViewRequest(request.TestRequestID)}
+                          onClick={() => handleViewRequest(r.RequestID)}
                           className='text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100'
                           title='Xem chi tiết'
                         >
                           <EyeIcon className='h-5 w-5' />
                         </button>
                         <button
-                          onClick={() => handleConfirmRequest(request.TestRequestID)}
-                          className='px-3 py-1 bg-gray-800 text-white text-sm rounded-md hover:bg-gray-900 transition-colors'
+                          onClick={() => handleConfirmRequest(r.RequestID)}
+                          className='text-green-400 hover:text-green-600 p-1 rounded-full hover:bg-green-100'
                           title='Xác nhận'
                         >
-                          Xác nhận
+                          <CheckCircleIcon className='h-5 w-5' />
                         </button>
                       </td>
                     </tr>
@@ -208,7 +208,7 @@ const ManageRequests: React.FC = () => {
                 <p className='mt-1 text-sm text-gray-500'>
                   {searchQuery
                     ? 'Không tìm thấy yêu cầu phù hợp với từ khóa tìm kiếm.'
-                    : 'Chưa có yêu cầu xét nghiệm nào cần xác nhận.'}
+                    : 'Chưa có yêu cầu xét nghiệm nào.'}
                 </p>
               </div>
             )}
@@ -220,84 +220,65 @@ const ManageRequests: React.FC = () => {
           <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50'>
             <div className='relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white'>
               <div className='mt-3'>
-                {/* Modal Header */}
                 <div className='flex items-center justify-between pb-4 border-b'>
-                  <h3 className='text-lg font-semibold text-gray-900'>Chi tiết yêu cầu xét nghiệm</h3>
-                  <button onClick={closeModal} className='text-gray-400 hover:text-gray-600'>
+                  <h3 className='text-lg font-semibold text-gray-900'>
+                    Chi tiết yêu cầu xét nghiệm
+                  </h3>
+                  <button
+                    onClick={closeModal}
+                    className='text-gray-400 hover:text-gray-600'
+                  >
                     <XMarkIcon className='h-6 w-6' />
                   </button>
                 </div>
 
-                {/* Modal Content */}
                 <div className='mt-4'>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    {/* Left Column */}
                     <div className='space-y-4'>
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Mã yêu cầu</label>
-                        <p className='text-sm text-gray-900'>{selectedRequest.TestRequestID}</p>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Mã yêu cầu</label>
+                        <p className='text-sm text-gray-900'>{selectedRequest.RequestID}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Loại xét nghiệm</label>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Loại xét nghiệm</label>
                         <p className='text-sm text-gray-900'>{selectedRequest.ServiceName}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Số điện thoại</label>
-                        <p className='text-sm text-gray-900'>{selectedRequest.CustomerPhone || '0123456789'}</p>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Số điện thoại</label>
+                        <p className='text-sm text-gray-900'>{selectedRequest.Phone}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Số lượng mẫu</label>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Số lượng mẫu</label>
                         <p className='text-sm text-gray-900'>{selectedRequest.SampleCount}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Trạng thái</label>
-                        <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>
-                          Chờ xác nhận
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Trạng thái</label>
+                        <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'>
+                          {selectedRequest.Status}
                         </span>
-                      </div>
-
-                      <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Ngày tạo</label>
-                        <p className='text-sm text-gray-900'>{formatDate(selectedRequest.CreatedAt)}</p>
                       </div>
                     </div>
 
-                    {/* Right Column */}
                     <div className='space-y-4'>
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Khách hàng</label>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Khách hàng</label>
                         <p className='text-sm text-gray-900'>{selectedRequest.CustomerName}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Ngày yêu cầu</label>
-                        <p className='text-sm text-gray-900'>{formatDate(selectedRequest.CreatedAt)}</p>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Ngày yêu cầu</label>
+                        <p className='text-sm text-gray-900'>{selectedRequest.CreatedAt}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Email</label>
-                        <p className='text-sm text-gray-900'>{selectedRequest.CustomerEmail}</p>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Email</label>
+                        <p className='text-sm text-gray-900'>{selectedRequest.Email}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Người xét nghiệm</label>
-                        <p className='text-sm text-gray-900 whitespace-pre-line'>{selectedRequest.TestSubjects}</p>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Người xét nghiệm</label>
+                        <p className='text-sm text-gray-900 whitespace-pre-line'>{selectedRequest.StaffName}</p>
                       </div>
-
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Địa chỉ</label>
-                        <p className='text-sm text-gray-900'>{selectedRequest.CustomerAddress || 'chung cư an phúc'}</p>
-                      </div>
-
-                      <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Phương thức lấy mẫu</label>
-                        <p className='text-sm text-gray-900'>
-                          {selectedRequest.CollectionMethod === 'Home' ? 'Tại nhà' : 'Tại cơ sở'}
-                        </p>
+                        <label className='text-sm font-medium text-gray-500 mb-1 block'>Địa điểm</label>
+                        <p className='text-sm text-gray-900'>{selectedRequest.CollectionMethod}</p>
                       </div>
                     </div>
                   </div>

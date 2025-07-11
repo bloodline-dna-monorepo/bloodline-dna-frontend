@@ -12,8 +12,7 @@ import {
   UsersIcon,
   ChartBarIcon,
   CogIcon,
-  ArrowRightOnRectangleIcon,
-  PencilSquareIcon
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline'
 import { useAuth } from '../../hooks/useAuth'
 import { CheckCircleIcon, PlusCircleIcon } from 'lucide-react'
@@ -21,7 +20,6 @@ import { CheckCircleIcon, PlusCircleIcon } from 'lucide-react'
 const DashboardSidebar: React.FC = () => {
   const { user, logout, isAdmin, isManager, isStaff, isCustomer } = useAuth()
   const location = useLocation()
-
   const handleLogout = async () => {
     try {
       await logout()
@@ -29,7 +27,6 @@ const DashboardSidebar: React.FC = () => {
       console.log(error)
     }
   }
-
   const isActive = (path: string) => {
     return location.pathname === path
   }
@@ -73,39 +70,90 @@ const DashboardSidebar: React.FC = () => {
   if (isAdmin) menuItems = adminMenuItems
   else if (isManager) menuItems = managerMenuItems
   else if (isStaff) menuItems = staffMenuItems
+  type MenuItem = {
+  path: string
+  label: string
+   icon: React.FC<React.SVGProps<SVGSVGElement>>
+  subItems?: MenuItem[] 
+}
+
+  let menuItems: MenuItem[] = []
+if (isAdmin) menuItems = [
+  { path: '/admin-dashboard', label: 'Dashboard', icon: HomeIcon },
+  { path: '/user-management', label: 'User Management', icon: UsersIcon },
+  { path: '/service-management', label: 'Service Management', icon: CogIcon },
+  { path: '/settings', label: 'Settings', icon: CogIcon }
+]
+else if (isManager) menuItems = [
+  { path: '/manager/manager-dashboard', label: 'Dashboard', icon: HomeIcon },
+  { path: '/manager/test-results', label: 'Test Results', icon: BeakerIcon },
+  { path: '/manager/view-feedback', label: 'View Feedback', icon: ChartBarIcon },
+  { path: '/profile', label: 'Profile', icon: UserIcon }
+]
+else if (isStaff) menuItems = [
+  { path: '/staff/dashboard', label: 'Dashboard', icon: HomeIcon },
+  {
+    path: '/staff/manage-requests', label: 'Test Requests', icon: BeakerIcon,
+    subItems: [
+      { path: '/staff/manage-requests/not-confirmed', label: '+ Chưa xác nhận', icon: PlusCircleIcon },
+      { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
+    ]
+  },
+  { path: '/profile', label: 'Profile', icon: UserIcon }
+]
+else menuItems = [
+  { path: '/profile', label: 'Profile', icon: UserIcon },
+  { path: '/customer/test-process', label: 'Test Process', icon: BeakerIcon },
+  { path: '/customer/history', label: 'History & Results', icon: DocumentTextIcon }
+]
 
   return (
     <div className='w-64 bg-teal-600 text-white min-h-screen flex flex-col'>
       {/* Logo */}
-      <div className='p-6 border-b border-teal-500'>
-        <div className='flex items-center space-x-3'>
-          <Link to='/' className='flex items-center space-x-2'>
-            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-              <span className='text-teal-600 font-bold text-lg'>G</span>
-            </div>
-            <div className='flex flex-col'>
-              <span className='text-sm font-bold'>Gen</span>
-              <span className='text-sm font-bold text-teal-200'>Unity</span>
-            </div>
-          </Link>
-        </div>
+      <div className="p-6 border-b border-teal-500">
+        <Link to="/" className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <span className="text-teal-600 font-bold text-lg">G</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold">Gen</span>
+            <span className="text-sm font-bold text-teal-200">Unity</span>
+          </div>
+        </Link>
       </div>
 
       {/* Navigation */}
-      <nav className='flex-1 py-6'>
+<nav className='flex-1 py-6'>
         <ul className='space-y-2 px-4'>
           {menuItems.map((item) => {
-            const Icon = item.icon
+          const Icon = item.icon
+          return (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  isActive(item.path) ? 'bg-teal-700 text-white' : 'text-teal-100 hover:bg-teal-500 hover:text-white'
+                }`}
+              >
+                <Icon className='w-5 h-5' />
+                <span className='font-medium'>{item.label}</span>
+              </Link>
+
+      {/* Render subItems nếu có */}
+      {item.subItems && (
+        <ul className='ml-8 mt-1 space-y-1'>
+          {item.subItems.map((sub) => {
+            const SubIcon = sub.icon
             return (
-              <li key={item.path}>
+              <li key={sub.path}>
                 <Link
-                  to={item.path}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive(item.path) ? 'bg-teal-700 text-white' : 'text-teal-100 hover:bg-teal-500 hover:text-white'
+                  to={sub.path}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    isActive(sub.path) ? 'bg-teal-700 text-white' : 'text-teal-100 hover:bg-teal-500 hover:text-white'
                   }`}
                 >
-                  <Icon className='w-5 h-5' />
-                  <span className='font-medium'>{item.label}</span>
+                  <SubIcon className='w-4 h-4' />
+                  <span>{sub.label}</span>
                 </Link>
                 {/* Render subItems nếu có */}
                 {item.subItems && (
@@ -133,6 +181,12 @@ const DashboardSidebar: React.FC = () => {
               </li>
             )
           })}
+        </ul>
+      )}
+    </li>
+  )
+})}
+
         </ul>
       </nav>
 

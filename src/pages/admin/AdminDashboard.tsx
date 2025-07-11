@@ -67,7 +67,10 @@ const AdminDashboard: React.FC = () => {
     ],
   }
 
-  const totalDoughnut = data.serviceDistribution.reduce((a, b) => a + b, 0)
+  const totalDoughnut = Array.isArray(data.serviceDistribution)
+  ? data.serviceDistribution.reduce((a, b) => a + b, 0)
+  : 0
+
 
   if (loading) {
     return (

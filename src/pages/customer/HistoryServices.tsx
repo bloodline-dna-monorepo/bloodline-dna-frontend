@@ -68,7 +68,7 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
             </div>
             <div>
               <div className='text-sm text-gray-600'>Thanh toán</div>
-              <div className='font-semibold'>Chuyển khoản</div>
+<div className='font-semibold'>Chuyển khoản</div>
             </div>
           </div>
         </div>
@@ -91,18 +91,80 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
   )
 }
 
+// Modal hiển thị biên bản kết quả xét nghiệm
+interface ReportModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  request: TestResults | null;
+}
+
+const ReportModal: React.FC<ReportModalProps> = ({ isOpen, onClose, request }) => {
+  if (!isOpen || !request) return null;
+  // Lấy thông tin từ request, fallback nếu thiếu
+  const fatherName = request.CustomerName || 'Nguyễn Văn A';
+  const motherName = request.CustomerName || 'Nguyễn Thị B';
+  const childName = request.CustomerName || 'Nguyễn Văn C'; // Nếu backend có trường riêng cho tên con thì thay vào đây
+  const testDate = request.CreatedAt || '10/1/2024';
+  const serviceName = request.ServiceName || 'Xét nghiệm ADN cha con';
+  const kitId = request.KitID || 'KIT001';
+  const cost = '';
+
+  return (
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+      <div className='bg-white rounded-lg p-8 w-full max-w-2xl shadow-lg relative'>
+        <button onClick={onClose} className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl'>✕</button>
+        <h2 className='text-center font-bold uppercase text-sm mb-1'>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h2>
+        <h3 className='text-center underline text-sm mb-2'>Độc lập – Tự do – Hạnh phúc</h3>
+        <h1 className='text-center font-bold text-xl my-4'>KẾT QUẢ XÉT NGHIỆM ADN</h1>
+        <p className='mb-2'>
+          Theo Đơn yêu cầu xét nghiệm ADN ngày {testDate} của {fatherName} (SĐT: {request.CustomerName || '0123456789'}), Công ty Gen Unity đã tiến hành lấy mẫu xét nghiệm ADN cho những người sau:
+        </p>
+        <ol className='list-decimal list-inside mb-2'>
+          <li>Mẫu móng tay, ghi tên {fatherName}.</li>
+          <li>Mẫu móng tay, ghi tên {motherName}.</li>
+          <li>Mẫu móng tay, ghi tên {childName}.</li>
+        </ol>
+        <p className='mb-2'>Mã dịch vụ: <b>{serviceName}</b> &nbsp; | &nbsp; Mã kit: <b>{kitId}</b></p>
+        <p className='font-bold mb-1'>Kết quả phân tích ADN như sau:</p>
+<p className='mb-2'>
+          Phân tích ADN cho thấy các trình tự di truyền (gen) của <b>{childName}</b> có sự trùng khớp với trình tự ADN của <b>{fatherName}</b> và <b>{motherName}</b> tại nhiều vị trí đặc trưng trong giảm định quan hệ huyết thống.
+        </p>
+        <p className='mb-2'>Mức độ trùng khớp giữa các mẫu cho thấy có <b>quan hệ huyết thống cha – mẹ – con</b> với độ chính xác rất cao.</p>
+        <p className='font-bold mb-1'>KẾT LUẬN:</p>
+        <p className='mb-2'>Căn cứ vào kết quả phân tích ADN, chúng tôi kết luận:</p>
+        <p className='mb-2'><b>{fatherName}</b> là cha ruột và <b>{motherName}</b> là mẹ ruột của <b>{childName}</b>.</p>
+        <p className='mb-2'>Mức độ chính xác của kết luận lên đến <b>99,9999%</b>.</p>
+        <p className='font-bold mb-1'>XÁC NHẬN CỦA ĐƠN VỊ XÉT NGHIỆM</p>
+        <div className='flex justify-between mt-8'>
+          <div>
+            Đại diện đơn vị xét nghiệm<br/>
+            <span className='italic'>(Ký, ghi rõ họ tên)</span>
+          </div>
+          <div className='text-right'>
+            Manager – Gen Unity<br/>
+            Ngày 1 tháng 10 năm 2024
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const HistoryServices: React.FC = () => {
   const [testRequests, setTestRequests] = useState<test[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
-  const [selectedTest, setSelectedTest] = useState<History | null>(null)
+  const [selectedTest, setSelectedTest] = useState<TestRequests | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [stats, setStats] = useState({
     totalTests: 0,
     completedTests: 0,
     totalCost: 0
   })
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+  const [selectedReport, setSelectedReport] = useState<TestResults | null>(null)
+  const [loadingReport, setLoadingReport] = useState(false)
 
   useEffect(() => {
     fetchHistoryData()
@@ -113,7 +175,7 @@ const HistoryServices: React.FC = () => {
       setLoading(true)
       // API calls would go here - need backend endpoints
       const requests = await testRequestService.getUserTestRequests()
-      const completedRequests = requests.filter((req) => req.status === 'completed')
+      const completedRequests = requests.filter((req) => req.Status === 'completed')
 
       setTestRequests(completedRequests)
       setStats({
@@ -134,7 +196,7 @@ const HistoryServices: React.FC = () => {
           createdAt: '10/1/2024',
           updatedAt: '15/1/2024',
           serviceName: 'Xét nghiệm ADN cha con',
-          serviceType: 'civil' as const,
+serviceType: 'civil' as const,
           location: 'at_home' as const,
           appointmentDate: '10/1/2024',
           technician: 'BS. Nguyễn Văn A',
@@ -173,10 +235,32 @@ const HistoryServices: React.FC = () => {
     setIsDetailModalOpen(true)
   }
 
-  const handleDownloadReport = (TestRequests: TestRequests) => {
-    // API call would go here - need backend endpoint
-    console.log('Download report API call needed for:', TestRequests.RequestID)
-    alert('Cần tạo API endpoint để tải báo cáo PDF')
+  const handleShowReport = async (request: test) => {
+    setLoadingReport(true)
+    try {
+      // Giả lập lấy TestResults từ backend bằng TestRequestID hoặc serviceId
+      // Thay thế bằng API thực tế của bạn
+      const testResult: TestResults = {
+        TestResultID: 1,
+        TestRequestID: request.id,
+        CustomerName: 'Nguyễn Văn A',
+        KitID: request.kitId,
+        ServiceID: 1,
+        ServiceType: request.serviceType,
+        SampleCount: 3,
+        Result: 'Nguyễn Văn C',
+        EnterBy: 1,
+        SampleDate: request.createdAt,
+        StaffName: request.technician,
+        Status: 'Verified',
+        CreatedAt: request.createdAt,
+        UpdatedAt: request.confirmAt,
+      }
+      setSelectedReport(testResult)
+      setIsReportModalOpen(true)
+    } finally {
+      setLoadingReport(false)
+    }
   }
 
   const filteredRequests = testRequests.filter((request) => {
@@ -208,7 +292,7 @@ const HistoryServices: React.FC = () => {
             <div className='flex items-center justify-between'>
               <div>
                 <div className='text-sm text-gray-600'>Tổng xét nghiệm</div>
-                <div className='text-2xl font-bold'>{stats.totalTests}</div>
+                  <div className='text-2xl font-bold'>{stats.totalTests}</div>
                 <div className='text-sm text-gray-500'>Tất cả dịch vụ</div>
               </div>
               <div className='w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center'>✏️</div>
@@ -270,7 +354,7 @@ const HistoryServices: React.FC = () => {
         <div className='space-y-4'>
           {filteredRequests.length > 0 ? (
             filteredRequests.map((request) => (
-              <div key={request.serviceId} className='bg-white rounded-lg border p-6'>
+<div key={request.serviceId} className='bg-white rounded-lg border p-6'>
                 <div className='flex items-center gap-4 mb-4'>
                   <div className='w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center'>🧬</div>
                   <div className='flex-1'>
@@ -303,17 +387,22 @@ const HistoryServices: React.FC = () => {
 
                 <div className='flex justify-between items-center'>
                   <div className='flex gap-2'>
-                    <span className='px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm'>Gói chi tiết</span>
-                    <span className='px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm'>Tại xét nghiệm</span>
-                  </div>
-
-                  <div className='flex gap-2'>
                     <button
                       onClick={() => handleViewDetail(request)}
                       className='px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200'
                     >
-                      click để xem chi tiết
+                      Xem chi tiết 
                     </button>
+                    <button
+                      onClick={() => handleShowReport(request)}
+                      className='px-4 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200'
+                      disabled={loadingReport}>
+                      {loadingReport ? 'Đang tải...' : 'Tải kết quả xét nghiệm'}
+                    </button>
+                  </div>
+
+                  <div className='flex gap-2'>
+                    
                     {/* <button
                     onClick={() => handleDownloadReport(request)}
                     className='px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200'
@@ -356,6 +445,7 @@ const HistoryServices: React.FC = () => {
           onClose={() => setIsDetailModalOpen(false)}
           TestRequests={selectedTest}
         />
+        <ReportModal isOpen={isReportModalOpen} onClose={() => setIsReportModalOpen(false)} request={selectedReport} />
       </div>
     </div>
   )
