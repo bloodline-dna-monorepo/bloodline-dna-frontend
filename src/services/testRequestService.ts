@@ -66,10 +66,7 @@ export const testRequestService = {
       console.error('Error downloading sample form PDF:', error)
       throw new Error('Không thể tải xuống file biên bản PDF')
     }
-  },
+  }
 
   // Update test request status (for staff)
-  updateTestRequestStatus: async (testRequestId: string, status: string): Promise<ApiResponse<TestProcess>> => {
-    return apiClient.put<TestProcess>(`/test-requests/${testRequestId}/status`, { status })
-  }
 }
