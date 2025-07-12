@@ -47,7 +47,6 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
           </button>
         </div>
 
-        <p className='text-gray-600 mb-6'>Thông tin chi tiết về dịch vụ xét nghiệm ADN cha con</p>
 
         <div className='space-y-4'>
           <div className='grid grid-cols-2 gap-4'>
@@ -58,7 +57,7 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
             <div>
               <div className='text-sm text-gray-600'>Mã kit</div>
               <div className='font-semibold'>
-                {testRequest.KitID || `KIT${testRequest.TestRequestID.toString().padStart(3, '0')}`}
+                {testRequest.KitID || `K${testRequest.TestRequestID.toString()}`}
               </div>
             </div>
           </div>
@@ -327,7 +326,7 @@ const HistoryServices: React.FC = () => {
                 onChange={(e) => setFilterType(e.target.value)}
                 className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500'
               >
-                <option value='all'>Tất cả thời gian</option>
+                <option value='all'>Loại</option>
                 <option value='civil'>Dân sự</option>
                 <option value='administrative'>Hành chính</option>
               </select>

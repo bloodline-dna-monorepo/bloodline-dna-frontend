@@ -169,7 +169,9 @@ const TestResultManage: React.FC = () => {
                           {item.TestRequestID}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>{item.CustomerName}</td>
-                        <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>{item.ServiceType}</td>
+                        <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
+                          {item.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}
+                        </td>
                         <td className='px-6 py-4 whitespace-nowrap'>
                           <span
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusColor(item.Status)}`}
@@ -177,7 +179,7 @@ const TestResultManage: React.FC = () => {
                             {statusText(item.Status)}
                           </span>
                         </td>
-                        <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>{item.StaffName}</td>
+                        <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>{item.EnteredByName}</td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                           <div className='flex space-x-2'>
                             <button
@@ -239,7 +241,7 @@ const TestResultManage: React.FC = () => {
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Loại xét nghiệm</label>
-                  <p className='text-lg font-semibold'>{selected.ServiceType}</p>
+                  <p className='text-lg font-semibold'>{selected.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Ngày lấy mẫu</label>
@@ -249,7 +251,7 @@ const TestResultManage: React.FC = () => {
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Kỹ thuật viên</label>
-                  <p className='text-lg font-semibold'>{selected.StaffName}</p>
+                  <p className='text-lg font-semibold'>{selected.EnteredByName}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Trạng thái</label>

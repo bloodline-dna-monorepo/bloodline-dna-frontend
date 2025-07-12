@@ -17,7 +17,7 @@ const AdminManager: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [loading, setLoading] = useState(false)
-
+  const [submitting, setSubmitting] = useState(false)
   const [addForm, setAddForm] = useState({
     ServiceName: '',
     ServiceType: CATEGORY_OPTIONS[0].value,
@@ -72,6 +72,8 @@ const AdminManager: React.FC = () => {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (submitting) return
+    setSubmitting(true)
     setLoading(true)
     try {
       const updatedService = {

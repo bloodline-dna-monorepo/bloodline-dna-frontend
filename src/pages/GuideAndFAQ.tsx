@@ -12,81 +12,81 @@ const GuideAndFAQ: React.FC = () => {
 
   const faqs = [
     {
-      question: "How accurate are your DNA tests?",
+      question: "Độ chính xác của xét nghiệm ADN của bạn là bao nhiêu?",
       answer:
-        "Our DNA tests are 99.9% accurate for paternity testing and 99.99% accurate for exclusion cases. We use state-of-the-art technology and analyze multiple genetic markers to ensure the highest level of accuracy.",
+        "Xét nghiệm ADN của chúng tôi đạt độ chính xác 99.9% cho xét nghiệm huyết thống cha con và 99.99% cho các trường hợp loại trừ. Chúng tôi sử dụng công nghệ hiện đại và phân tích nhiều dấu hiệu di truyền để đảm bảo độ chính xác cao nhất.",
     },
     {
-      question: "How long does it take to get results?",
+      question: "Mất bao lâu để nhận được kết quả?",
       answer:
-        "Standard results are available within 3-5 business days from when we receive your samples. We also offer expedited services with results in 24 hours or 4 hours for urgent cases.",
+        "Kết quả tiêu chuẩn có sẵn trong vòng 3-5 ngày làm việc kể từ khi chúng tôi nhận được mẫu của bạn. Chúng tôi cũng cung cấp dịch vụ khẩn cấp với kết quả trong 24 giờ hoặc 4 giờ đối với các trường hợp cấp bách.",
     },
     {
-      question: "Is my genetic information kept private?",
+      question: "Thông tin di truyền của tôi có được giữ bí mật không?",
       answer:
-        "Yes, we maintain the highest standards of privacy and confidentiality. Your genetic information is securely stored and never shared with third parties without your explicit consent.",
+        "Có, chúng tôi duy trì các tiêu chuẩn cao nhất về quyền riêng tư và bảo mật. Thông tin di truyền của bạn được lưu trữ an toàn và không bao giờ được chia sẻ với bên thứ ba nếu không có sự đồng ý rõ ràng của bạn.",
     },
     {
-      question: "Can I use my DNA test results in court?",
+      question: "Tôi có thể sử dụng kết quả xét nghiệm ADN của mình tại tòa án không?",
       answer:
-        "Yes, our legal DNA tests are admissible in court. For legal purposes, we follow strict chain of custody procedures and provide official documentation that meets legal requirements.",
+        "Có, các xét nghiệm ADN pháp lý của chúng tôi được chấp nhận tại tòa án. Đối với mục đích pháp lý, chúng tôi tuân thủ các quy trình chuỗi giám sát nghiêm ngặt và cung cấp tài liệu chính thức đáp ứng các yêu cầu pháp lý.",
     },
     {
-      question: "What's the difference between at-home collection and lab collection?",
+      question: "Sự khác biệt giữa lấy mẫu tại nhà và lấy mẫu tại phòng thí nghiệm là gì?",
       answer:
-        "At-home collection allows you to collect samples in the comfort of your home using our kit, while lab collection requires visiting our facility. Both methods are equally accurate, but lab collection is required for legal cases.",
+        "Lấy mẫu tại nhà cho phép bạn thu thập mẫu tại nhà một cách thoải mái bằng bộ kit của chúng tôi, trong khi lấy mẫu tại phòng thí nghiệm yêu cầu bạn đến cơ sở của chúng tôi. Cả hai phương pháp đều chính xác như nhau, nhưng lấy mẫu tại phòng thí nghiệm là bắt buộc đối với các trường hợp pháp lý.",
     },
     {
-      question: "How do I collect my DNA sample?",
+      question: "Làm cách nào để thu thập mẫu ADN của tôi?",
       answer:
-        "We provide easy-to-use cheek swab kits. Simply rub the swab inside your cheek for 30 seconds, let it dry, and mail it back to our laboratory using the prepaid envelope provided.",
+        "Chúng tôi cung cấp bộ kit lấy mẫu bằng tăm bông má dễ sử dụng. Đơn giản chỉ cần chà tăm bông vào bên trong má của bạn trong 30 giây, để khô và gửi lại phòng thí nghiệm của chúng tôi bằng phong bì trả trước được cung cấp.",
     },
     {
-      question: "Can I test without the other person knowing?",
+      question: "Tôi có thể xét nghiệm mà người khác không biết không?",
       answer:
-        "For peace of mind testing, yes. However, for legal testing, all participants must be present with valid identification and consent to the testing process.",
+        "Đối với xét nghiệm vì mục đích cá nhân, có. Tuy nhiên, đối với xét nghiệm pháp lý, tất cả những người tham gia phải có mặt với giấy tờ tùy thân hợp lệ và đồng ý với quy trình xét nghiệm.",
     },
     {
-      question: "What happens to my sample after testing?",
+      question: "Điều gì xảy ra với mẫu của tôi sau khi xét nghiệm?",
       answer:
-        "After testing is complete, samples are securely destroyed according to our privacy policy unless you specifically request that we retain them for future testing.",
+        "Sau khi xét nghiệm hoàn tất, các mẫu sẽ được tiêu hủy an toàn theo chính sách bảo mật của chúng tôi trừ khi bạn yêu cầu cụ thể chúng tôi giữ lại để xét nghiệm trong tương lai.",
     },
     {
-      question: "Do you offer testing for health conditions?",
+      question: "Bạn có cung cấp xét nghiệm cho các tình trạng sức khỏe không?",
       answer:
-        "Currently, we specialize in relationship testing (paternity, maternity, sibling tests). We do not offer genetic health screening or predisposition testing.",
+        "Hiện tại, chúng tôi chuyên về xét nghiệm mối quan hệ (xét nghiệm huyết thống cha con, mẹ con, anh chị em). Chúng tôi không cung cấp sàng lọc sức khỏe di truyền hoặc xét nghiệm khuynh hướng.",
     },
     {
-      question: "Can I use insurance to pay for DNA testing?",
+      question: "Tôi có thể sử dụng bảo hiểm để thanh toán xét nghiệm ADN không?",
       answer:
-        "DNA testing for relationship determination is typically not covered by insurance as it's considered elective. However, you can check with your insurance provider for specific coverage details.",
+        "Xét nghiệm ADN để xác định mối quan hệ thường không được bảo hiểm chi trả vì nó được coi là tự nguyện. Tuy nhiên, bạn có thể kiểm tra với nhà cung cấp bảo hiểm của mình để biết chi tiết bảo hiểm cụ thể.",
     },
   ]
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-teal-600 to-purple-600 py-16">
+      {/* Tiêu đề */}
+      <div className="bg-gradient-to-r from-teal-600 to-blue-600 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Testing Guide & FAQ</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">Hướng dẫn Xét nghiệm & Câu hỏi thường gặp</h1>
           <p className="text-xl text-white/90">
-            Everything you need to know about our DNA testing process, from collection to results.
+            Mọi thứ bạn cần biết về quy trình xét nghiệm ADN của chúng tôi, từ thu thập đến kết quả.
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Testing Process Guide */}
+        {/* Hướng dẫn quy trình xét nghiệm */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Testing Process</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Quy trình xét nghiệm của chúng tôi</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* At-Home Collection Process */}
+            {/* Quy trình lấy mẫu tại nhà */}
             <div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">At-Home Collection Process</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Quy trình lấy mẫu tại nhà</h3>
               <p className="text-gray-600 mb-6">
-                Our at-home DNA collection process is designed to be simple, convenient, and private. Follow these steps
-                to ensure accurate results.
+                Quy trình lấy mẫu ADN tại nhà của chúng tôi được thiết kế đơn giản, tiện lợi và riêng tư. Thực hiện theo
+                các bước sau để đảm bảo kết quả chính xác.
               </p>
 
               <div className="space-y-6">
@@ -95,10 +95,10 @@ const GuideAndFAQ: React.FC = () => {
                     1
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Order Your Kit</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Đặt bộ kit của bạn</h4>
                     <p className="text-gray-600">
-                      Select your preferred test and complete your order. Your collection kit will be shipped to you in
-                      discreet packaging.
+                      Chọn xét nghiệm bạn muốn và hoàn tất đơn đặt hàng. Bộ kit lấy mẫu của bạn sẽ được gửi đến bạn
+                      trong bao bì kín đáo.
                     </p>
                   </div>
                 </div>
@@ -108,10 +108,10 @@ const GuideAndFAQ: React.FC = () => {
                     2
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Register Your Kit</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Đăng ký bộ kit của bạn</h4>
                     <p className="text-gray-600">
-                      Each kit has a unique identification number. Register this number on our secure portal to link
-                      your kit to your account.
+                      Mỗi bộ kit có một số nhận dạng duy nhất. Đăng ký số này trên cổng thông tin an toàn của chúng tôi
+                      để liên kết bộ kit của bạn với tài khoản của bạn.
                     </p>
                   </div>
                 </div>
@@ -121,10 +121,10 @@ const GuideAndFAQ: React.FC = () => {
                     3
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Collect Your Sample</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Thu thập mẫu của bạn</h4>
                     <p className="text-gray-600">
-                      Follow the detailed instructions to collect your cheek swab sample. Remember not to eat, drink,
-                      smoke, or chew gum for 30 minutes before collection.
+                      Làm theo hướng dẫn chi tiết để thu thập mẫu tăm bông má của bạn. Nhớ không ăn, uống, hút thuốc
+                      hoặc nhai kẹo cao su trong 30 phút trước khi lấy mẫu.
                     </p>
                   </div>
                 </div>
@@ -134,10 +134,10 @@ const GuideAndFAQ: React.FC = () => {
                     4
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Mail Your Sample</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Gửi mẫu của bạn</h4>
                     <p className="text-gray-600">
-                      Place your sample in the prepaid return envelope and mail it back to our laboratory. No additional
-                      postage is required.
+                      Đặt mẫu của bạn vào phong bì trả trước và gửi lại phòng thí nghiệm của chúng tôi. Không cần thêm
+                      phí bưu chính.
                     </p>
                   </div>
                 </div>
@@ -147,10 +147,11 @@ const GuideAndFAQ: React.FC = () => {
                     5
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Receive Your Results</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Nhận kết quả của bạn</h4>
                     <p className="text-gray-600">
-                      Once your sample arrives at our lab, testing typically takes 3-5 business days. You'll receive an
-                      email notification when your results are ready to view in your secure online account.
+                      Khi mẫu của bạn đến phòng thí nghiệm của chúng tôi, xét nghiệm thường mất 3-5 ngày làm việc. Bạn
+                      sẽ nhận được thông báo qua email khi kết quả của bạn sẵn sàng để xem trong tài khoản trực tuyến an
+                      toàn của bạn.
                     </p>
                   </div>
                 </div>
@@ -161,81 +162,84 @@ const GuideAndFAQ: React.FC = () => {
                 <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl">▶</span>
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Video Guide: How to Collect Your DNA Sample</h4>
-                <p className="text-gray-600">Watch our step-by-step video guide for proper sample collection.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Hướng dẫn video: Cách thu thập mẫu ADN của bạn</h4>
+                <p className="text-gray-600">Xem hướng dẫn video từng bước của chúng tôi để thu thập mẫu đúng cách.</p>
               </div>
             </div>
 
-            {/* Lab Facility Collection Process */}
+            {/* Quy trình lấy mẫu tại cơ sở phòng thí nghiệm */}
             <div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Lab Facility Collection Process</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+                Quy trình lấy mẫu tại cơ sở phòng thí nghiệm
+              </h3>
               <p className="text-gray-600 mb-6">
-                For legal DNA testing or those who prefer professional collection, our partner facilities provide a
-                convenient and efficient process.
+                Đối với xét nghiệm ADN pháp lý hoặc những người thích lấy mẫu chuyên nghiệp, các cơ sở đối tác của chúng
+                tôi cung cấp một quy trình tiện lợi và hiệu quả.
               </p>
 
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                     1
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Schedule an Appointment</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Đặt lịch hẹn</h4>
                     <p className="text-gray-600">
-                      Book an appointment at one of our partner facilities at a time that's convenient for you. Same-day
-                      appointments are often available.
+                      Đặt lịch hẹn tại một trong các cơ sở đối tác của chúng tôi vào thời gian thuận tiện cho bạn. Các
+                      cuộc hẹn trong cùng ngày thường có sẵn.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                     2
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Arrive for Your Appointment</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Đến cuộc hẹn của bạn</h4>
                     <p className="text-gray-600">
-                      Bring a valid photo ID. For legal testing, all participants must be present with identification.
-                      For testing minors, bring their birth certificate.
+                      Mang theo giấy tờ tùy thân có ảnh hợp lệ. Đối với xét nghiệm pháp lý, tất cả những người tham gia
+                      phải có mặt với giấy tờ tùy thân. Đối với xét nghiệm trẻ vị thành niên, mang theo giấy khai sinh
+                      của chúng.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                     3
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Professional Sample Collection</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Lấy mẫu chuyên nghiệp</h4>
                     <p className="text-gray-600">
-                      A trained professional will collect your DNA sample using a simple and painless cheek swab. The
-                      entire process takes just a few minutes.
+                      Một chuyên gia được đào tạo sẽ thu thập mẫu ADN của bạn bằng cách sử dụng tăm bông má đơn giản và
+                      không đau. Toàn bộ quá trình chỉ mất vài phút.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                     4
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Sample Processing</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Xử lý mẫu</h4>
                     <p className="text-gray-600">
-                      Your sample is securely packaged and sent to our laboratory with proper chain of custody
-                      documentation for legal testing.
+                      Mẫu của bạn được đóng gói an toàn và gửi đến phòng thí nghiệm của chúng tôi với tài liệu chuỗi
+                      giám sát thích hợp cho xét nghiệm pháp lý.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                     5
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Receive Your Results</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Nhận kết quả của bạn</h4>
                     <p className="text-gray-600">
-                      Results are typically available within 3-5 business days. For legal testing, official
-                      documentation will be provided.
+                      Kết quả thường có sẵn trong vòng 3-5 ngày làm việc. Đối với xét nghiệm pháp lý, tài liệu chính
+                      thức sẽ được cung cấp.
                     </p>
                   </div>
                 </div>
@@ -243,23 +247,23 @@ const GuideAndFAQ: React.FC = () => {
 
               {/* Lab facility image placeholder */}
               <div className="mt-8 bg-gray-100 rounded-lg p-8 text-center">
-                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl">🏢</span>
                 </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Lab Facility</h4>
-                <p className="text-gray-600">Professional collection in a comfortable, private environment.</p>
+                <h4 className="font-semibold text-gray-900 mb-2">Cơ sở phòng thí nghiệm</h4>
+                <p className="text-gray-600">Lấy mẫu chuyên nghiệp trong môi trường thoải mái, riêng tư.</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* FAQ Section */}
+        {/* Phần Câu hỏi thường gặp */}
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Câu hỏi thường gặp</h2>
 
           <div className="max-w-4xl mx-auto space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-lg shadow">
+              <div key={index} className="bg-white rounded-lg shadow border border-gray-200">
                 <button
                   onClick={() => toggleFAQ(index)}
                   className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
@@ -280,13 +284,14 @@ const GuideAndFAQ: React.FC = () => {
             ))}
           </div>
 
-          {/* Contact Support */}
+          {/* Liên hệ hỗ trợ */}
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">
-              Don't see your question answered here? Contact our support team for assistance.
+              Không tìm thấy câu trả lời cho câu hỏi của bạn ở đây? Liên hệ đội ngũ hỗ trợ của chúng tôi để được giúp
+              đỡ.
             </p>
             <button className="bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors">
-              Contact Support
+              Liên hệ hỗ trợ
             </button>
           </div>
         </div>

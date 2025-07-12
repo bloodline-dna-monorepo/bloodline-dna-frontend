@@ -293,8 +293,9 @@ export interface DashboardStats {
   completed: number
   pending: number
   feedback: number
-  monthlyRevenue: number[] // ví dụ: 6 tháng gần nhất
+  monthlyRevenue: number[]
   serviceDistribution: number[]
+  serviceNames?: string[]
 }
 export interface BlogPostAdd {
   Title: string
@@ -451,4 +452,32 @@ export interface SubmittedFeedbackRequest {
   CompletionDate: string
   CollectionMethod: 'Home' | 'Facility'
   Status: string
+}
+
+export interface Feedback {
+  FeedbackID: number
+  TestResultID: number
+  Rating: number
+  Comment: string
+  FullName: string
+  CreatedAt: string
+  id: number
+  rating: number // e.g., 1-5 stars
+  comment: string
+  customerName: string
+  isVerified: boolean
+}
+
+export interface SubmittedFeedback{
+  FeedbackID: number
+  Rating: number
+  Comment: string
+  CreatedAt: string
+  TestRequestID: number
+  ServiceName: string
+  KitID?: string
+  CompletionDate: string
+  CollectionMethod: "Home" | "Facility"
+  Status: string
+  FullName?: string
 }

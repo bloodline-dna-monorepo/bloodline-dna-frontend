@@ -69,7 +69,7 @@ const PaymentResult: React.FC = () => {
               serviceName: serviceInfo.serviceName,
               serviceType: serviceInfo.serviceType,
               amount: serviceInfo.amount,
-              sampleCount: serviceInfo.serviceType === 'Administrative' ? 3 : 2
+              sampleCount: serviceInfo.SampleCount
             })
 
             setMessage('Thanh toán thành công! Yêu cầu xét nghiệm đã được tạo.')
@@ -165,7 +165,8 @@ const PaymentResult: React.FC = () => {
             <div className='py-2'>
               <div className='text-gray-600 mb-1'>Dịch vụ:</div>
               <div className='font-medium'>
-                {serviceDetails.serviceName} ({serviceDetails.sampleCount} mẫu) - {serviceDetails.serviceType}
+                {serviceDetails.serviceName} ({serviceDetails.sampleCount} mẫu) -{' '}
+                {serviceDetails.serviceType === 'Civil' ? 'Dân sự' : 'Hành chính'}
               </div>
             </div>
 

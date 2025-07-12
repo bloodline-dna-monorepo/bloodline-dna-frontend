@@ -1,12 +1,12 @@
 import { apiClient } from '../utils/api'
-import type { ApiResponse, Services, ServiceResponse } from '../utils/types'
+import type { ApiResponse, Services } from '../utils/types'
 
 class ServiceService {
   async getAllServices(): Promise<Services[]> {
     try {
       const response = await apiClient.get<ApiResponse<Services[]>>('/services')
       return response.data.data
-    } catch (error: any) {
+    } catch (error) {
       console.error('Service service get all error:', error)
       throw error
     }
@@ -16,7 +16,7 @@ class ServiceService {
     try {
       const response = await apiClient.get<ApiResponse<Services>>(`/services/${id}`)
       return response.data.data
-    } catch (error: any) {
+    } catch (error) {
       console.error('Service service get by id error:', error)
       throw error
     }

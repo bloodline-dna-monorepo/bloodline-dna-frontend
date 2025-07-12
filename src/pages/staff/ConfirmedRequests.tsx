@@ -152,7 +152,7 @@ const ConfirmedRequests: React.FC = () => {
                       Khách hàng
                     </th>
                     <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                      Loại xét nghiệm
+                      Tên dịch vụ
                     </th>
                     <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                       Ngày yêu cầu
@@ -259,8 +259,11 @@ const ConfirmedRequests: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Loại xét nghiệm</label>
-                        <p className='text-sm text-gray-900'>{selectedRequest.ServiceName}</p>
+                        <label className='block text-sm font-medium text-gray-500 mb-1'>Tên dịch vụ</label>
+                        <p className='text-sm text-gray-900'>
+                          {selectedRequest.ServiceName} -{' '}
+                          {selectedRequest.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}
+                        </p>
                       </div>
 
                       <div>

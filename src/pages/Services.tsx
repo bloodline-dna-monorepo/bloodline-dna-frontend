@@ -43,7 +43,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
         setUserProfile(profile)
       }
     } catch (error) {
-      console.error('Error fetching user profile:', error)
+      console.error('Lỗi khi tải hồ sơ người dùng:', error)
     }
   }
 
@@ -122,7 +122,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
         serviceId: Services.ServiceID
       }
 
-      console.log('Sending payment request:', paymentData)
+      console.log('Đang gửi yêu cầu thanh toán:', paymentData)
 
       // Create VNPAY payment URL
       const paymentResponse = await paymentService.createPaymentUrl(paymentData)
@@ -140,6 +140,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             serviceID: Services.ServiceID,
             serviceName: Services.ServiceName,
             serviceType: Services.ServiceType,
+            SampleCount: Services.SampleCount,
             amount: Services.Price
           }
         }
@@ -147,7 +148,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
         // Store data in sessionStorage as backup
         localStorage.setItem('pendingRegistration', JSON.stringify(navigationState))
 
-        console.log('Redirecting to VNPAY:', paymentResponse.paymentUrl)
+        console.log('Chuyển hướng đến VNPAY:', paymentResponse.paymentUrl)
 
         // Redirect to VNPAY payment page
         window.location.href = paymentResponse.paymentUrl
@@ -169,7 +170,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
       <div className='bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto'>
-        {/* Header */}
+        {/* Tiêu đề */}
         <div className='bg-gray-200 px-6 py-4 flex items-center'>
           <button onClick={onClose} className='text-gray-600 hover:text-gray-800 mr-3' disabled={isSubmitting}>
             ← Quay lại
@@ -180,7 +181,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
         </div>
 
         <form onSubmit={handleSubmit} className='p-6 space-y-6'>
-          {/* Date Field - Only show for Administrative or when Facility is selected for Civil */}
+          {/* Trường ngày - Chỉ hiển thị cho Hành chính hoặc khi chọn Cơ sở cho Dân sự */}
           {formData.collectionMethod === 'Facility' && (
             <div>
               <label className='block text-sm font-medium mb-2'>
@@ -190,7 +191,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                 type='date'
                 value={formData.appointmentDate}
                 onChange={(e) => handleInputChange('appointmentDate', e.target.value)}
-                min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]} // Tomorrow
+                min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]} // Ngày mai
                 className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                 required
                 disabled={isSubmitting}
@@ -198,7 +199,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             </div>
           )}
 
-          {/* Collection Method */}
+          {/* Phương thức lấy mẫu */}
           <div>
             <label className='block text-sm font-medium mb-2'>
               Hình thức lấy mẫu <span className='text-red-500'>*</span>
@@ -233,7 +234,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             </div>
           </div>
 
-          {/* Services Selection */}
+          {/* Lựa chọn dịch vụ */}
           <div>
             <label className='block text-sm font-medium mb-2'>
               Chọn dịch vụ <span className='text-red-500'>*</span>
@@ -249,7 +250,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             </select>
           </div>
 
-          {/* User Information Section */}
+          {/* Phần thông tin người dùng */}
           <div>
             <h3 className='text-lg font-medium mb-4'>Thông tin người yêu cầu</h3>
 
@@ -299,7 +300,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
               </div>
             </div>
 
-            {/* Signature Upload */}
+            {/* Tải chữ ký */}
             <div>
               <label className='block text-sm font-medium mb-1'>
                 Hình ảnh chữ ký <span className='text-red-500'>*</span>
@@ -334,7 +335,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             </div>
           </div>
 
-          {/* Terms and Conditions */}
+          {/* Điều khoản và điều kiện */}
           <div>
             <h3 className='text-lg font-medium mb-4'>Tôi xin cam kết</h3>
             <div className='space-y-2 text-sm text-gray-700 mb-4'>
@@ -368,7 +369,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             </label>
           </div>
 
-          {/* Submit Button */}
+          {/* Nút gửi */}
           <button
             type='submit'
             disabled={isSubmitting}
@@ -402,7 +403,7 @@ const ServicesPage: React.FC = () => {
       const data = await serviceService.getServicesByType(activeTab)
       setServicesList(Array.isArray(data) ? data : [])
     } catch (error: any) {
-      setError('Failed to load services: ' + (error.message || error))
+      setError('Không thể tải dịch vụ: ' + (error.message || error))
     } finally {
       setLoading(false)
     }
@@ -435,8 +436,8 @@ const ServicesPage: React.FC = () => {
 
   return (
     <div className='min-h-screen bg-gray-50'>
-      {/* Header */}
-      <div className='bg-gradient-to-r from-teal-600 to-purple-600 py-16'>
+      {/* Tiêu đề */}
+      <div className='bg-gradient-to-r from-teal-600 to-blue-600 py-16'>
         <div className='max-w-7xl mx-auto px-4 text-center'>
           <h1 className='text-4xl font-bold text-white mb-4'>Dịch vụ Giám định ADN</h1>
           <div className='flex justify-center space-x-4 mb-8'>
@@ -455,12 +456,12 @@ const ServicesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Services list */}
+      {/* Danh sách dịch vụ */}
       <div className='max-w-7xl mx-auto px-4 py-16'>
         {loading ? (
           <div className='text-center py-12'>
             <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto'></div>
-            <p className='mt-4 text-gray-600'>Loading services...</p>
+            <p className='mt-4 text-gray-600'>Đang tải dịch vụ...</p>
           </div>
         ) : error ? (
           <div className='text-center py-12'>
@@ -483,7 +484,7 @@ const ServicesPage: React.FC = () => {
               return (
                 <div
                   key={Services.ServiceID}
-                  className='bg-gradient-to-r from-teal-500 to-purple-600 rounded-lg p-8 text-white'
+                  className='bg-gradient-to-r from-teal-500 to-blue-600 rounded-lg p-8 text-white'
                 >
                   <div className='mb-6'>
                     <h2 className='text-2xl font-bold mb-2'>{Services.ServiceName}</h2>
@@ -518,7 +519,7 @@ const ServicesPage: React.FC = () => {
         )}
       </div>
 
-      {/* Registration Modal */}
+      {/* Modal đăng ký */}
       <RegistrationModal isOpen={showModal} onClose={closeModal} Services={selectedService} serviceType={activeTab} />
     </div>
   )

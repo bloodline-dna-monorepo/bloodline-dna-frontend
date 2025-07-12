@@ -18,6 +18,16 @@ const BlogManagement: React.FC = () => {
     Description: '',
     Image: ''
   })
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, Image: reader.result as string }))
+      }
+      reader.readAsDataURL(file) // Chuyển thành base64
+    }
+  }
 
   useEffect(() => {
     fetchBlogs()
@@ -282,12 +292,10 @@ const BlogManagement: React.FC = () => {
                 <div>
                   <label className='block text-sm font-medium text-gray-700 mb-2'>URL hình ảnh</label>
                   <input
-                    type='url'
-                    name='Image'
-                    value={formData.Image}
-                    onChange={handleInputChange}
+                    type='file'
+                    accept='image/*'
+                    onChange={handleImageChange}
                     className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
-                    placeholder='https://example.com/image.jpg'
                   />
                 </div>
 

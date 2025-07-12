@@ -10,6 +10,8 @@ import type { DashboardStats } from '../../utils/types'
 
 Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
+const COLORS = ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#f44336', '#4caf50', '#ff9800', '#9c27b0']
+
 const ManagerDashboard: React.FC = () => {
   const [data, setData] = useState<DashboardStats>({
     totalUsers: 0,
@@ -20,8 +22,9 @@ const ManagerDashboard: React.FC = () => {
     completed: 0,
     pending: 0,
     feedback: 0,
-    monthlyRevenue: [], // hoặc [0, 0, 0, 0, 0, 0] nếu cần 6 tháng
-    serviceDistribution: {} // hoặc { Civil: 0, Administrative: 0 }
+    monthlyRevenue: [],
+    serviceDistribution: [],
+    serviceNames: []
   })
 
   const [loading, setLoading] = useState(true)
@@ -57,49 +60,17 @@ const ManagerDashboard: React.FC = () => {
   }
 
   const doughnutData = {
-    labels: ['ADN cha con', 'ADN 2', 'ADN 3', 'ADN 4', 'Khác'],
+    labels: data.serviceNames,
     datasets: [
       {
         data: data.serviceDistribution,
-        backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#bdbdbd'],
+        backgroundColor: COLORS.slice(0, data.serviceDistribution.length),
         borderWidth: 2
       }
     ]
   }
-  const totalDoughnut = Object.values(data.serviceDistribution).reduce((a, b) => a + b, 0)
 
-  const serviceDetails = [
-    {
-      color: '#42a5f5',
-      label: 'ADN cha con',
-      value: data.serviceDistribution[0] || 0,
-      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[0] / totalDoughnut) * 100)}%` : '0%'
-    },
-    {
-      color: '#66bb6a',
-      label: 'ADN 2',
-      value: data.serviceDistribution[1] || 0,
-      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[1] / totalDoughnut) * 100)}%` : '0%'
-    },
-    {
-      color: '#ffa726',
-      label: 'ADN 3',
-      value: data.serviceDistribution[2] || 0,
-      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[2] / totalDoughnut) * 100)}%` : '0%'
-    },
-    {
-      color: '#ab47bc',
-      label: 'ADN 4',
-      value: data.serviceDistribution[3] || 0,
-      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[3] / totalDoughnut) * 100)}%` : '0%'
-    },
-    {
-      color: '#bdbdbd',
-      label: 'Khác',
-      value: data.serviceDistribution[4] || 0,
-      percent: totalDoughnut ? `${Math.round((data.serviceDistribution[4] / totalDoughnut) * 100)}%` : '0%'
-    }
-  ]
+  const totalDoughnut = data.serviceDistribution.reduce((a, b) => a + b, 0)
 
   if (loading) {
     return (
@@ -170,7 +141,13 @@ const ManagerDashboard: React.FC = () => {
                   plugins: { legend: { display: false } },
                   scales: {
                     x: { grid: { display: false } },
-                    y: { grid: { display: false }, ticks: { display: false } }
+                    y: {
+                      grid: { display: false },
+                      ticks: {
+                        display: true,
+                        callback: (value) => new Intl.NumberFormat('vi-VN').format(value as number) + ' ₫'
+                      }
+                    }
                   }
                 }}
               />
@@ -179,7 +156,7 @@ const ManagerDashboard: React.FC = () => {
               {['T1', 'T2', 'T3', 'T4', 'T5', 'T6'].map((label, idx) => (
                 <div key={label} className='text-center'>
                   <div className='text-xs text-gray-500'>{label}</div>
-                  <div className='text-xs text-gray-400'>{18 + idx * 4} test</div>
+                  <div className='text-xs text-gray-400'>{(data.monthlyRevenue[idx] || 0).toLocaleString()} ₫</div>
                 </div>
               ))}
             </div>
@@ -203,14 +180,17 @@ const ManagerDashboard: React.FC = () => {
                 </div>
               </div>
               <div className='ml-4'>
-                {serviceDetails.map((item) => (
-                  <div key={item.label} className='flex items-center mb-2'>
+                {data.serviceNames?.map((serviceName, idx) => (
+                  <div key={serviceName} className='flex items-center mb-2'>
                     <span
                       className='inline-block w-3 h-3 rounded-full mr-2'
-                      style={{ backgroundColor: item.color }}
+                      style={{ backgroundColor: COLORS[idx] }}
                     ></span>
                     <span className='text-sm'>
-                      {item.label} <b>{item.value}</b> ({item.percent})
+                      {serviceName} <b>{data.serviceDistribution[idx] || 0}</b>
+                      {totalDoughnut > 0 && (
+                        <>({Math.round(((data.serviceDistribution[idx] || 0) / totalDoughnut) * 100)}%)</>
+                      )}
                     </span>
                   </div>
                 ))}
