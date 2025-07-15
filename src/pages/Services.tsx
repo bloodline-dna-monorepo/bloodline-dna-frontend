@@ -51,7 +51,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
     if (isOpen) {
       fetchUserProfile()
     }
-  }, [isOpen, user])
+  }, [isOpen])
 
   // Load user data when modal opens
   useEffect(() => {
@@ -503,7 +503,6 @@ const ServicesPage: React.FC = () => {
                     </div>
                     <div></div>
                     <div>
-                      <h3 className='font-semibold mb-2'>Đăng ký</h3>
                       <button
                         onClick={() => handleRegisterClick(Services)}
                         className='inline-block mt-2 px-6 py-2 rounded-full font-medium transition-colors bg-white/20 text-white hover:bg-white/30 active:bg-white/40'

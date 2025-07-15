@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/useAuth'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
 import type { LoginRequest } from '../../utils/types'
+import Logo from '../../assets/logo.png'
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginRequest>({
@@ -48,14 +49,14 @@ const Login: React.FC = () => {
     <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         <div className='text-center'>
-          <div className='mx-auto h-16 w-16 bg-teal-100 rounded-full flex items-center justify-center'>
-            <span className='text-2xl'>🧬</span>
+          <div className='mx-auto h-20 w-20 flex items-center justify-center rounded-full '>
+            <img src={Logo} alt='' />
           </div>
-          <h2 className='mt-6 text-3xl font-bold text-gray-900'>Sign in to your account</h2>
+          <h2 className='mt-6 text-3xl font-bold text-gray-900'>Đặng nhập tài khoản của bạn</h2>
           <p className='mt-2 text-sm text-gray-600'>
-            Or{' '}
+            Hoặc{' '}
             <Link to='/register' className='font-medium text-teal-600 hover:text-teal-500'>
-              create a new account
+              Tạo tài khoản mới
             </Link>
           </p>
         </div>
@@ -67,25 +68,25 @@ const Login: React.FC = () => {
 
           <div className='space-y-4'>
             <Input
-              label='Email address'
+              label='Email '
               type='email'
               name='Email'
               value={formData.Email}
               onChange={handleChange}
               required
               autoComplete='email'
-              placeholder='Enter your email'
+              placeholder='Nhập Email'
             />
 
             <Input
-              label='Password'
+              label='Mật Khẩu'
               type='password'
               name='PasswordHash'
               value={formData.PasswordHash}
               onChange={handleChange}
               required
               autoComplete='current-password'
-              placeholder='Enter your password'
+              placeholder='Nhập mật khẩu của bạn'
             />
           </div>
 
@@ -98,13 +99,13 @@ const Login: React.FC = () => {
                 className='h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded'
               />
               <label htmlFor='remember-me' className='ml-2 block text-sm text-gray-900'>
-                Remember me
+                Nhớ tài khoản
               </label>
             </div>
 
             <div className='text-sm'>
               <Link to='/forgot-password' className='font-medium text-teal-600 hover:text-teal-500'>
-                Forgot your password?
+                Quên mật khẩu?
               </Link>
             </div>
           </div>

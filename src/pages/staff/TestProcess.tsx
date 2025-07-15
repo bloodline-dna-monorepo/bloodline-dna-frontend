@@ -48,7 +48,7 @@ const TestProcess: React.FC = () => {
   ]
 
   const [processSteps, setProcessSteps] = useState(initialSteps)
-
+  const [isSubmitting, setIsSubmitting] = useState(false)
   useEffect(() => {
     const fetchRequestData = async () => {
       if (!requestId) return
@@ -168,7 +168,8 @@ const TestProcess: React.FC = () => {
   }
 
   const handleSubmitResult = async () => {
-    if (!requestId) return
+    if (!requestId || isSubmitting) return
+    setIsSubmitting(true)
 
     try {
       await staffService.createTestResult(Number.parseInt(requestId), resultData)
@@ -178,6 +179,8 @@ const TestProcess: React.FC = () => {
     } catch (error) {
       console.error('Error submitting result:', error)
       alert('Có lỗi xảy ra khi lưu kết quả!')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -389,7 +392,7 @@ const TestProcess: React.FC = () => {
                       <textarea
                         placeholder='Nhập kết quả xét nghiệm...'
                         value={resultData.result}
-                        onChange={(e) => handleResultChange('conclusion', e.target.value)}
+                        onChange={(e) => handleResultChange('result', e.target.value)}
                         rows={8}
                         className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500'
                         required

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { testRequestService } from '../../services/testRequestService'
 import type { SampleInfo, TestProcess } from '../../utils/types'
 import DashboardSidebar from '../../components/Common/Sidebar'
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 
 const TestTracking: React.FC = () => {
   const [testRequests, setTestRequests] = useState<TestProcess[]>([])
@@ -22,7 +24,6 @@ const TestTracking: React.FC = () => {
       setLoading(true)
       const requests = await testRequestService.getUserTestRequests()
       console.log(requests)
-
       setTestRequests(requests)
     } catch (error) {
       console.error('Lỗi khi lấy danh sách xét nghiệm:', error)
@@ -259,73 +260,54 @@ const TestTracking: React.FC = () => {
 }
 
 // Component điền thông tin mẫu
+const validationSchema = (serviceType: string, count: number) =>
+  Yup.object().shape({
+    samples: Yup.array()
+      .of(
+        Yup.object().shape({
+          fullName: Yup.string().required('Họ tên là bắt buộc'),
+          birthYear: Yup.number()
+            .required('Năm sinh là bắt buộc')
+            .min(1900, 'Năm sinh không hợp lệ')
+            .max(new Date().getFullYear() - 1, 'Năm sinh không hợp lệ'),
+          gender: Yup.string().required('Giới tính là bắt buộc'),
+          relation: Yup.string().required('Mối quan hệ là bắt buộc'),
+          sampleType: Yup.string().required('Loại mẫu là bắt buộc'),
+          idNumber:
+            serviceType === 'Civil'
+              ? Yup.string()
+              : Yup.string()
+                  .matches(/^\d{12}$/, 'Phải đúng 12 chữ số')
+                  .required('CMND/CCCD là bắt buộc'),
+          file: serviceType === 'Civil' ? Yup.mixed().nullable() : Yup.string().required('Cần có file đính kèm')
+        })
+      )
+      .length(count)
+  })
+
 const TestInfoForm: React.FC<{
   sampleCount: number
   onClose: () => void
   request: TestProcess
   onSubmitted: () => void
 }> = ({ sampleCount, onClose, request, onSubmitted }) => {
-  const [samples, setSamples] = useState<SampleInfo[]>(
-    Array.from({ length: sampleCount }, () => ({
-      fullName: '',
-      birthYear: '',
-      gender: '',
-      relation: '',
-      sampleType: '',
-      idNumber: '',
-      file: null // ✅ Đúng kiểu: File | null
-    }))
-  )
+  const initialSamples = Array.from({ length: sampleCount }, () => ({
+    fullName: '',
+    birthYear: '',
+    gender: '',
+    relation: '',
+    sampleType: '',
+    idNumber: '',
+    file: null
+  }))
 
-  const handleFileChange = (index: number, file: File | null) => {
-    if (!file) {
-      const updated = [...samples]
-      updated[index].file = null
-      setSamples(updated)
-      return
-    }
-
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      const base64 = reader.result as string // dạng: "data:image/png;base64,..."
-      const updated = [...samples]
-      updated[index].file = base64
-      setSamples(updated)
-    }
-
-    reader.readAsDataURL(file) // đọc file dưới dạng base64
-  }
-
-  const handleChange = (index: number, field: keyof SampleInfo, value: SampleInfo[keyof SampleInfo]) => {
-    const updated = [...samples]
-    updated[index] = { ...updated[index], [field]: value } // ✅ Cập nhật 1 trường duy nhất
-    setSamples(updated)
-  }
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const handleSubmit = async (values: { samples: SampleInfo[] }) => {
     try {
-      for (let i = 0; i < samples.length; i++) {
-        const sample = samples[i]
-
-        if (!sample.fullName || !sample.birthYear || !sample.gender || !sample.sampleType || !sample.idNumber) {
-          alert(`⚠️ Vui lòng nhập đầy đủ thông tin cho mẫu số ${i + 1}`)
-          return
-        }
-
-        if (!/^\d{12}$/.test(sample.idNumber)) {
-          alert(`⚠️ CMND/CCCD mẫu số ${i + 1} phải đúng 12 chữ số`)
-          return
-        }
-
-        if (request.ServiceType !== 'Civil' && !sample.file) {
-          alert(`⚠️ Mẫu số ${i + 1} cần phải có file đính kèm đối với dịch vụ hành chính.`)
-          return
-        }
-
+      for (let i = 0; i < values.samples.length; i++) {
+        const sample = values.samples[i]
         const formData = new FormData()
         formData.append('TesterName', sample.fullName)
-        formData.append('YOB', sample.birthYear)
+        formData.append('YOB', sample.birthYear.toString())
         formData.append('Gender', sample.gender)
         formData.append('Relationship', sample.relation)
         formData.append('SampleType', sample.sampleType)
@@ -333,7 +315,6 @@ const TestInfoForm: React.FC<{
         if (sample.file) {
           formData.append('File', sample.file)
         }
-
         await testRequestService.createSampleCategory(request.TestRequestID, formData)
       }
 
@@ -347,129 +328,97 @@ const TestInfoForm: React.FC<{
   }
 
   return (
-    <div>
-      <div className='mb-6'>
-        <h3 className='font-semibold mb-2'>Thông tin người xét nghiệm</h3>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {samples.map((sample, i) => (
-          <div key={i} className='mb-6 p-4 bg-gray-50 rounded-lg'>
-            <h4 className='font-semibold mb-4'>Mẫu {i + 1}</h4>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  Họ tên <span className='text-red-500'>*</span>
-                </label>
-                <input
-                  className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  placeholder='Nhập họ tên'
-                  value={sample.fullName}
-                  onChange={(e) => handleChange(i, 'fullName', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  Năm sinh <span className='text-red-500'>*</span>
-                </label>
-                <input
-                  className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  placeholder='Nhập năm sinh'
-                  value={sample.birthYear}
-                  onChange={(e) => handleChange(i, 'birthYear', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  Giới tính <span className='text-red-500'>*</span>
-                </label>
-                <select
-                  className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  value={sample.gender}
-                  onChange={(e) => handleChange(i, 'gender', e.target.value)}
-                  required
-                >
-                  <option value=''>Chọn giới tính</option>
-                  <option value='Male'>Nam</option>
-                  <option value='Female'>Nữ</option>
-                  <option value='Other'>Khác</option>
-                </select>
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  Mối quan hệ <span className='text-red-500'>*</span>
-                </label>
-                <input
-                  className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  placeholder='VD: Con, Cha, Mẹ...'
-                  value={sample.relation}
-                  onChange={(e) => handleChange(i, 'relation', e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  Loại mẫu <span className='text-red-500'>*</span>
-                </label>
-                <select
-                  className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  value={sample.sampleType}
-                  onChange={(e) => handleChange(i, 'sampleType', e.target.value)}
-                  required
-                >
-                  <option value=''>Chọn loại mẫu</option>
-                  <option value='Máu'>Máu</option>
-                  <option value='Nước Bọt'>Nước bọt</option>
-                  <option value='Tóc'>Tóc</option>
-                </select>
-              </div>
-
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  CMND/CCCD/Passport <span className='text-red-500'>*</span>
-                </label>
-                <input
-                  className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500'
-                  placeholder='Nhập số CMND/CCCD'
-                  value={sample.idNumber}
-                  onChange={(e) => handleChange(i, 'idNumber', e.target.value)}
-                  required
-                />
-              </div>
-
-              {request.ServiceType !== 'Civil' && (
-                <div className='md:col-span-3'>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>
-                    Hình ảnh chữ ký <span className='text-red-500'>*</span>
-                  </label>
-                  <input
-                    type='file'
-                    accept='image/*'
-                    className='border p-2 rounded'
-                    onChange={(e) => handleFileChange(i, e.target.files?.[0] || null)}
-                  />
-                  <p className='text-sm text-gray-500 mt-1'>Không có tập tin nào được chọn</p>
+    <Formik
+      initialValues={{ samples: initialSamples }}
+      validationSchema={validationSchema(request.ServiceType, sampleCount)}
+      onSubmit={handleSubmit}
+    >
+      {({ values, setFieldValue }) => (
+        <Form>
+          {values.samples.map((sample, i) => (
+            <div key={i} className='mb-6 p-4 bg-gray-50 rounded-lg'>
+              <h4 className='font-semibold mb-4'>Mẫu {i + 1}</h4>
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                <div>
+                  <label className='block text-sm font-medium'>Họ tên *</label>
+                  <Field name={`samples[${i}].fullName`} className='input' placeholder='Nhập họ tên' />
+                  <ErrorMessage name={`samples[${i}].fullName`} component='div' className='text-red-500 text-sm' />
                 </div>
-              )}
-            </div>
-          </div>
-        ))}
 
-        <div className='mt-6 flex justify-center'>
-          <button
-            type='submit'
-            className='w-full max-w-md bg-teal-600 text-white py-3 px-6 rounded-md hover:bg-teal-700 transition-colors font-medium'
-          >
-            Xác nhận thông tin
-          </button>
-        </div>
-      </form>
-    </div>
+                <div>
+                  <label className='block text-sm font-medium'>Năm sinh *</label>
+                  <Field type='number' name={`samples[${i}].birthYear`} className='input' placeholder='VD: 1990' />
+                  <ErrorMessage name={`samples[${i}].birthYear`} component='div' className='text-red-500 text-sm' />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium'>Giới tính *</label>
+                  <Field as='select' name={`samples[${i}].gender`} className='input'>
+                    <option value=''>Chọn giới tính</option>
+                    <option value='Male'>Nam</option>
+                    <option value='Female'>Nữ</option>
+                    <option value='Other'>Khác</option>
+                  </Field>
+                  <ErrorMessage name={`samples[${i}].gender`} component='div' className='text-red-500 text-sm' />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium'>Mối quan hệ *</label>
+                  <Field name={`samples[${i}].relation`} className='input' placeholder='VD: Cha, Con...' />
+                  <ErrorMessage name={`samples[${i}].relation`} component='div' className='text-red-500 text-sm' />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium'>Loại mẫu *</label>
+                  <Field as='select' name={`samples[${i}].sampleType`} className='input'>
+                    <option value=''>Chọn loại mẫu</option>
+                    <option value='Máu'>Máu</option>
+                    <option value='Nước Bọt'>Nước bọt</option>
+                    <option value='Tóc'>Tóc</option>
+                  </Field>
+                  <ErrorMessage name={`samples[${i}].sampleType`} component='div' className='text-red-500 text-sm' />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium'>CMND/CCCD *</label>
+                  <Field name={`samples[${i}].idNumber`} className='input' placeholder='12 chữ số' />
+                  <ErrorMessage name={`samples[${i}].idNumber`} component='div' className='text-red-500 text-sm' />
+                </div>
+
+                {request.ServiceType !== 'Civil' && (
+                  <div className='md:col-span-3'>
+                    <label className='block text-sm font-medium'>Hình ảnh chữ ký *</label>
+                    <input
+                      type='file'
+                      accept='image/*'
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        const reader = new FileReader()
+                        reader.onloadend = () => {
+                          setFieldValue(`samples[${i}].file`, reader.result)
+                        }
+                        reader.readAsDataURL(file)
+                      }}
+                    />
+                    <ErrorMessage name={`samples[${i}].file`} component='div' className='text-red-500 text-sm' />
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <div className='mt-6 flex justify-center'>
+            <button
+              type='submit'
+              className='w-full max-w-md bg-teal-600 text-white py-3 px-6 rounded-md hover:bg-teal-700 font-medium'
+            >
+              Xác nhận thông tin
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   )
 }
 
@@ -482,7 +431,7 @@ const TestProgressTracker: React.FC<{
   const currentIndex = stepDefs.indexOf(request.Status)
 
   const progressSteps = stepDefs.map((step, index) => ({
-    id: step.toLowerCase().replace(/\s+/g, '_'),
+    id: step,
     title:
       step === 'Input Infor'
         ? 'Điền thông tin'
@@ -494,12 +443,19 @@ const TestProgressTracker: React.FC<{
               ? 'Đang thực hiện'
               : 'Hoàn thành',
     description: '', // bạn có thể thêm mô tả tuỳ ý
-    status: index < currentIndex ? 'completed' : index === currentIndex ? 'in_progress' : 'pending',
+    status:
+      index < currentIndex
+        ? 'Completed'
+        : index === currentIndex
+          ? request.Status === 'Completed'
+            ? 'Completed'
+            : 'In Progress'
+          : 'Pending',
     date: '' // bạn có thể thêm nếu muốn
   }))
 
   const getProgressPercentage = () => {
-    const completedSteps = progressSteps.filter((step) => step.status === 'completed').length
+    const completedSteps = progressSteps.filter((step) => step.status === 'Completed').length
     return Math.round((completedSteps / progressSteps.length) * 100)
   }
 
@@ -537,17 +493,17 @@ const TestProgressTracker: React.FC<{
             <div className='flex flex-col items-center'>
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  step.status === 'completed'
+                  step.status === 'Completed'
                     ? 'bg-green-100 text-green-600'
                     : step.status === 'in_progress'
                       ? 'bg-blue-100 text-blue-600'
                       : 'bg-gray-100 text-gray-400'
                 }`}
               >
-                {step.status === 'completed' ? '✓' : step.status === 'in_progress' ? '⏳' : '○'}
+                {step.status === 'Completed' ? '✓' : step.status === 'In Progress' ? '⏳' : '○'}
               </div>
               {index < progressSteps.length - 1 && (
-                <div className={`w-0.5 h-8 ${step.status === 'completed' ? 'bg-green-200' : 'bg-gray-200'}`}></div>
+                <div className={`w-0.5 h-8 ${step.status === 'Completed' ? 'bg-green-200' : 'bg-gray-200'}`}></div>
               )}
             </div>
             <div className='flex-1'>
@@ -557,10 +513,10 @@ const TestProgressTracker: React.FC<{
                   <p className='text-sm text-gray-600'>{step.description}</p>
                 </div>
                 <div className='text-right'>
-                  {step.status === 'completed' && (
+                  {step.status === 'Completed' && (
                     <span className='text-xs text-green-600 bg-green-50 px-2 py-1 rounded'>Hoàn thành</span>
                   )}
-                  {step.status === 'in_progress' && (
+                  {step.status === 'In Progress' && (
                     <span className='text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded'>Đang thực hiện</span>
                   )}
                   {step.date && <p className='text-xs text-gray-500 mt-1'>{step.date}</p>}

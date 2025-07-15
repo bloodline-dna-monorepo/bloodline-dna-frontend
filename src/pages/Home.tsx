@@ -179,9 +179,9 @@ const Home: React.FC = () => {
           </p>
           {!isAuthenticated && (
             <Link to='/register'>
-              <Button size='lg' className='bg-white text-teal-600 hover:bg-gray-100'>
+              <button className='px-6 py-3 text-white font-semibold rounded-md bg-gray-800 hover:bg-teal-500 transition-colors'>
                 Tạo tài khoản ngay hôm nay
-              </Button>
+              </button>
             </Link>
           )}
         </div>

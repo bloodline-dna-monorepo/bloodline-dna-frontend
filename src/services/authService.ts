@@ -33,9 +33,14 @@ export const authService = {
   },
 
   async register(data: RegisterRequest): Promise<RegisterResponse> {
-    const response = await apiClient.post<ApiResponse<RegisterResponse>>('/auth/register', data)
-    return {
-      message: response.data.message
+    try {
+      const response = await apiClient.post<ApiResponse<RegisterResponse>>('/auth/register', data)
+      return {
+        message: response.data.message
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message
+      throw new Error(message)
     }
   },
 

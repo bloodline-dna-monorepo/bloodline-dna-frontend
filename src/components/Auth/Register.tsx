@@ -8,6 +8,7 @@ import { useAuth } from '../../hooks/useAuth'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
 import type { RegisterRequest } from '../../utils/types'
+import Logo from '../../assets/logo.png'
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -52,7 +53,9 @@ const Register: React.FC = () => {
       .oneOf([Yup.ref('PasswordHash')], 'Passwords must match')
       .required('Required'),
     FullName: Yup.string().required('Required'),
-    PhoneNumber: Yup.string().required('Required'),
+    PhoneNumber: Yup.string()
+      .matches(/^(0|\+84)[0-9]{9}$/, 'Số điện thoại không hợp lệ')
+      .required('Bắt buộc nhập số điện thoại'),
     Address: Yup.string().required('Required'),
     DateOfBirth: Yup.string().required('Required'),
     SignatureImage: Yup.string().required('Required')
@@ -76,29 +79,31 @@ const Register: React.FC = () => {
       return
     }
 
-    try {
-      const response = await register(formData)
-      setSuccessMessage(response.message || 'Register successful! Redirecting...')
-      setTimeout(() => navigate('/dashboard'), 2000)
-    } catch (error) {
-      setError('Registration failed. Please try again. ' + error)
-    } finally {
-      setLoading(false)
-    }
+ try {
+  const response = await register(formData)
+  setSuccessMessage(response.message || 'Register successful! Redirecting...')
+  setTimeout(() => navigate('/dashboard'), 2000)
+} catch (error: any) {
+  const message = error?.message || String(error)
+  const cleaned = message.replace('Error:', '').trim()
+  setError('Một số thông tin đang lỗi như: ' + cleaned)
+} finally {
+  setLoading(false)
+}
   }
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         <div>
-          <div className='mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-teal-100'>
-            <span className='text-2xl'>🧬</span>
+          <div className='mx-auto h-20 w-20 flex items-center justify-center rounded-full '>
+            <img src={Logo} alt='' />
           </div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Create your account</h2>
+          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Tạo tài khoản của bạn</h2>
           <p className='mt-2 text-center text-sm text-gray-600'>
-            Or{' '}
+            Hoặc{' '}
             <Link to='/login' className='font-medium text-teal-600 hover:text-teal-500'>
-              sign in
+              Đăng nhập
             </Link>
           </p>
         </div>
@@ -112,78 +117,78 @@ const Register: React.FC = () => {
 
         <form className='space-y-4' onSubmit={handleSubmit}>
           <Input
-            label='Email address'
+            label='Email '
             type='email'
             name='Email'
             value={formData.Email}
             onChange={handleChange}
             required
-            placeholder='Enter your email'
+            placeholder='Nhập Email của bạn'
             error={fieldErrors.Email}
           />
           <Input
-            label='Password'
+            label='Mật khẩu'
             type='password'
             name='PasswordHash'
             value={formData.PasswordHash}
             onChange={handleChange}
             required
-            placeholder='Enter your password'
+            placeholder='Nhập mật khẩu'
             error={fieldErrors.PasswordHash}
           />
           <Input
-            label='Confirm Password'
+            label='Xác nhận mật khẩu'
             type='password'
             name='ConfirmPassword'
             value={formData.ConfirmPassword}
             onChange={handleChange}
             required
-            placeholder='Confirm your password'
+            placeholder='Xác nhận mật khẩu của bạn'
             error={fieldErrors.ConfirmPassword}
           />
           <Input
-            label='Full Name'
+            label='Họ Tên'
             type='text'
             name='FullName'
             value={formData.FullName}
             onChange={handleChange}
             required
-            placeholder='Full Name'
+            placeholder='Nhập Họ Tên của bạn'
             error={fieldErrors.FullName}
           />
           <Input
-            label='Phone Number'
+            label='Số điện thoại'
             type='text'
             name='PhoneNumber'
             value={formData.PhoneNumber}
             onChange={handleChange}
             required
-            placeholder='Phone Number'
+            placeholder='Nhập số điện thoại của bạn'
             error={fieldErrors.PhoneNumber}
           />
           <Input
-            label='Address'
+            label='Địa chỉ'
             type='text'
             name='Address'
             value={formData.Address}
             onChange={handleChange}
             required
-            placeholder='Address'
+            placeholder='Nhập địa chỉ nhà của bạn'
             error={fieldErrors.Address}
           />
           <Input
-            label='Date of Birth'
+            label='Ngày Sinh'
             type='date'
             name='DateOfBirth'
             value={formData.DateOfBirth}
             onChange={handleChange}
             required
-            placeholder='Date of Birth'
+            placeholder='Ngày Tháng Năm Sinh của bạn'
             error={fieldErrors.DateOfBirth}
           />
 
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>Signature Image</label>
+            <label className='block text-sm font-medium text-gray-700 mb-1'>Hình ảnh vân tay của bạn *</label>
             <input
               type='file'
               name='SignatureImage'

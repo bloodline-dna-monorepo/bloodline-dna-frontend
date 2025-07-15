@@ -270,7 +270,7 @@ const UserProfilePage: React.FC = () => {
             {/* Signature image */}
             {userProfile?.SignatureImage && (
               <div className='mt-6'>
-                <label className='block text-sm font-medium mb-2'>Chữ ký</label>
+                <label className='block text-sm font-medium mb-2'>Vân tay</label>
                 <div className='border border-gray-200 rounded-md p-3 bg-gray-50 max-w-[126px]'>
                   <img src={userProfile.SignatureImage} alt='Chữ ký' className='w-auto h-auto max-w-full' />
                 </div>
