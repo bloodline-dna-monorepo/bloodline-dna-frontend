@@ -11,7 +11,8 @@ import type {
   RegisterResponse,
   ChangePasswordReponse,
   UpdateProfilereq,
-  UpdateProfilerep
+  UpdateProfilerep,
+  AuthResponse
 } from '../utils/types'
 
 export const authService = {
@@ -79,5 +80,26 @@ export const authService = {
     const token = localStorage.getItem('accessToken')
     const user = localStorage.getItem('user')
     return !!(token && user)
+  },
+
+
+  // ✅ Forgot Password
+  async forgotPassword(email: string): Promise<AuthResponse> {
+    const response = await apiClient.post<ApiResponse<AuthResponse>>('/auth/forgot-password', { email })
+    return response.data
+  },
+
+  // ✅ Reset Password
+  async resetPassword(
+    token: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<AuthResponse> {
+    const response = await apiClient.post<ApiResponse<AuthResponse>>('/auth/reset-password', {
+      token,
+      newPassword,
+      confirmPassword
+    })
+    return response.data
   }
 }

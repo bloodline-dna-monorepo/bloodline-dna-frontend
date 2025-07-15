@@ -4,7 +4,10 @@ export interface CreatePaymentUrlRequest {
   orderInfo: string
   serviceId?: number
 }
-
+export interface AuthResponse {
+  success: boolean
+  message: string
+}
 export interface CreatePaymentUrlResponse {
   success: boolean
   paymentUrl?: string

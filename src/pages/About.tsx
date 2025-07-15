@@ -1,31 +1,34 @@
 import type React from 'react'
 import { Link } from 'react-router-dom'
-
+import m1 from '../../assets/about/m1.png'
+import m2 from '../../assets/about/m2.png'
+import m3 from '../../assets/about/m3.png'
+import m4 from '../../assets/about/m4.png'
 const About: React.FC = () => {
   const teamMembers = [
     {
       name: 'Tiến sĩ Emily Chen',
       title: 'Trưởng nhóm Di truyền học',
       description: 'Chuyên về giải trình tự và phân tích di truyền',
-      image: '/src/assets/about/m1.png'
+      image: m1
     },
     {
       name: 'Michael Davis',
       title: 'Quản lý Phòng thí nghiệm',
       description: 'Giám sát hoạt động phòng thí nghiệm và kiểm soát chất lượng',
-      image: '/src/assets/about/m2.png'
+      image: m2
     },
     {
       name: 'Sarah Lee',
       title: 'Trưởng phòng Quan hệ Khách hàng',
       description: 'Đảm bảo trải nghiệm khách hàng liền mạch và hỗ trợ',
-      image: '/src/assets/about/m3.png'
+      image: m3
     },
     {
       name: 'Tiến sĩ Alex Kim',
       title: 'Cố vấn Y tế',
       description: 'Cung cấp chuyên môn lâm sàng và hướng dẫn y tế',
-      image: '/src/assets/about/m4.png'
+      image: m4
     }
   ]
 
