@@ -57,7 +57,7 @@ const TestResultManage: React.FC = () => {
     try {
       await managerService.approveTestResult(testResultId)
       await fetchTestResults() // Refresh data
-      alert('Kết quả đã được duyệt thành công')
+      alert('Kết quả đã được duyệt và gửi mail thành công')
     } catch (error) {
       console.error('Error approving test result:', error)
       alert('Có lỗi xảy ra khi duyệt kết quả')

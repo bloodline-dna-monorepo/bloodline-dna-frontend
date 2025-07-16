@@ -19,12 +19,24 @@ export const managerService = {
     return response.data.data
   },
 
-  async approveTestResult(testResultId: number): Promise<{ message: string }> {
-    const response = await apiClient.put<ApiResponse<{ message: string }>>(
-      `/manager/test-results/${testResultId}/approve`
-    )
-    return response.data.data
-  },
+async approveTestResult(testResultId: number): Promise<{
+  message: string
+  email: string
+  fullName: string
+  serviceName: string
+  registrationId: number
+}> {
+  const response = await apiClient.put<ApiResponse<{
+    message: string
+    email: string
+    fullName: string
+    serviceName: string
+    registrationId: number
+  }>>(`/manager/test-results/${testResultId}/approve`)
+
+  return response.data.data
+},
+
 
   async rejectTestResult(testResultId: number, reason?: string): Promise<{ message: string }> {
     const response = await apiClient.put<ApiResponse<{ message: string }>>(
