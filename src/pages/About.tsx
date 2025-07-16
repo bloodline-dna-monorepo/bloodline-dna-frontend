@@ -1,9 +1,14 @@
 import type React from 'react'
 import { Link } from 'react-router-dom'
-import m1 from '../../assets/about/m1.png'
-import m2 from '../../assets/about/m2.png'
-import m3 from '../../assets/about/m3.png'
-import m4 from '../../assets/about/m4.png'
+import m1 from '../assets/about/m1.png'
+import m2 from '../assets/about/m2.png'
+import m3 from '../assets/about/m3.png'
+import m4 from '../assets/about/m4.png'
+import havard from '../assets/about/havard.png'
+import our from '../assets/about/our.png'
+import tuvu from '../assets/about/tuvu.png'
+import yduoc from '../assets/about/yduoc.png'
+import fpt from '../assets/about/fpt.png'
 const About: React.FC = () => {
   const teamMembers = [
     {
@@ -106,7 +111,7 @@ const About: React.FC = () => {
             </div>
             <div className='flex justify-center'>
               <img
-                src='/src/assets/about/our.png'
+                src={our}
                 alt='Sứ mệnh của chúng tôi'
                 className='max-w-md w-full h-auto rounded-lg shadow-lg'
               />
@@ -270,16 +275,16 @@ const About: React.FC = () => {
 
           <div className='grid grid-cols-2 md:grid-cols-4 gap-8 items-center'>
             <div className='flex justify-center'>
-              <img src='/src/assets/about/fpt.png' alt='Đại học FPT' className='h-16 object-contain' />
+              <img src={fpt} alt='Đại học FPT' className='h-16 object-contain' />
             </div>
             <div className='flex justify-center'>
-              <img src='/src/assets/about/tuvu.png' alt='Đại học Tu Vu' className='h-16 object-contain' />
+              <img src={tuvu} alt='Đại học Tu Vu' className='h-16 object-contain' />
             </div>
             <div className='flex justify-center'>
-              <img src='/src/assets/about/havard.png' alt='Đại học Harvard' className='h-16 object-contain' />
+              <img src={havard} alt='Đại học Harvard' className='h-16 object-contain' />
             </div>
             <div className='flex justify-center'>
-              <img src='/src/assets/about/yduoc.png' alt='Đại học Y Dược' className='h-16 object-contain' />
+              <img src={yduoc} alt='Đại học Y Dược' className='h-16 object-contain' />
             </div>
           </div>
         </div>

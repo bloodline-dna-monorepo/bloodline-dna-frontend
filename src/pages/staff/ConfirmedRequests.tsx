@@ -64,7 +64,8 @@ const ConfirmedRequests: React.FC = () => {
     setSelectedRequest(null)
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'Không rõ'
     const date = new Date(dateString)
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
   }
@@ -155,7 +156,7 @@ const ConfirmedRequests: React.FC = () => {
                       Tên dịch vụ
                     </th>
                     <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                      Ngày yêu cầu
+                      Ngày đăng ký
                     </th>
                     <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                       Địa điểm
@@ -183,7 +184,7 @@ const ConfirmedRequests: React.FC = () => {
                           {request.ServiceName} - {request.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                          {formatDate(request.CreatedAt)}
+                          {formatDate(request.Appointment)}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
                           {request.CollectionMethod === 'Home' ? 'Tại Nhà' : 'Tại Trung Tâm'}
@@ -299,8 +300,8 @@ const ConfirmedRequests: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className='block text-sm font-medium text-gray-500 mb-1'>Ngày yêu cầu</label>
-                        <p className='text-sm text-gray-900'>{formatDate(selectedRequest.CreatedAt)}</p>
+                        <label className='block text-sm font-medium text-gray-500 mb-1'>Ngày đăng ký</label>
+                        <p className='text-sm text-gray-900'>{formatDate(selectedRequest.Appointment)}</p>
                       </div>
 
                       <div>

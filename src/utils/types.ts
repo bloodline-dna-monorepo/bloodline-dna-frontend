@@ -110,21 +110,7 @@ export interface LoginRequest {
   PasswordHash: string
 }
 
-export interface test {
-  id: string
-  serviceId: string
-  userId: string
-  status: string
-  kitId: string
-  createdAt: string
-  confirmAt: string
-  serviceName: string
-  serviceType: string
-  location: string
-  appointmentDate: string
-  technician: string
-  cost: number
-}
+
 
 export interface RegisterRequest {
   Email: string
