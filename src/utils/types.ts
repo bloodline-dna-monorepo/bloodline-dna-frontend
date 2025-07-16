@@ -218,7 +218,7 @@ export interface TestResults {
   Result: string
   EnterBy: number
   SampleDate: string
-  EnteredByName: string
+  StaffName: string
   Status: 'Pending' | 'Verified' | 'Rejected'
   CreatedAt: string
   UpdatedAt: string

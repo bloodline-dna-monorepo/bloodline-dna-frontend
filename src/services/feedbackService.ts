@@ -22,5 +22,12 @@ export const feedbackService = {
       comment
     })
     return response.data.data
-  }
+  },
+    async updateFeedback(feedbackId: number, rating: number, comment: string): Promise<{ message: string }> {
+    const response = await apiClient.put<ApiResponse<{ message: string }>>(`/feedback/${feedbackId}`, {
+      rating,
+      comment,
+    })
+    return response.data.data
+  },
 }
