@@ -105,7 +105,7 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
           <div className='text-sm text-gray-700 mb-3'>Kết quả: {Result?.Result}</div>
 
           <div className='font-semibold mb-2'>Thông tin kỹ thuật viên</div>
-          <div className='text-sm text-gray-700'>{Result?.EnteredByName}</div>
+          <div className='text-sm text-gray-700'>{Result?.StaffName}</div>
         </div>
       </div>
     </div>
