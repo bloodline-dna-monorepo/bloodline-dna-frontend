@@ -9,6 +9,7 @@ import Button from '../Common/Button'
 import Input from '../Common/Input'
 import type { RegisterRequest } from '../../utils/types'
 import Logo from '../../assets/logo.png'
+import { parse, isValid, differenceInYears } from 'date-fns'
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterRequest>({
@@ -57,7 +58,16 @@ const Register: React.FC = () => {
       .matches(/^(0|\+84)[0-9]{9}$/, 'Số điện thoại không hợp lệ')
       .required('Bắt buộc nhập số điện thoại'),
     Address: Yup.string().required('Required'),
-    DateOfBirth: Yup.string().required('Required'),
+    
+  DateOfBirth: Yup.string()
+    .required('Bắt buộc nhập ngày sinh')
+    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Định dạng ngày sinh phải là YYYY-MM-DD')
+    .test('is-18-or-older', 'Bạn phải từ 18 tuổi trở lên', value => {
+      if (!value) return false
+      const birthDate = parse(value, 'yyyy-MM-dd', new Date())
+      if (!isValid(birthDate)) return false
+      return differenceInYears(new Date(), birthDate) >= 18
+    }),
     SignatureImage: Yup.string().required('Required')
   })
 
