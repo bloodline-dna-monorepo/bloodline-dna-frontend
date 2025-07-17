@@ -77,7 +77,7 @@ const DashboardSidebar: React.FC = () => {
   else menuItems = customerMenuItems
 
   return (
-    <div className='w-64 bg-teal-600 text-white min-h-screen flex flex-col'>
+    <div className='w-64 bg-teal-600 text-white h-screen fixed top-0 left-0 flex flex-col'>
       <div className='p-6 border-b border-teal-500'>
         <Link to='/' className='flex items-center justify-center'>
           <div className='w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-white'>
@@ -87,7 +87,9 @@ const DashboardSidebar: React.FC = () => {
       </div>
 
       {/* Navigation */}
-      <nav className='flex-1 py-6'>
+      <nav className='flex-1 py-6 overflow-y-auto'>
+        {' '}
+        {/* Cho phép cuộn nếu nội dung dài */}
         <ul className='space-y-2 px-4'>
           {menuItems.map((item) => {
             const Icon = item.icon
