@@ -9,7 +9,24 @@ import our from '../assets/about/our.png'
 import tuvu from '../assets/about/tuvu.png'
 import yduoc from '../assets/about/yduoc.png'
 import fpt from '../assets/about/fpt.png'
+import { ArrowUpIcon } from '@heroicons/react/24/outline'
+import { useEffect, useState } from 'react'
+
 const About: React.FC = () => {
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   const teamMembers = [
     {
       name: 'Tiến sĩ Emily Chen',
@@ -110,11 +127,7 @@ const About: React.FC = () => {
               </p>
             </div>
             <div className='flex justify-center'>
-              <img
-                src={our}
-                alt='Sứ mệnh của chúng tôi'
-                className='max-w-md w-full h-auto rounded-lg shadow-lg'
-              />
+              <img src={our} alt='Sứ mệnh của chúng tôi' className='max-w-md w-full h-auto rounded-lg shadow-lg' />
             </div>
           </div>
         </div>
@@ -325,6 +338,15 @@ const About: React.FC = () => {
           </div>
         </div>
       </div>
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className='fixed bottom-6 right-6 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300'
+          title='Lên đầu trang'
+        >
+          <ArrowUpIcon className='w-6 h-6' />
+        </button>
+      )}
     </div>
   )
 }

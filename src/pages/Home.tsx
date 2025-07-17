@@ -8,8 +8,23 @@ import Button from '../components/Common/Button'
 import FeedbackCarousel from '../components/Common/FeedbackCarousel'
 import { feedbackService } from '../services/feedbackService'
 import type { SubmittedFeedback } from '../utils/types'
+import { ArrowUpIcon } from 'lucide-react'
 
 const Home: React.FC = () => {
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  
+    useEffect(() => {
+      const handleScroll = () => {
+        setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
+      }
+  
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+  
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   const { isAuthenticated } = useAuth()
   const [feedbacks, setFeedbacks] = useState<SubmittedFeedback[]>([])
   const [loadingFeedbacks, setLoadingFeedbacks] = useState(true)
@@ -186,7 +201,17 @@ const Home: React.FC = () => {
           )}
         </div>
       </section>
+       {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className='fixed bottom-6 right-6 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300'
+          title='Lên đầu trang'
+        >
+          <ArrowUpIcon className='w-6 h-6' />
+        </button>
+      )}
     </div>
+    
   )
 }
 

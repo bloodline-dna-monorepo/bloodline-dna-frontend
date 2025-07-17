@@ -176,19 +176,7 @@ const App: React.FC = () => {
                 </>
               }
             />
-            {/* <Route
-              path="/service/:id"
-              element={
-                <>
-                  <Header />
-                  <main className="flex-1">
-                    <ServiceDetail />
-                  </main>
-                  <Footer />
-                </>
-              }
-            /> */}
-            {/* Auth Routes */}
+     
             <Route
               path='/login'
               element={

@@ -9,6 +9,7 @@ import type { Services as ServiceType, UserProfile } from '../utils/types'
 import { userService } from '../services/userService'
 import { paymentService } from '../services/paymentService'
 import type { CreatePaymentUrlRequest } from '../utils/types'
+import { ArrowUpIcon } from 'lucide-react'
 
 interface RegistrationModalProps {
   isOpen: boolean
@@ -18,6 +19,7 @@ interface RegistrationModalProps {
 }
 
 const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Services, serviceType }) => {
+ 
   const { user } = useAuth()
   const navigate = useNavigate()
 
@@ -386,6 +388,20 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
 }
 
 const ServicesPage: React.FC = () => {
+   const [showScrollTop, setShowScrollTop] = useState(false)
+  
+    useEffect(() => {
+      const handleScroll = () => {
+        setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
+      }
+  
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+  
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
   const [servicesList, setServicesList] = useState<ServiceType[]>([])
   const [loading, setLoading] = useState(true)
@@ -520,6 +536,15 @@ const ServicesPage: React.FC = () => {
 
       {/* Modal đăng ký */}
       <RegistrationModal isOpen={showModal} onClose={closeModal} Services={selectedService} serviceType={activeTab} />
+       {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className='fixed bottom-6 right-6 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300'
+          title='Lên đầu trang'
+        >
+          <ArrowUpIcon className='w-6 h-6' />
+        </button>
+      )}
     </div>
   )
 }

@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { managerService } from "../services/managerService"
 import type { BlogPost } from "../utils/types"
-import { X } from "lucide-react" // Import X icon for close button
+import { ArrowUpIcon, X } from "lucide-react" // Import X icon for close button
 
 const Blog: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("All")
@@ -13,7 +13,20 @@ const Blog: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null) // State for the selected blog to display in modal
+const [showScrollTop, setShowScrollTop] = useState(false)
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   useEffect(() => {
     fetchBlogs()
   }, [])
@@ -223,6 +236,15 @@ const Blog: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+       {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className='fixed bottom-6 right-6 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300'
+          title='Lên đầu trang'
+        >
+          <ArrowUpIcon className='w-6 h-6' />
+        </button>
       )}
     </div>
   )

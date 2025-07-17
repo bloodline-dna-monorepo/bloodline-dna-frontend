@@ -1,9 +1,24 @@
 'use client'
 
 import type React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LabImage from '../assets/phongxetnghiem.jpg'
+import { ArrowUpIcon } from 'lucide-react'
 const GuideAndFAQ: React.FC = () => {
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
 
   const toggleFAQ = (index: number) => {
@@ -253,9 +268,8 @@ const GuideAndFAQ: React.FC = () => {
 
               {/* Lab facility image placeholder */}
               <div className='mt-8 bg-gray-100 rounded-lg p-8 text-center'>
-                
-                  <img src={LabImage} alt="" />
-         
+                <img src={LabImage} alt='' />
+
                 <h4 className='font-semibold text-gray-900 mb-2'>Cơ sở phòng thí nghiệm</h4>
                 <p className='text-gray-600'>Lấy mẫu chuyên nghiệp trong môi trường thoải mái, riêng tư.</p>
               </div>
@@ -296,12 +310,26 @@ const GuideAndFAQ: React.FC = () => {
               Không tìm thấy câu trả lời cho câu hỏi của bạn ở đây? Liên hệ đội ngũ hỗ trợ của chúng tôi để được giúp
               đỡ.
             </p>
-            <button className='bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors'>
+            <a
+              href='https://mail.google.com/mail/?view=cm&fs=1&to=genunitycompany@gmail.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-block bg-teal-600 text-white px-6 py-3 rounded-lg hover:bg-teal-700 transition-colors'
+            >
               Liên hệ hỗ trợ
-            </button>
+            </a>
           </div>
         </div>
       </div>
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className='fixed bottom-6 right-6 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300'
+          title='Lên đầu trang'
+        >
+          <ArrowUpIcon className='w-6 h-6' />
+        </button>
+      )}
     </div>
   )
 }
