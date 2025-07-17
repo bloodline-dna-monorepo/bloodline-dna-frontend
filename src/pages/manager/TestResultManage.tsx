@@ -255,19 +255,26 @@ const TestResultManage: React.FC = () => {
 
         {/* Modal hiển thị chi tiết */}
         {modalOpen && selected && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
-            <div className='bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl relative mx-4'>
+          <div
+            className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'
+            onClick={handleCloseModal} // Bấm ra ngoài để tắt
+          >
+            <div
+              className='bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl relative mx-4 max-h-[90vh] overflow-y-auto'
+              onClick={(e) => e.stopPropagation()} // Ngăn modal bị đóng khi click bên trong
+            >
+              {/* Nút đóng thấp hơn và dễ bấm */}
               <button
-                className='absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl'
+                className='absolute top-6 right-6 text-gray-400 hover:text-gray-600 text-xl'
                 onClick={handleCloseModal}
                 aria-label='Đóng'
               >
-                ×
+                ✕
               </button>
 
               <div className='mb-6'>
-                <h2 className='text-2xl font-bold mb-2'>Chi tiết kết quả xét nghiệm</h2>
-                <p className='text-gray-600 text-sm'>
+                <h2 className='text-2xl font-bold mb-2 break-words'>Chi tiết kết quả xét nghiệm</h2>
+                <p className='text-gray-600 text-sm break-words'>
                   Thông tin chi tiết về kết quả xét nghiệm {selected.TestRequestID}
                 </p>
               </div>
@@ -275,15 +282,15 @@ const TestResultManage: React.FC = () => {
               <div className='grid grid-cols-2 gap-6 mb-6'>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Mã yêu cầu</label>
-                  <p className='text-lg font-semibold'>{selected.TestRequestID}</p>
+                  <p className='text-lg font-semibold break-all'>{selected.TestRequestID}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Khách hàng</label>
-                  <p className='text-lg font-semibold'>{selected.CustomerName}</p>
+                  <p className='text-lg font-semibold break-words'>{selected.CustomerName}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Tên dịch vụ</label>
-                  <p className='text-lg font-semibold'>
+                  <p className='text-lg font-semibold break-words'>
                     Xét nghiệm Sức Khỏe Di Truyền -{' '}
                     {selected.ServiceType === 'Civil' ? 'Dân Sự - Dân sự' : 'Hành Chính - Hành chính'}
                   </p>
@@ -298,11 +305,11 @@ const TestResultManage: React.FC = () => {
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Số điện thoại</label>
-                  <p className='text-lg font-semibold'>{selected.CustomerPhone}</p>
+                  <p className='text-lg font-semibold break-all'>{selected.CustomerPhone}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Email</label>
-                  <p className='text-lg font-semibold'>{selected.CustomerEmail}</p>
+                  <p className='text-lg font-semibold break-all'>{selected.CustomerEmail}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Số lượng mẫu</label>
@@ -310,7 +317,7 @@ const TestResultManage: React.FC = () => {
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Người xét nghiệm</label>
-                  <p className='text-lg font-semibold whitespace-pre-line'>{selected.TestSubjects}</p>
+                  <p className='text-lg font-semibold whitespace-pre-line break-words'>{selected.TestSubjects}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Trạng thái</label>
@@ -322,7 +329,7 @@ const TestResultManage: React.FC = () => {
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Địa chỉ</label>
-                  <p className='text-lg font-semibold'>{selected.CustomerAddress}</p>
+                  <p className='text-lg font-semibold break-words'>{selected.CustomerAddress}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Ngày xác nhận kết quả</label>
@@ -332,14 +339,16 @@ const TestResultManage: React.FC = () => {
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Nhân viên xác nhận</label>
-                  <p className='text-lg font-semibold'>{selected.StaffName}</p>
+                  <p className='text-lg font-semibold break-words'>{selected.StaffName}</p>
                 </div>
               </div>
 
               <div>
                 <label className='text-sm font-medium text-gray-500 block mb-2'>Kết quả</label>
-                <div className='bg-gray-50 border rounded-lg px-4 py-3 min-h-[100px]'>
-                  <p className='text-gray-900 whitespace-pre-wrap'>{selected.Result || 'Chưa có kết quả'}</p>
+                <div className='bg-gray-50 border rounded-lg px-4 py-3 min-h-[100px] max-h-[200px] overflow-auto'>
+                  <p className='text-gray-900 whitespace-pre-wrap break-words'>
+                    {selected.Result || 'Chưa có kết quả'}
+                  </p>
                 </div>
               </div>
             </div>
