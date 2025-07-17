@@ -77,7 +77,7 @@ const DashboardSidebar: React.FC = () => {
   else menuItems = customerMenuItems
 
 return (
-    <div className='w-64 bg-teal-600 text-white fixed min-h-screen flex flex-col'>
+    <div className='w-64 bg-teal-600 text-white min-h-screen flex flex-col'>
       {/* Logo */}
       <div className='p-6 border-b border-teal-500'>
         <div className='flex items-center space-x-3'>
@@ -96,6 +96,7 @@ return (
       {/* Navigation */}
       <nav className='flex-1 py-6 overflow-y-auto'>
         <ul className='space-y-2 px-4'>
+
 
           {menuItems.map((item) => {
             const Icon = item.icon

@@ -73,7 +73,7 @@ const AdminDashboard: React.FC = () => {
   if (loading) {
     return (
       <div className='flex min-h-screen bg-gray-50'>
-        <DashboardSidebar />
+       <div> <DashboardSidebar /></div>
         <main className='flex-1 p-8 flex items-center justify-center'>
           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600'></div>
         </main>
@@ -83,7 +83,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className='flex min-h-screen bg-gray-50'>
-      <DashboardSidebar />
+      <div><DashboardSidebar /></div>
       <main className='flex-1 p-8'>
         <div className='flex justify-between mb-4'>
           <h1 className='text-4xl font-bold'>Dashboard</h1>
