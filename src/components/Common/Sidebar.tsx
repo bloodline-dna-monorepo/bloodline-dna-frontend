@@ -76,21 +76,27 @@ const DashboardSidebar: React.FC = () => {
   else if (isStaff) menuItems = staffMenuItems
   else menuItems = customerMenuItems
 
-  return (
-    <div className='w-64 bg-teal-600 text-white h-screen fixed top-0 left-0 flex flex-col'>
+return (
+    <div className='w-64 bg-teal-600 text-white fixed min-h-screen flex flex-col'>
+      {/* Logo */}
       <div className='p-6 border-b border-teal-500'>
-        <Link to='/' className='flex items-center justify-center'>
-          <div className='w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-white'>
-            <img src={Logo} alt='Logo' className='w-full h-full object-contain' />
-          </div>
-        </Link>
+        <div className='flex items-center space-x-3'>
+          <Link to='/' className='flex items-center space-x-2'>
+            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
+              <span className='text-teal-600 font-bold text-lg'>G</span>
+            </div>
+            <div className='flex flex-col'>
+              <span className='text-sm font-bold'>Gen</span>
+              <span className='text-sm font-bold text-teal-200'>Unity</span>
+            </div>
+          </Link>
+        </div>
       </div>
 
       {/* Navigation */}
       <nav className='flex-1 py-6 overflow-y-auto'>
-        {' '}
-        {/* Cho phép cuộn nếu nội dung dài */}
         <ul className='space-y-2 px-4'>
+
           {menuItems.map((item) => {
             const Icon = item.icon
             return (
