@@ -58,16 +58,16 @@ const Register: React.FC = () => {
       .matches(/^(0|\+84)[0-9]{9}$/, 'Số điện thoại không hợp lệ')
       .required('Bắt buộc nhập số điện thoại'),
     Address: Yup.string().required('Required'),
-    
-  DateOfBirth: Yup.string()
-    .required('Bắt buộc nhập ngày sinh')
-    .matches(/^\d{4}-\d{2}-\d{2}$/, 'Định dạng ngày sinh phải là YYYY-MM-DD')
-    .test('is-18-or-older', 'Bạn phải từ 18 tuổi trở lên', value => {
-      if (!value) return false
-      const birthDate = parse(value, 'yyyy-MM-dd', new Date())
-      if (!isValid(birthDate)) return false
-      return differenceInYears(new Date(), birthDate) >= 18
-    }),
+
+    DateOfBirth: Yup.string()
+      .required('Bắt buộc nhập ngày sinh')
+      .matches(/^\d{4}-\d{2}-\d{2}$/, 'Định dạng ngày sinh phải là YYYY-MM-DD')
+      .test('is-18-or-older', 'Bạn phải từ 18 tuổi trở lên', (value) => {
+        if (!value) return false
+        const birthDate = parse(value, 'yyyy-MM-dd', new Date())
+        if (!isValid(birthDate)) return false
+        return differenceInYears(new Date(), birthDate) >= 18
+      }),
     SignatureImage: Yup.string().required('Required')
   })
 
@@ -89,17 +89,17 @@ const Register: React.FC = () => {
       return
     }
 
- try {
-  const response = await register(formData)
-  setSuccessMessage(response.message || 'Register successful! Redirecting...')
-  setTimeout(() => navigate('/dashboard'), 2000)
-} catch (error: any) {
-  const message = error?.message || String(error)
-  const cleaned = message.replace('Error:', '').trim()
-  setError('Một số thông tin đang lỗi như: ' + cleaned)
-} finally {
-  setLoading(false)
-}
+    try {
+      const response = await register(formData)
+      setSuccessMessage(response.message || 'Register successful! Redirecting...')
+      setTimeout(() => navigate('/dashboard'), 2000)
+    } catch (error: any) {
+      const message = error?.message || String(error)
+      const cleaned = message.replace('Error:', '').trim()
+      setError('Một số thông tin đang lỗi như: ' + cleaned)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
