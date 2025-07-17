@@ -3,7 +3,7 @@ import './index.css'
 import type React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-
+import { ToastContainer } from 'react-toastify'
 // Layout Components
 import Header from './components/Common/Header'
 import Footer from './components/Common/Footer'
@@ -111,6 +111,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const App: React.FC = () => {
   return (
     <Router>
+      <ToastContainer />
       <AuthProvider>
         <div className='min-h-screen flex flex-col'>
           <Routes>

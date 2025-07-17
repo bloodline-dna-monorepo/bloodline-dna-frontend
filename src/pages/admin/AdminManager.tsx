@@ -2,7 +2,7 @@
 
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { adminService } from '../../services/adminService'
 import type { Services } from '../../utils/types'
@@ -94,16 +94,7 @@ const AdminManager: React.FC = () => {
     }
   }
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Bạn có chắc muốn xóa dịch vụ này?')) {
-      try {
-        await adminService.deleteService(id)
-        setServices((prev) => prev.filter((s) => s.ServiceID !== id))
-      } catch (error) {
-        console.error('Error deleting service:', error)
-      }
-    }
-  }
+ 
 
   const handleAdd = () => setShowAddModal(true)
 
@@ -190,18 +181,12 @@ const AdminManager: React.FC = () => {
                           <div className='flex items-center gap-2'>
                             <button
                               className='text-blue-600 hover:text-blue-800'
-                              onClick={() => handleEdit(s.ServiceID)}
-                              title='Chỉnh sửa'
-                            >
-                              <EditOutlined />
-                            </button>
-                            <button
-                              className='text-red-500 hover:text-red-700'
-                              onClick={() => handleDelete(s.ServiceID)}
-                              title='Xóa'
-                            >
-                              <DeleteOutlined />
-                            </button>
+                                onClick={() => handleEdit(s.ServiceID)}
+                                title='Chỉnh sửa'
+                              >
+                                <EditOutlined />
+                              </button>
+                            
                           </div>
                         </td>
                       </tr>

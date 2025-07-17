@@ -58,7 +58,7 @@ const TestProcess: React.FC = () => {
         setRequestData(data)
 
         // Set current step based on status
-        if (data.Status === 'In Progress' || data.Status === 'Pending Review') {
+        if (data.Status === 'In Progress' || data.Status === 'Pending') {
           setCurrentStepIndex(3) // Ready for result input
           // Mark step 3 as completed if In Progress
           if (data.Status === 'In Progress') {

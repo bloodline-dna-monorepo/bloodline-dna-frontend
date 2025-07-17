@@ -208,20 +208,26 @@ export interface History {
 
 export interface TestResults {
   TestResultID: number
-  TestRequestID: string
+  TestRequestID: number
   CustomerName: string
+  CustomerEmail: string
+  CustomerPhone: string
+  CustomerAddress: string
   KitID?: string
   ServiceID: number
   ServiceName: string
   ServiceType: string
   SampleCount: 2 | 3
+  TestSubjects: string
   Result: string
   EnterBy: number
   SampleDate: string
   StaffName: string
-  Status: 'Pending' | 'Verified' | 'Rejected'
+  Status: "Pending" | "Verified" | "Rejected"
   CreatedAt: string
   UpdatedAt: string
+  ConfirmDate: string
+    RegistrationDate: string
 }
 
 // File Upload Types

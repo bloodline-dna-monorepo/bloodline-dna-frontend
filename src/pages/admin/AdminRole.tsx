@@ -61,16 +61,7 @@ const AdminRole: React.FC = () => {
     }
   }
 
-  // const handleDeleteUser = async (userId: number) => {
-  //   if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
-  //     try {
-  //       await adminService.deleteUser(userId)
-  //       setUsers((prev) => prev.filter((user) => user.accountId !== userId))
-  //     } catch (error) {
-  //       console.error('Error deleting user:', error)
-  //     }
-  //   }
-  // }
+
 
   const handleViewUser = async (userId: number) => {
     try {

@@ -47,7 +47,6 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
           </button>
         </div>
 
-
         <div className='space-y-4'>
           <div className='grid grid-cols-2 gap-4'>
             <div>
@@ -56,9 +55,7 @@ const HistoryServiceDetailModal: React.FC<HistoryServiceDetailModalProps> = ({ i
             </div>
             <div>
               <div className='text-sm text-gray-600'>Mã kit</div>
-              <div className='font-semibold'>
-                {testRequest.KitID || `K${testRequest.TestRequestID.toString()}`}
-              </div>
+              <div className='font-semibold'>{testRequest.KitID || `K${testRequest.TestRequestID.toString()}`}</div>
             </div>
           </div>
 

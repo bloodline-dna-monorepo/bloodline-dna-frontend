@@ -6,6 +6,8 @@ import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { managerService } from '../../services/managerService'
 import type { BlogPost } from '../../utils/types'
+import ConfirmModal from '../../components/Common/ConfirmModal'
+import { toast } from 'react-toastify'
 
 const BlogManagement: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([])
@@ -13,6 +15,8 @@ const BlogManagement: React.FC = () => {
   const [searchText, setSearchText] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null)
   const [formData, setFormData] = useState({
     Title: '',
     Description: '',
@@ -66,35 +70,43 @@ const BlogManagement: React.FC = () => {
     setShowModal(true)
   }
 
-  const handleDelete = async (blogId: number) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa bài viết này?')) {
-      try {
-        await managerService.deleteBlog(blogId)
-        await fetchBlogs()
-        alert('Xóa bài viết thành công')
-      } catch (error) {
-        console.error('Error deleting blog:', error)
-        alert('Có lỗi xảy ra khi xóa bài viết')
-      }
+  const handleDeleteClick = (blogId: number) => {
+    setPendingDeleteId(blogId)
+    setDeleteConfirmOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteId) return
+    try {
+      await managerService.deleteBlog(pendingDeleteId)
+      toast.success('🗑️ Xóa bài viết thành công')
+      await fetchBlogs()
+    } catch (error) {
+      toast.error('❌ Có lỗi xảy ra khi xóa bài viết')
+      console.error(error)
+    } finally {
+      setDeleteConfirmOpen(false)
+      setPendingDeleteId(null)
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    try {
-      if (editingBlog) {
-        await managerService.updateBlog(editingBlog.BlogID, formData)
-        alert('Cập nhật bài viết thành công')
-      } else {
-        await managerService.createBlog(formData)
-        alert('Tạo bài viết thành công')
-      }
-      setShowModal(false)
-      await fetchBlogs()
-    } catch (error) {
-      console.error('Error saving blog:', error)
-      alert('Có lỗi xảy ra khi lưu bài viết')
-    }
+   try {
+  if (editingBlog) {
+    await managerService.updateBlog(editingBlog.BlogID, formData)
+    toast.success('✏️ Cập nhật bài viết thành công')
+  } else {
+    await managerService.createBlog(formData)
+    toast.success('✅ Tạo bài viết thành công')
+  }
+  setShowModal(false)
+  await fetchBlogs()
+} catch (error) {
+  console.error('Error saving blog:', error)
+  toast.error('❌ Có lỗi xảy ra khi lưu bài viết')
+}
+
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -102,27 +114,7 @@ const BlogManagement: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const statusColor = (status: string) => {
-    switch (status) {
-      case 'Published':
-        return 'bg-green-100 text-green-800'
-      case 'Draft':
-        return 'bg-gray-100 text-gray-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
-    }
-  }
 
-  const statusText = (status: string) => {
-    switch (status) {
-      case 'Published':
-        return 'Đã xuất bản'
-      case 'Draft':
-        return 'Bản nháp'
-      default:
-        return status
-    }
-  }
 
   return (
     <div className='flex min-h-screen bg-gray-50'>
@@ -232,12 +224,19 @@ const BlogManagement: React.FC = () => {
                               <PencilIcon className='h-5 w-5' />
                             </button>
                             <button
-                              onClick={() => handleDelete(blog.BlogID)}
+                              onClick={() => handleDeleteClick(blog.BlogID)}
                               className='text-red-600 hover:text-red-800 p-1 rounded'
                               title='Xóa'
                             >
                               <TrashIcon className='h-5 w-5' />
                             </button>
+                            <ConfirmModal
+                              isOpen={deleteConfirmOpen}
+                              onClose={() => setDeleteConfirmOpen(false)}
+                              onConfirm={handleConfirmDelete}
+                              title='Xác nhận xóa bài viết'
+                              message='Bạn có chắc chắn muốn xóa bài viết này? Thao tác này không thể hoàn tác.'
+                            />
                           </div>
                         </td>
                       </tr>

@@ -6,6 +6,8 @@ import { EyeIcon, CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline
 import type { TestResults } from '../../utils/types'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { managerService } from '../../services/managerService'
+import { toast } from 'react-toastify'
+import ConfirmModal from '../../components/Common/ConfirmModal'
 
 const TestResultManage: React.FC = () => {
   const [searchText, setSearchText] = useState('')
@@ -16,6 +18,9 @@ const TestResultManage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [selected, setSelected] = useState<TestResults | null>(null)
 
+  //modal confirm
+
+  const [pendingRejectId, setPendingRejectId] = useState<number | null>(null)
   useEffect(() => {
     fetchTestResults()
   }, [])
@@ -64,18 +69,22 @@ const TestResultManage: React.FC = () => {
     }
   }
 
-  const handleReject = async (testResultId: number) => {
-    if (
-      window.confirm('Bạn có chắc chắn muốn từ chối và xóa kết quả này? Đơn sẽ được đưa về trạng thái "Đang xử lý".')
-    ) {
-      try {
-        await managerService.rejectTestResult(testResultId)
-        await fetchTestResults() // Refresh data
-        alert('Kết quả đã được từ chối và xóa thành công')
-      } catch (error) {
-        console.error('Error rejecting test result:', error)
-        alert('Có lỗi xảy ra khi từ chối kết quả')
-      }
+  const handleRejectClick = (testResultId: number) => {
+    setPendingRejectId(testResultId)
+    setModalOpen(true)
+  }
+  const handleConfirmReject = async () => {
+    if (!pendingRejectId) return
+    try {
+      await managerService.rejectTestResult(pendingRejectId)
+      await fetchTestResults()
+      toast.success('✅ Kết quả đã bị từ chối và xóa thành công')
+    } catch (error) {
+      console.error('Error rejecting test result:', error)
+      toast.error('❌ Có lỗi xảy ra khi từ chối kết quả')
+    } finally {
+      setModalOpen(false)
+      setPendingRejectId(null)
     }
   }
 
@@ -216,12 +225,21 @@ const TestResultManage: React.FC = () => {
                                   <CheckCircleIcon className='h-5 w-5' />
                                 </button>
                                 <button
-                                  onClick={() => handleReject(item.TestResultID)}
+                                  onClick={() => handleRejectClick(item.TestResultID)}
                                   className='text-red-600 hover:text-red-800 p-1 rounded'
                                   title='Từ chối'
                                 >
                                   <XMarkIcon className='h-5 w-5' />
                                 </button>
+
+                                <ConfirmModal
+                                  isOpen={modalOpen}
+                                  onClose={() => setModalOpen(false)}
+                                  onConfirm={handleConfirmReject}
+                                  title='Xác nhận từ chối'
+                                  message='Bạn có chắc chắn muốn từ chối và xóa kết quả này? 
+                                  Đơn sẽ được đưa về trạng thái "Đang xử lý".'
+                                />
                               </>
                             )}
                           </div>
@@ -260,22 +278,39 @@ const TestResultManage: React.FC = () => {
                   <p className='text-lg font-semibold'>{selected.TestRequestID}</p>
                 </div>
                 <div>
-                  <label className='text-sm font-medium text-gray-500'>Bệnh nhân</label>
+                  <label className='text-sm font-medium text-gray-500'>Khách hàng</label>
                   <p className='text-lg font-semibold'>{selected.CustomerName}</p>
                 </div>
                 <div>
-                  <label className='text-sm font-medium text-gray-500'>Loại xét nghiệm</label>
-                  <p className='text-lg font-semibold'>{selected.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}</p>
-                </div>
-                <div>
-                  <label className='text-sm font-medium text-gray-500'>Ngày lấy mẫu</label>
+                  <label className='text-sm font-medium text-gray-500'>Tên dịch vụ</label>
                   <p className='text-lg font-semibold'>
-                    {selected.SampleDate ? new Date(selected.SampleDate).toLocaleDateString('vi-VN') : '--'}
+                    Xét nghiệm Sức Khỏe Di Truyền -{' '}
+                    {selected.ServiceType === 'Civil' ? 'Dân Sự - Dân sự' : 'Hành Chính - Hành chính'}
                   </p>
                 </div>
                 <div>
-                  <label className='text-sm font-medium text-gray-500'>Kỹ thuật viên</label>
-                  <p className='text-lg font-semibold'>{selected.StaffName}</p>
+                  <label className='text-sm font-medium text-gray-500'>Ngày đăng ký</label>
+                  <p className='text-lg font-semibold'>
+                    {selected.RegistrationDate
+                      ? new Date(selected.RegistrationDate).toLocaleDateString('vi-VN')
+                      : 'Không rõ'}
+                  </p>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Số điện thoại</label>
+                  <p className='text-lg font-semibold'>{selected.CustomerPhone}</p>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Email</label>
+                  <p className='text-lg font-semibold'>{selected.CustomerEmail}</p>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Số lượng mẫu</label>
+                  <p className='text-lg font-semibold'>{selected.SampleCount}</p>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Người xét nghiệm</label>
+                  <p className='text-lg font-semibold whitespace-pre-line'>{selected.TestSubjects}</p>
                 </div>
                 <div>
                   <label className='text-sm font-medium text-gray-500'>Trạng thái</label>
@@ -284,6 +319,20 @@ const TestResultManage: React.FC = () => {
                   >
                     {statusText(selected.Status)}
                   </span>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Địa chỉ</label>
+                  <p className='text-lg font-semibold'>{selected.CustomerAddress}</p>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Ngày xác nhận kết quả</label>
+                  <p className='text-lg font-semibold'>
+                    {selected.ConfirmDate ? new Date(selected.ConfirmDate).toLocaleDateString('vi-VN') : '--'}
+                  </p>
+                </div>
+                <div>
+                  <label className='text-sm font-medium text-gray-500'>Nhân viên xác nhận</label>
+                  <p className='text-lg font-semibold'>{selected.StaffName}</p>
                 </div>
               </div>
 
