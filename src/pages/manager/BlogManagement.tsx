@@ -119,7 +119,7 @@ const BlogManagement: React.FC = () => {
   return (
     <div className='flex min-h-screen bg-gray-50'>
       <DashboardSidebar />
-      <main className='flex-1 p-8'>
+      <main className='flex-1 p-8 '>
         <div className='max-w-7xl mx-auto'>
           <div className='flex justify-between items-center mb-8'>
             <h1 className='font-bold text-3xl'>Quản lý Blog</h1>

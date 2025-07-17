@@ -76,10 +76,11 @@ const DashboardSidebar: React.FC = () => {
   else if (isStaff) menuItems = staffMenuItems
   else menuItems = customerMenuItems
 
-return (
-    <div className='w-64 bg-teal-600 text-white min-h-screen flex flex-col'>
+  return (
+    <div className='w-64 bg-teal-600 text-white  min-h-screen flex flex-col'>
+    <div className='w-64 bg-teal-600 text-white fixed  min-h-screen flex flex-col'>
       {/* Logo */}
-      <div className='p-6 border-b border-teal-500'>
+      <div className='p-6 border-b  border-teal-500'>
         <div className='flex items-center space-x-3'>
           <Link to='/' className='flex items-center space-x-2'>
             <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
@@ -94,10 +95,8 @@ return (
       </div>
 
       {/* Navigation */}
-      <nav className='flex-1 py-6 overflow-y-auto'>
+      <nav className='flex-1 py-6 '>
         <ul className='space-y-2 px-4'>
-
-
           {menuItems.map((item) => {
             const Icon = item.icon
             return (
@@ -166,6 +165,7 @@ return (
           <span>Logout</span>
         </button>
       </div>
+    </div>
     </div>
   )
 }
