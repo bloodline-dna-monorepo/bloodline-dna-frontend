@@ -15,8 +15,8 @@ const Footer: React.FC = () => {
               <span className='text-xl font-bold'>Gen Unity</span>
             </div>
             <p className='text-gray-300 mb-4'>
-              Leading DNA testing service providing accurate and reliable genetic analysis for administrative and civil
-              purposes.
+              Dịch vụ xét nghiệm ADN hàng đầu, cung cấp phân tích di truyền chính xác và đáng tin cậy cho mục đích hành
+              chính và dân sự.
             </p>
           </div>
 
@@ -44,6 +44,11 @@ const Footer: React.FC = () => {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link to='/terms' className='text-gray-300 hover:text-white transition-colors'>
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -51,8 +56,8 @@ const Footer: React.FC = () => {
           <div>
             <h3 className='text-lg font-semibold mb-4'>Contact Info</h3>
             <ul className='space-y-2 text-gray-300'>
-              <li>📍 7 Đ. D1, Long Thạnh Mỹ, Thủ Đức, Hồ Chí Minh 700000</li>
-              <li>📞 +84 123 456 789</li>
+              <li>📍 Địa chỉ: 7 Đ. D1, Long Thạnh Mỹ, Thủ Đức, Hồ Chí Minh 700000</li>
+              <li>📞 Điện thoại: 0123 456 789</li>
               <li>✉️ genunitycompany@gmail.com</li>
               <li>🕒 Mon-Fri: 8AM-6PM</li>
             </ul>
@@ -60,7 +65,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className='border-t border-gray-800 mt-8 pt-8 text-center text-gray-300'>
-          <p>&copy; 2024 BloodLine DNA. All rights reserved.</p>
+          <p>&copy; 2024 GenUnity. All rights reserved.</p>
         </div>
       </div>
     </footer>

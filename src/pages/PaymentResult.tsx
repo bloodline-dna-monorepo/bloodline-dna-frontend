@@ -2,7 +2,7 @@
 
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { testRequestService } from '../services/testRequestService'
 import { useAuth } from '../hooks/useAuth'
 
@@ -15,7 +15,7 @@ interface ServiceDetails {
 
 const PaymentResult: React.FC = () => {
   const [searchParams] = useSearchParams()
-  const location = useLocation()
+
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -39,7 +39,8 @@ const PaymentResult: React.FC = () => {
       console.log('Payment result code:', responseCode)
 
       // Get stored data
-      const storedData = localStorage.getItem('pendingRegistration')
+      const storedData = sessionStorage.getItem('pendingRegistration')
+
       let registrationData = null
       let serviceInfo = null
 
@@ -64,7 +65,8 @@ const PaymentResult: React.FC = () => {
             console.log('Creating test request with data:', registrationData)
             const result = await testRequestService.createTestRequest(registrationData)
             console.log('Test request created successfully:', result)
-            localStorage.removeItem('pendingRegistration')
+            sessionStorage.removeItem('pendingRegistration')
+
             setServiceDetails({
               serviceName: serviceInfo.serviceName,
               serviceType: serviceInfo.serviceType,

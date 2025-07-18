@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { testRequestService } from '../../services/testRequestService'
 import type { TestProcess, TestResults } from '../../utils/types'
 import DashboardSidebar from '../../components/Common/Sidebar'
+import { toast } from 'react-toastify'
 
 interface HistoryServiceDetailModalProps {
   isOpen: boolean
@@ -193,7 +194,7 @@ const HistoryServices: React.FC = () => {
       }, 500)
     } catch (error) {
       console.error('Error downloading PDFs:', error)
-      alert('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
+      toast.error('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
     } finally {
       setLoadingDownload(false)
     }
@@ -220,7 +221,7 @@ const HistoryServices: React.FC = () => {
       // Download sample form PDF with a slight delay
     } catch (error) {
       console.error('Error downloading PDFs:', error)
-      alert('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
+      toast.error('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
     } finally {
       setLoadingDownload(false)
     }
@@ -432,10 +433,10 @@ const HistoryServices: React.FC = () => {
             <p className='text-gray-600 mb-4'>Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
             <div className='flex gap-4'>
               <button className='flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors'>
-                📞 Gọi ngay: 1900-1234
+                📞 Gọi ngay: 0123 456 789
               </button>
               <button className='flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors'>
-                ✉️ Email: info@genunity.com
+                ✉️ Email: genunitycompany@gmail.com
               </button>
             </div>
           </div>

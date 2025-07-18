@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { type TestRequestDetail, type TestResultData } from '../../utils/types'
 import { staffService } from '../../services/staffService'
+import { toast } from 'react-toastify'
 
 const TestProcess: React.FC = () => {
   const { requestId } = useParams()
@@ -141,7 +142,7 @@ const TestProcess: React.FC = () => {
         setCurrentStepIndex(3)
       } catch (error) {
         console.error('Error confirming sample:', error)
-        alert('Có lỗi xảy ra khi xác nhận mẫu!')
+         toast.error('Có lỗi xảy ra khi xác nhận mẫu!')
       }
     }
   }
@@ -173,12 +174,12 @@ const TestProcess: React.FC = () => {
 
     try {
       await staffService.createTestResult(Number.parseInt(requestId), resultData)
-      alert('Kết quả đã được lưu thành công!')
+      toast.success('Kết quả đã được lưu thành công!')
       setShowResultModal(false)
       navigate('/staff/manage-requests/confirmed')
     } catch (error) {
       console.error('Error submitting result:', error)
-      alert('Có lỗi xảy ra khi lưu kết quả!')
+       toast.error('Có lỗi xảy ra khi lưu kết quả!')
     } finally {
       setIsSubmitting(false)
     }

@@ -3,10 +3,11 @@
 import type React from 'react'
 import { useState, useEffect } from 'react'
 import { EyeIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { type TestRequestDetail } from '../../utils/types'
 import { staffService } from '../../services/staffService'
+import { toast } from 'react-toastify'
 
 const ManageRequests: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -14,7 +15,7 @@ const ManageRequests: React.FC = () => {
   const [showModal, setShowModal] = useState(false)
   const [requests, setRequests] = useState<TestRequestDetail[]>([])
   const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
+
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -53,10 +54,10 @@ const ManageRequests: React.FC = () => {
       await staffService.confirmRequest(requestId)
       // Remove the confirmed request from the list
       setRequests(requests.filter((req) => req.TestRequestID !== requestId))
-      alert('Yêu cầu đã được xác nhận thành công!')
+      toast.success('Yêu cầu đã được xác nhận thành công!')
     } catch (error) {
       console.error('Error confirming request:', error)
-      alert('Có lỗi xảy ra khi xác nhận yêu cầu!')
+      toast.error('Có lỗi xảy ra khi xác nhận yêu cầu!')
     }
   }
 
@@ -65,12 +66,11 @@ const ManageRequests: React.FC = () => {
     setSelectedRequest(null)
   }
 
- const formatDate = (dateString: string | null) => {
-  if (!dateString) return 'Không rõ'
-  const date = new Date(dateString)
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-}
-
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'Không rõ'
+    const date = new Date(dateString)
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  }
 
   if (loading) {
     return (

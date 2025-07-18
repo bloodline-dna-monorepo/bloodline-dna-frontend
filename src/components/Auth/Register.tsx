@@ -219,18 +219,18 @@ const Register: React.FC = () => {
             />
             <label htmlFor='agree-terms' className='ml-2 block text-sm text-gray-900'>
               I agree to the{' '}
-              <Link to='/terms' className='text-teal-600 hover:text-teal-500'>
+              <Link to='/terms' target='_blank' rel='noopener noreferrer' className='text-teal-600 hover:text-teal-500'>
                 Terms
               </Link>{' '}
               and{' '}
-              <Link to='/privacy' className='text-teal-600 hover:text-teal-500'>
+              <Link to='/terms' target='_blank' rel='noopener noreferrer' className='text-teal-600 hover:text-teal-500'>
                 Privacy Policy
               </Link>
             </label>
           </div>
 
           <Button type='submit' className='w-full' loading={loading}>
-            Create Account
+            Tạo Tài Khoản
           </Button>
         </form>
       </div>

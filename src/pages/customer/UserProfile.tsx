@@ -9,6 +9,7 @@ import Button from '../../components/Common/Button'
 import DashboardSidebar from '../../components/Common/Sidebar'
 import { authService } from '../../services/authService'
 import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
 
 interface PasswordChangeModalProps {
   isOpen: boolean
@@ -27,7 +28,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({ isOpen, onClo
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (newPassword !== confirmPassword) {
-      alert('Mật khẩu mới không khớp')
+      toast.error('Mật khẩu không khớp')
       return
     }
     onSubmit(currentPassword, newPassword, confirmPassword)
@@ -114,8 +115,6 @@ const UserProfilePage: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [address, setAddress] = useState('')
-  const [gender, setGender] = useState('Nam')
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   useEffect(() => {
     fetchUserProfile()
@@ -131,7 +130,6 @@ const UserProfilePage: React.FC = () => {
         setPhoneNumber(profile.PhoneNumber || '')
         setDateOfBirth(profile.DateOfBirth ? dayjs(profile.DateOfBirth).format('YYYY-MM-DD') : '')
         setAddress(profile.Address || '')
-        setGender(profile.Gender || 'Nam')
       }
     } catch (error) {
       console.error('Error fetching user profile:', error)
@@ -147,12 +145,12 @@ const UserProfilePage: React.FC = () => {
         NewPassword: newPassword,
         confirmNewPassword: confirmPassword
       }
-      const response = await authService.changePassword(data)
-      alert(response.message || 'Đổi mật khẩu thành công')
+      const res = await authService.changePassword(data)
+      toast.success(res.message || 'Đổi mật khẩu thành công!')
       setIsPasswordModalOpen(false)
     } catch (error: any) {
       console.error('Error changing password:', error)
-      alert(error?.response?.data?.message || 'Có lỗi xảy ra khi đổi mật khẩu')
+      toast.error(error?.response?.data?.message || 'Đổi mật khẩu thất bại')
     }
   }
 
@@ -165,11 +163,11 @@ const UserProfilePage: React.FC = () => {
         Address: address
       }
       await userService.updateProfile(data)
-      alert('Cập nhật thông tin thành công!')
+      toast.success('Cập nhật thông tin thành công!')
       fetchUserProfile()
     } catch (error: any) {
       console.error('Error updating profile:', error)
-      alert(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật thông tin')
+      toast.error(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật thông tin')
     }
   }
 
@@ -240,19 +238,6 @@ const UserProfilePage: React.FC = () => {
                   onChange={(e) => setDateOfBirth(e.target.value)}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                 />
-              </div>
-
-              {/* Gender */}
-              <div>
-                <label className='block text-sm font-medium mb-2'>Giới tính</label>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
-                >
-                  <option value='Nam'>Nam</option>
-                  <option value='Nữ'>Nữ</option>
-                </select>
               </div>
 
               {/* Address */}

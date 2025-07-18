@@ -50,10 +50,7 @@ import AdminManager from './pages/admin/AdminManager'
 import AdminRole from './pages/admin/AdminRole'
 import ForgotPassword from './components/Auth/ForgotPassword'
 import ResetPassword from './components/Auth/ResetPassword'
-
-// import TestTracking from 'pages/customer/TestTracking'
-// import HistoryServices from 'pages/customer/HistoryServices'
-// import UserProfile from 'pages/customer/UserProfile'
+import Terms from './pages/Terms'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
@@ -176,7 +173,7 @@ const App: React.FC = () => {
                 </>
               }
             />
-     
+            <Route path='/terms' element={<Terms />} />
             <Route
               path='/login'
               element={

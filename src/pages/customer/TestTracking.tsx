@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react'
 import { testRequestService } from '../../services/testRequestService'
 import type { SampleInfo, TestProcess } from '../../utils/types'
 import DashboardSidebar from '../../components/Common/Sidebar'
-import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
+import { Formik, Form, Field,  ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import { toast } from 'react-toastify'
 
 const TestTracking: React.FC = () => {
   const [testRequests, setTestRequests] = useState<TestProcess[]>([])
@@ -318,13 +319,14 @@ const TestInfoForm: React.FC<{
         await testRequestService.createSampleCategory(request.TestRequestID, formData)
       }
 
-      alert('✅ Gửi mẫu thành công!')
-      onClose()
-      onSubmitted()
-    } catch (err) {
-      console.error('❌ Lỗi gửi mẫu:', err)
-      alert('Có lỗi xảy ra. Vui lòng thử lại.')
-    }
+    
+    toast.success('✅ Gửi mẫu thành công!')
+    onClose()
+    onSubmitted()
+  } catch (err) {
+    console.error('❌ Lỗi gửi mẫu:', err)
+    toast.error('❌ Có lỗi xảy ra. Vui lòng thử lại.')
+  }
   }
 
   return (

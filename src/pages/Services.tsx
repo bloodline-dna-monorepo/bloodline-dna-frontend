@@ -2,7 +2,7 @@
 
 import type React from 'react'
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { serviceService } from '../services/serviceService'
 import { useAuth } from '../hooks/useAuth'
 import type { Services as ServiceType, UserProfile } from '../utils/types'
@@ -10,6 +10,7 @@ import { userService } from '../services/userService'
 import { paymentService } from '../services/paymentService'
 import type { CreatePaymentUrlRequest } from '../utils/types'
 import { ArrowUpIcon } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 interface RegistrationModalProps {
   isOpen: boolean
@@ -19,9 +20,7 @@ interface RegistrationModalProps {
 }
 
 const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, Services, serviceType }) => {
- 
   const { user } = useAuth()
-  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     appointmentDate: '',
@@ -104,13 +103,13 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       tomorrow.setDate(today.getDate() + 1)
 
       if (selectedDate < tomorrow) {
-        alert('Ngày đăng ký phải sau ngày hiện tại ít nhất 1 ngày!')
+        toast.error('Ngày đăng ký phải sau ngày hiện tại ít nhất 1 ngày!')
         return
       }
     }
 
     if (!Services) {
-      alert('Không tìm thấy thông tin dịch vụ')
+      toast.error('Không tìm thấy thông tin dịch vụ')
       return
     }
 
@@ -148,7 +147,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
         }
 
         // Store data in sessionStorage as backup
-        localStorage.setItem('pendingRegistration', JSON.stringify(navigationState))
+        // Store data in sessionStorage as backup
+        sessionStorage.setItem('pendingRegistration', JSON.stringify(navigationState))
 
         console.log('Chuyển hướng đến VNPAY:', paymentResponse.paymentUrl)
 
@@ -159,7 +159,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
       }
     } catch (error: any) {
       console.error('Lỗi khi tạo thanh toán:', error)
-      alert(error.message || 'Có lỗi xảy ra khi tạo thanh toán. Vui lòng thử lại sau.')
+      toast.error(error.message || 'Có lỗi xảy ra khi tạo thanh toán. Vui lòng thử lại sau.')
     } finally {
       setIsSubmitting(false)
     }
@@ -305,12 +305,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
             {/* Tải chữ ký */}
             <div>
               <label className='block text-sm font-medium mb-1'>
-                Hình ảnh chữ ký <span className='text-red-500'>*</span>
+                Hình ảnh vân tay <span className='text-red-500'>*</span>
               </label>
               <div className='flex items-center gap-2'>
                 {userProfile?.SignatureImage ? (
-                  <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
-                    <span className='text-sm'>{userProfile.SignatureImage}</span>
+                  <div className='border border-gray-200 rounded-md p-3 bg-gray-50 max-w-[126px]'>
+                    <img src={userProfile.SignatureImage} alt='Chữ ký' className='w-auto h-auto max-w-full' />
                   </div>
                 ) : (
                   <div className='flex items-center gap-2 bg-gray-100 px-3 py-2 rounded'>
@@ -325,14 +325,6 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
                   id='signature-upload'
                   disabled={isSubmitting}
                 />
-                <label
-                  htmlFor='signature-upload'
-                  className={`cursor-pointer text-blue-500 hover:text-blue-700 text-sm ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                >
-                  Chọn file
-                </label>
               </div>
             </div>
           </div>
@@ -341,20 +333,26 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
           <div>
             <h3 className='text-lg font-medium mb-4'>Tôi xin cam kết</h3>
             <div className='space-y-2 text-sm text-gray-700 mb-4'>
-              <p>1. Tôi tự nguyện đề nghị xét nghiệm ADN và chấp nhận chi phí xét nghiệm.</p>
-              <p>2. Những thông tin tôi đã khai trên đây là đúng và thật và không thay đổi.</p>
-              <p>3. Tôi không đổ nghĩa nhà, người quan đến phiền nhiễu, làm mất trật tự.</p>
+              <p>1. Tôi tự nguyện đề nghị xét nghiệm ADN và chấp nhận thanh toán đầy đủ chi phí xét nghiệm.</p>
               <p>
-                4. Những trường hợp sản đẻ, người giám hộ tuy, nhận mẫu, nếu không thái hảo trung thực sẽ bị phạt giáp 2
-                lần số phí đã nộp.
+                2. Những thông tin tôi đã khai trên đây là hoàn toàn đúng sự thật và tôi chịu trách nhiệm về tính chính
+                xác của các thông tin đó.
               </p>
               <p>
-                5. Tôi đã đọc và chấp nhận các{' '}
-                <a href='#' className='text-blue-500 underline'>
+                3. Tôi cam kết không gây ảnh hưởng đến trật tự, không khiếu nại, làm phiền hoặc gây rối cho trung tâm và
+                các bên liên quan trong quá trình thực hiện xét nghiệm.
+              </p>
+              <p>
+                4. Đối với các trường hợp là sản phụ, người giám hộ hoặc người đại diện nhận mẫu xét nghiệm, nếu cung
+                cấp thông tin sai lệch hoặc không trung thực, sẽ bị xử phạt gấp 2 lần chi phí đã nộp.
+              </p>
+              <p>
+                5. Tôi đã đọc, hiểu và đồng ý với các{' '}
+                <Link to='/terms' target='_blank' rel='noopener noreferrer' className='text-blue-500 underline'>
                   điều khoản của trung tâm GenUnity
-                </a>{' '}
-                và sử dụng ý đề Viện thực hiện các phân tích với các mẫu trên. Nếu vi phạm, tôi xin chịu hoàn toàn trách
-                nhiệm trước pháp luật.
+                </Link>{' '}
+                và đồng ý cho phép Trung tâm chuyển mẫu đến Viện chuyên môn để thực hiện phân tích. Nếu vi phạm, tôi xin
+                hoàn toàn chịu trách nhiệm trước pháp luật.
               </p>
             </div>
 
@@ -388,20 +386,20 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
 }
 
 const ServicesPage: React.FC = () => {
-   const [showScrollTop, setShowScrollTop] = useState(false)
-  
-    useEffect(() => {
-      const handleScroll = () => {
-        setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
-      }
-  
-      window.addEventListener('scroll', handleScroll)
-      return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
-  
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300) // hiện khi scroll hơn 300px
     }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   const [activeTab, setActiveTab] = useState<'Administrative' | 'Civil'>('Administrative')
   const [servicesList, setServicesList] = useState<ServiceType[]>([])
   const [loading, setLoading] = useState(true)
@@ -436,7 +434,7 @@ const ServicesPage: React.FC = () => {
   const handleRegisterClick = (Services: ServiceType) => {
     // Check if user is logged in
     if (!isAuthenticated) {
-      alert('Vui lòng đăng nhập để đăng ký dịch vụ')
+      toast.error('Vui lòng đăng nhập để đăng ký dịch vụ')
       navigate('/login')
       return
     }
@@ -536,7 +534,7 @@ const ServicesPage: React.FC = () => {
 
       {/* Modal đăng ký */}
       <RegistrationModal isOpen={showModal} onClose={closeModal} Services={selectedService} serviceType={activeTab} />
-       {showScrollTop && (
+      {showScrollTop && (
         <button
           onClick={scrollToTop}
           className='fixed bottom-6 right-6 z-50 bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-full shadow-lg transition-all duration-300'

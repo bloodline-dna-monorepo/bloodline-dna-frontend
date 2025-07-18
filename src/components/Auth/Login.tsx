@@ -52,7 +52,7 @@ const Login: React.FC = () => {
           <div className='mx-auto h-20 w-20 flex items-center justify-center rounded-full '>
             <img src={Logo} alt='' />
           </div>
-          <h2 className='mt-6 text-3xl font-bold text-gray-900'>Đặng nhập tài khoản của bạn</h2>
+          <h2 className='mt-6 text-3xl font-bold text-gray-900'>Đăng nhập tài khoản của bạn</h2>
           <p className='mt-2 text-sm text-gray-600'>
             Hoặc{' '}
             <Link to='/register' className='font-medium text-teal-600 hover:text-teal-500'>
@@ -111,7 +111,7 @@ const Login: React.FC = () => {
           </div>
 
           <Button type='submit' className='w-full' loading={loading} disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Signing in...' : 'Đăng Nhập'}
           </Button>
         </form>
       </div>
