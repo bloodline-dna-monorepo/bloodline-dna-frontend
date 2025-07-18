@@ -218,13 +218,9 @@ const Register: React.FC = () => {
               className='h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded'
             />
             <label htmlFor='agree-terms' className='ml-2 block text-sm text-gray-900'>
-              I agree to the{' '}
+              Tôi đồng ý với các{' '}
               <Link to='/terms' target='_blank' rel='noopener noreferrer' className='text-teal-600 hover:text-teal-500'>
-                Terms
-              </Link>{' '}
-              and{' '}
-              <Link to='/terms' target='_blank' rel='noopener noreferrer' className='text-teal-600 hover:text-teal-500'>
-                Privacy Policy
+                Điều khoản và Điều kiện
               </Link>
             </label>
           </div>
