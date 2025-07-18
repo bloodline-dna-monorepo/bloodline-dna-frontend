@@ -22,6 +22,7 @@ const AdminRole: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [originalUsers, setOriginalUsers] = useState<User[]>([])
 
   useEffect(() => {
     fetchUsers()
@@ -31,6 +32,7 @@ const AdminRole: React.FC = () => {
     try {
       setLoading(true)
       const data = await adminService.getAllUsers()
+      setOriginalUsers(data)
       setUsers(data)
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -39,17 +41,28 @@ const AdminRole: React.FC = () => {
     }
   }
 
-  const handleSearch = async () => {
-    try {
-      setLoading(true)
-      const data = await adminService.getAllUsers(search)
-      setUsers(data)
-    } catch (error) {
-      console.error('Error searching users:', error)
-    } finally {
-      setLoading(false)
+  useEffect(() => {
+    if (search.trim() === '') {
+      setUsers(originalUsers)
+      return
     }
-  }
+
+    const debounce = setTimeout(() => {
+      const keyword = search.trim().toLowerCase()
+
+      const filtered = originalUsers.filter((user) => {
+        const idMatch = user.accountId.toString().includes(keyword)
+        const nameMatch = user.name?.toLowerCase().includes(keyword)
+        const emailMatch = user.email?.toLowerCase().includes(keyword)
+        const roleMatch = user.role?.toLowerCase().includes(keyword)
+        return idMatch || nameMatch || emailMatch || roleMatch
+      })
+
+      setUsers(filtered)
+    }, 300)
+
+    return () => clearTimeout(debounce)
+  }, [search, originalUsers])
 
   const handleRoleChange = async (userId: number, newRole: UserRole) => {
     try {
@@ -60,8 +73,6 @@ const AdminRole: React.FC = () => {
       console.error('Error updating user role:', error)
     }
   }
-
-
 
   const handleViewUser = async (userId: number) => {
     try {
@@ -93,19 +104,7 @@ const AdminRole: React.FC = () => {
                   placeholder='Search by name, email...'
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
-                {/* <button
-                  onClick={handleSearch}
-                  className='border rounded px-4 py-2 flex items-center gap-2 hover:bg-gray-50'
-                >
-                  <span className='hidden md:inline'>Sort</span>
-                  <svg width='18' height='18' fill='none' viewBox='0 0 20 20'>
-                    <rect x='3' y='5' width='14' height='2' rx='1' fill='#222' />
-                    <rect x='5' y='9' width='10' height='2' rx='1' fill='#222' />
-                    <rect x='7' y='13' width='6' height='2' rx='1' fill='#222' />
-                  </svg>
-                </button> */}
               </div>
             </div>
 

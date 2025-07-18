@@ -7,7 +7,7 @@ import type { BlogPost } from "../utils/types"
 import { ArrowUpIcon, X } from "lucide-react" // Import X icon for close button
 
 const Blog: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState("All")
+ 
   const [currentPage, setCurrentPage] = useState(1)
   const [searchText, setSearchText] = useState("")
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])

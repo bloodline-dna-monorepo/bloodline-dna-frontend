@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
               <li>📍 Địa chỉ: 7 Đ. D1, Long Thạnh Mỹ, Thủ Đức, Hồ Chí Minh 700000</li>
               <li>📞 Điện thoại: 0123 456 789</li>
               <li>✉️ genunitycompany@gmail.com</li>
-              <li>🕒 Mon-Fri: 8AM-6PM</li>
+              <li>🕒 Mon-Sat: 8AM-6PM</li>
             </ul>
           </div>
         </div>

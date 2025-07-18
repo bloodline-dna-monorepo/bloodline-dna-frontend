@@ -192,7 +192,17 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
               <input
                 type='date'
                 value={formData.appointmentDate}
-                onChange={(e) => handleInputChange('appointmentDate', e.target.value)}
+                onChange={(e) => {
+                  const selectedDate = new Date(e.target.value)
+                  const isSunday = selectedDate.getDay() === 0
+
+                  if (isSunday) {
+                    toast.error('Chúng tôi không làm việc vào Chủ Nhật. Vui lòng chọn ngày khác.')
+                    return
+                  }
+
+                  handleInputChange('appointmentDate', e.target.value)
+                }}
                 min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]} // Ngày mai
                 className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
                 required
