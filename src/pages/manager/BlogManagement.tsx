@@ -79,10 +79,10 @@ const BlogManagement: React.FC = () => {
     if (!pendingDeleteId) return
     try {
       await managerService.deleteBlog(pendingDeleteId)
-      toast.success('🗑️ Xóa bài viết thành công')
+      toast.success(' Xóa bài viết thành công')
       await fetchBlogs()
     } catch (error) {
-      toast.error('❌ Có lỗi xảy ra khi xóa bài viết')
+      toast.error(' Có lỗi xảy ra khi xóa bài viết')
       console.error(error)
     } finally {
       setDeleteConfirmOpen(false)
@@ -95,16 +95,16 @@ const BlogManagement: React.FC = () => {
    try {
   if (editingBlog) {
     await managerService.updateBlog(editingBlog.BlogID, formData)
-    toast.success('✏️ Cập nhật bài viết thành công')
+    toast.success(' Cập nhật bài viết thành công')
   } else {
     await managerService.createBlog(formData)
-    toast.success('✅ Tạo bài viết thành công')
+    toast.success(' Tạo bài viết thành công')
   }
   setShowModal(false)
   await fetchBlogs()
 } catch (error) {
   console.error('Error saving blog:', error)
-  toast.error('❌ Có lỗi xảy ra khi lưu bài viết')
+  toast.error(' Có lỗi xảy ra khi lưu bài viết')
 }
 
   }

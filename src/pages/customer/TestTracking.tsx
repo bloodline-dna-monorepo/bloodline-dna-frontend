@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { testRequestService } from '../../services/testRequestService'
 import type { SampleInfo, TestProcess } from '../../utils/types'
 import DashboardSidebar from '../../components/Common/Sidebar'
-import { Formik, Form, Field,  ErrorMessage } from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 
@@ -211,20 +211,20 @@ const TestTracking: React.FC = () => {
                 <div className='flex justify-between items-center mb-6'>
                   <div>
                     <div className='flex items-center gap-2 text-sm text-gray-600 mb-2'>
-                      <span>←</span>
-                      <span>Quay lại</span>
+                      <button
+                        onClick={() => setIsDetailModalOpen(false)}
+                        className='text-gray-500 hover:text-gray-700 text-sl'
+                      >
+                        <span>←</span>
+                        <span>Quay lại</span>
+                      </button>
                     </div>
                     <h2 className='text-xl font-bold'>
                       Điền thông tin xét nghiệm - {selectedTest.ServiceType === 'Civil' ? 'Dân sự' : 'Hành chính'}
                     </h2>
                   </div>
-                  <button
-                    onClick={() => setIsDetailModalOpen(false)}
-                    className='text-gray-500 hover:text-gray-700 text-xl'
-                  >
-                    ×
-                  </button>
                 </div>
+
                 <TestInfoForm
                   sampleCount={selectedTest.SampleCount}
                   onClose={() => setIsDetailModalOpen(false)}
@@ -283,7 +283,8 @@ const validationSchema = (serviceType: string, count: number) =>
           file: serviceType === 'Civil' ? Yup.mixed().nullable() : Yup.string().required('Cần có file đính kèm')
         })
       )
-      .length(count)
+      .length(count),
+    acceptTerms: Yup.boolean().oneOf([true], 'Bạn phải đồng ý với điều khoản và điều kiện')
   })
 
 const TestInfoForm: React.FC<{
@@ -302,7 +303,12 @@ const TestInfoForm: React.FC<{
     file: null
   }))
 
-  const handleSubmit = async (values: { samples: SampleInfo[] }) => {
+  const initialValues = {
+    samples: initialSamples,
+    acceptTerms: false
+  }
+
+  const handleSubmit = async (values: { samples: SampleInfo[]; acceptTerms: boolean }) => {
     try {
       for (let i = 0; i < values.samples.length; i++) {
         const sample = values.samples[i]
@@ -319,19 +325,18 @@ const TestInfoForm: React.FC<{
         await testRequestService.createSampleCategory(request.TestRequestID, formData)
       }
 
-    
-    toast.success('✅ Gửi mẫu thành công!')
-    onClose()
-    onSubmitted()
-  } catch (err) {
-    console.error('❌ Lỗi gửi mẫu:', err)
-    toast.error('❌ Có lỗi xảy ra. Vui lòng thử lại.')
-  }
+      toast.success(' Gửi mẫu thành công!')
+      onClose()
+      onSubmitted()
+    } catch (err) {
+      console.error('❌ Lỗi gửi mẫu:', err)
+      toast.error(' Có lỗi xảy ra. Vui lòng thử lại.')
+    }
   }
 
   return (
     <Formik
-      initialValues={{ samples: initialSamples }}
+      initialValues={initialValues}
       validationSchema={validationSchema(request.ServiceType, sampleCount)}
       onSubmit={handleSubmit}
     >
@@ -359,7 +364,6 @@ const TestInfoForm: React.FC<{
                     <option value=''>Chọn giới tính</option>
                     <option value='Male'>Nam</option>
                     <option value='Female'>Nữ</option>
-                    <option value='Other'>Khác</option>
                   </Field>
                   <ErrorMessage name={`samples[${i}].gender`} component='div' className='text-red-500 text-sm' />
                 </div>
@@ -410,10 +414,36 @@ const TestInfoForm: React.FC<{
             </div>
           ))}
 
+          {/* Terms and Conditions Checkbox */}
+          <div className='mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200'>
+            <div className='flex items-start gap-3'>
+              <Field type='checkbox' name='acceptTerms' className='mt-1' />
+              <div className='flex-1'>
+                <label className='text-sm font-medium text-gray-900'>
+                  Tôi đồng ý với{' '}
+                  <a
+                    href='/terms'
+                    target='_blank'
+                    className='text-blue-600 hover:text-blue-800 underline'
+                    rel='noreferrer'
+                  >
+                    Điều khoản và Điều kiện
+                  </a>{' '}
+                  của dịch vụ xét nghiệm DNA *
+                </label>
+                <p className='text-xs text-gray-600 mt-1'>
+                  Bằng cách đánh dấu vào ô này, bạn xác nhận rằng bạn đã đọc, hiểu và đồng ý với tất cả các điều khoản
+                  và điều kiện của chúng tôi.
+                </p>
+              </div>
+            </div>
+            <ErrorMessage name='acceptTerms' component='div' className='text-red-500 text-sm mt-2' />
+          </div>
+
           <div className='mt-6 flex justify-center'>
             <button
               type='submit'
-              className='w-full max-w-md bg-teal-600 text-white py-3 px-6 rounded-md hover:bg-teal-700 font-medium'
+              className='w-full max-w-md bg-teal-600 text-white py-3 px-6 rounded-md hover:bg-teal-700 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed'
             >
               Xác nhận thông tin
             </button>

@@ -78,10 +78,10 @@ const TestResultManage: React.FC = () => {
     try {
       await managerService.rejectTestResult(pendingRejectId)
       await fetchTestResults()
-      toast.success('✅ Kết quả đã bị từ chối và xóa thành công')
+      toast.success(' Kết quả đã bị từ chối và xóa thành công')
     } catch (error) {
       console.error('Error rejecting test result:', error)
-      toast.error('❌ Có lỗi xảy ra khi từ chối kết quả')
+      toast.error(' Có lỗi xảy ra khi từ chối kết quả')
     } finally {
       setModalOpen(false)
       setPendingRejectId(null)
