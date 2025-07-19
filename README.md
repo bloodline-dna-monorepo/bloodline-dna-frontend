@@ -1,161 +1,238 @@
-# README.md cho frontend `bloodline-dna-frontend`
+# Bloodline DNA Frontend
 
-````markdown
-# Bloodline DNA Testing Service - Frontend
+A modern React-based frontend application for DNA testing services, built with TypeScript and Vite.
 
-## Giới thiệu
+## 🚀 Features
 
-Frontend hệ thống quản lý dịch vụ xét nghiệm ADN huyết thống, xây dựng bằng React, TypeScript, Vite, TailwindCSS.
+- **Modern UI/UX**: Clean and responsive design with Tailwind CSS
+- **Role-Based Dashboard**: Different interfaces for Admin, Manager, Staff, and Customer roles
+- **Authentication**: Secure login/register with JWT token management
+- **Test Management**: Complete DNA test request and tracking workflow
+- **Payment Integration**: Seamless payment processing with VNPay
+- **Real-time Updates**: Live status updates for test requests
+- **Responsive Design**: Mobile-first approach with cross-device compatibility
+- **File Management**: Upload and download test results and reports
 
----
+## 🛠 Tech Stack
 
-## Yêu cầu môi trường
+- **Framework**: React 18
+- **Language**: TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **Routing**: React Router DOM
+- **State Management**: React Context API
+- **HTTP Client**: Axios
+- **Icons**: Lucide React
+- **Deployment**: Vercel
 
-- Node.js >=16
-- Yarn
-- Trình duyệt hiện đại (Chrome, Firefox, Edge...)
+## 📁 Project Structure
 
----
+\`\`\`
+src/
+├── components/          # Reusable UI components
+│   ├── Auth/           # Authentication components
+│   └── Common/         # Shared components
+├── pages/              # Page components
+│   ├── admin/          # Admin dashboard pages
+│   ├── manager/        # Manager dashboard pages
+│   ├── staff/          # Staff dashboard pages
+│   └── customer/       # Customer dashboard pages
+├── services/           # API service functions
+├── context/            # React Context providers
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions and types
+└── assets/             # Static assets
+\`\`\`
 
-## Cài đặt và chạy project
+## 🚦 Getting Started
 
-1. Clone repo về:
+### Prerequisites
 
-```bash
-git clone https://github.com/your-org/bloodline-dna-frontend.git
+- Node.js (v16 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
+\`\`\`bash
+git clone <repository-url>
 cd bloodline-dna-frontend
-```
-````
+\`\`\`
 
-2. Cài package:
+2. Install dependencies:
+\`\`\`bash
+npm install
+\`\`\`
 
-```bash
-yarn install
-```
+3. Set up environment variables:
+Create a \`.env\` file in the root directory:
 
-3. Chạy project:
+\`\`\`env
+VITE_API_BASE_URL=http://localhost:5000/api
+VITE_APP_NAME=Bloodline DNA
+VITE_VNPAY_RETURN_URL=http://localhost:3000/payment-result
+\`\`\`
 
-```bash
-yarn dev
-```
+4. Start the development server:
+\`\`\`bash
+npm run dev
+\`\`\`
 
-Ứng dụng sẽ chạy trên `http://localhost:5173` (hoặc port do Vite chỉ định).
+The application will be available at \`http://localhost:3000\`
 
----
+## 🎯 User Roles & Features
 
-Dưới đây là nội dung bạn có thể copy vào phần `README.md` để mô tả **cấu trúc thư mục** của dự án frontend `Bloodline DNA Testing Service Management System`:
+### 👤 Customer Features
+- **Account Management**: Register, login, and profile management
+- **Service Booking**: Browse and book DNA testing services
+- **Test Tracking**: Real-time tracking of test request status
+- **Payment**: Secure online payment processing
+- **Results**: View and download test results
+- **History**: Access to service history
+- **Feedback**: Submit feedback and reviews
 
----
+### 👨‍💼 Staff Features
+- **Request Management**: View and process assigned test requests
+- **Sample Processing**: Update test progress and status
+- **Result Submission**: Upload and submit test results
+- **Dashboard**: Overview of assigned tasks and workload
 
-Dưới đây là phần **tổng hợp cấu trúc thư mục chi tiết** bạn có thể **copy dán vào `README.md`** để mô tả rõ ràng kiến trúc frontend của dự án **Bloodline DNA Testing Service Management System**:
+### 👩‍💼 Manager Features
+- **Test Result Management**: Review and approve test results
+- **Blog Management**: Create and manage blog content
+- **Feedback Management**: Monitor customer feedback
+- **Analytics**: View performance metrics and reports
 
----
+### 👑 Admin Features
+- **User Management**: Manage all user accounts and roles
+- **System Overview**: Complete system statistics and monitoring
+- **Role Assignment**: Assign and modify user roles
+- **System Configuration**: Manage system settings
 
-## 📁 Cấu trúc thư mục frontend
+## 🎨 UI Components
 
-Dự án sử dụng kiến trúc **feature-based modular architecture**, chia theo từng tính năng, dễ bảo trì và mở rộng trong tương lai.
+### Common Components
+- **Header**: Navigation with role-based menu items
+- **Sidebar**: Dashboard navigation for authenticated users
+- **Footer**: Site information and links
+- **Button**: Reusable button component with variants
+- **Input**: Form input components with validation
+- **Modal**: Confirmation and dialog modals
 
-```bash
-bloodline-dna-frontend/
-├── public/                         # File tĩnh (favicon, logo, robots.txt, etc.)
-├── src/
-│   ├── assets/                     # Tài nguyên chung (ảnh, fonts, icons,...)
-│   ├── components/                 # UI components dùng toàn app (Button, Modal, Spinner,...)
-│   ├── constants/                  # Các hằng số toàn cục (routes, enums, config,...)
-│   ├── features/                   # Các module chức năng (feature-based)
-│   │   ├── auth/                   # Đăng nhập, đăng ký, xác thực
-│   │   │   ├── components/        # UI riêng cho auth
-│   │   │   ├── pages/             # Trang login, register,...
-│   │   │   ├── services/          # Gọi API liên quan auth
-│   │   │   ├── hooks/             # Custom hooks riêng của auth
-│   │   │   ├── slices/            # Redux slice / Zustand store (nếu dùng)
-│   │   │   ├── types/             # Kiểu dữ liệu liên quan auth
-│   │   │   └── index.ts           # Barrel exports
-│   │   ├── customer/              # Người dùng đặt xét nghiệm
-│   │   ├── appointment/           # Đặt lịch xét nghiệm
-│   │   ├── dnaTest/               # Quản lý xét nghiệm và kết quả
-│   │   ├── sampleTracking/        # Theo dõi mẫu xét nghiệm
-│   │   ├── manager/               # Tính năng cho quản lý trung tâm
-│   │   ├── admin/                 # Tính năng dành cho admin hệ thống
-│   │   └── ...                    # (Mở rộng thêm nếu cần)
-│   ├── hooks/                      # Custom hooks dùng toàn app (useDebounce, useAuth, etc.)
-│   ├── layouts/                    # Bố cục chính (MainLayout, AuthLayout,...)
-│   ├── pages/                      # Entry cho từng trang nếu cần mapping
-│   ├── routes/                     # Cấu hình route, bảo vệ route,...
-│   ├── services/                   # Gọi API chung (axios instance, interceptor,...)
-│   ├── styles/                     # CSS/tailwind hoặc global styles
-│   ├── utils/                      # Hàm tiện ích dùng chung (formatDate, validateEmail,...)
-│   ├── App.tsx                     # Root component
-│   ├── main.tsx                    # Entry point chính
-│   └── vite-env.d.ts               # Cấu hình hỗ trợ cho Vite
-├── .eslintrc.cjs                   # Cấu hình ESLint
-├── .prettierrc                     # Cấu hình Prettier
-├── package.json                    # Thông tin dependencies
-├── tsconfig.json                   # Cấu hình TypeScript
-└── README.md                       # Mô tả dự án, hướng dẫn cài đặt
-```
+### Authentication Components
+- **Login**: User authentication form
+- **Register**: New user registration
+- **ForgotPassword**: Password reset request
+- **ResetPassword**: Password reset form
 
----
+## 🔧 Available Scripts
 
-### ✅ Nguyên tắc tổ chức
+- \`npm run dev\` - Start development server
+- \`npm run build\` - Build for production
+- \`npm run preview\` - Preview production build
+- \`npm run lint\` - Run ESLint
+- \`npm run type-check\` - Run TypeScript type checking
 
-* **Tách rõ theo tính năng**: Mỗi module nằm trong `features/` chứa đầy đủ component, logic, API, hook, store, type riêng.
-* **Không cần thư mục `shared/`**: Vì mọi thứ đã được chia rõ theo từng feature hoặc dùng chung thì nằm trong `components/`, `hooks/`, `utils/`.
-* **Dễ scale**: Khi cần thêm tính năng mới (ví dụ: `billing`, `notifications`), chỉ cần tạo thêm thư mục trong `features/`.
+## 🌐 API Integration
 
----
+The frontend communicates with the backend through RESTful APIs:
 
-📌 *Gợi ý*: Mỗi `features/<module>` có thể có file `index.ts` để `barrel export` giúp import code gọn hơn.
+### Authentication
+- Login/Register/Logout
+- Password reset functionality
+- JWT token management
 
-Bạn có thể dán nguyên block này vào README. Nếu muốn mình tạo sẵn file `README.md` markdown đúng chuẩn để paste vào VS Code, mình có thể gửi luôn!
+### User Management
+- Profile management
+- Service history
+- Role-based access control
 
+### Test Requests
+- Create new test requests
+- Track request status
+- View test results
 
-## Quy trình quản lý code và branch
+### Payments
+- Process payments via VNPay
+- Handle payment callbacks
+- Payment history
 
-- **main**: nhánh ổn định, deploy production
-- **develop**: nhánh phát triển chung
-- **feature/\<tên-feature>**: nhánh riêng cho từng tính năng/task
-- **hotfix/\<tên-hotfix>**: sửa lỗi nhanh trên main hoặc develop
+## 🎨 Styling & Theming
 
-### Quy trình làm việc
-đầu tiên nè mấy ba mở terminal npm install --global yarn
-git clone project về
+The application uses Tailwind CSS for styling with:
+- **Responsive Design**: Mobile-first approach
+- **Custom Components**: Reusable styled components
+- **Color Scheme**: Professional blue and white theme
+- **Typography**: Clean and readable font hierarchy
 
-1. Cập nhật nhánh develop mới nhất:
+## 🚀 Deployment
 
-```bash
-git checkout develop
-git pull origin develop
-```
-yarn install
+### Build for Production
+\`\`\`bash
+npm run build
+\`\`\`
 
-2. Tạo nhánh feature mới:
+### Deploy to Vercel
+The project is configured for Vercel deployment with:
+- Automatic deployments from Git
+- Environment variable management
+- SPA routing configuration
 
-```bash
-git checkout -b feature/<tên-feature>
-```
-yarn dev
-3. Viết code, commit rõ ràng.
+### Environment Variables for Production
+Set the following environment variables in your deployment platform:
+- \`VITE_API_BASE_URL\`: Production API URL
+- \`VITE_APP_NAME\`: Application name
+- \`VITE_VNPAY_RETURN_URL\`: Production payment return URL
 
-4. Đẩy nhánh lên repo:
+## 🔒 Security Features
 
-```bash
-git push -u origin feature/<tên-feature>
-```
+- **JWT Authentication**: Secure token-based authentication
+- **Protected Routes**: Role-based route protection
+- **Input Validation**: Client-side form validation
+- **XSS Protection**: Sanitized user inputs
+- **HTTPS**: Secure communication in production
 
-5. Tạo Pull Request để review và merge vào develop.
+## 📱 Responsive Design
 
----
+The application is fully responsive and optimized for:
+- **Desktop**: Full-featured dashboard experience
+- **Tablet**: Adapted layout for medium screens
+- **Mobile**: Touch-friendly mobile interface
 
-## Công cụ và chuẩn coding
+## 🧪 Testing
 
-- Dùng ESLint + Prettier để giữ style code chuẩn
-- TailwindCSS để viết CSS tiện lợi, nhanh chóng
-- Viết test (unit test, component test) trong thư mục phù hợp
-- Chạy dev bằng `yarn dev` với hot reload của Vite
+\`\`\`bash
+npm run test
+\`\`\`
 
----
+## 🤝 Contributing
 
-## Liên hệ
+1. Fork the repository
+2. Create a feature branch (\`git checkout -b feature/amazing-feature\`)
+3. Commit your changes (\`git commit -m 'Add some amazing feature'\`)
+4. Push to the branch (\`git push origin feature/amazing-feature\`)
+5. Open a Pull Request
 
-Mọi thắc mắc, vấn đề vui lòng liên hệ nhóm trưởng hoặc tạo issue trên GitHub.
+## 📝 Code Style
+
+- **TypeScript**: Strict type checking enabled
+- **ESLint**: Code linting and formatting
+- **Prettier**: Code formatting
+- **Component Structure**: Functional components with hooks
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **API Connection Issues**:
+   - Check if backend server is running
+   - Verify API base URL in environment variables
+
+2. **Authentication Problems**:
+   - Clear browser localStorage
+   - Check JWT token expiration
+
+3. **Build Issues**:
+   - Clear node_modules and reinstall dependencies
+   - Check TypeScript errors
+
