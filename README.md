@@ -27,7 +27,7 @@ A modern React-based frontend application for DNA testing services, built with T
 
 ## 📁 Project Structure
 
-\`\`\`
+```bash
 src/
 ├── components/          # Reusable UI components
 │   ├── Auth/           # Authentication components
@@ -42,7 +42,7 @@ src/
 ├── hooks/              # Custom React hooks
 ├── utils/              # Utility functions and types
 └── assets/             # Static assets
-\`\`\`
+```
 
 ## 🚦 Getting Started
 
