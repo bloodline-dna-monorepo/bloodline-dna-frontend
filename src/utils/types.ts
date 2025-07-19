@@ -86,6 +86,7 @@ export interface TestProcess {
   Appointment: string
   Status: string
   AssignedTo?: number
+  StaffName?: string
   CreatedAt: string
   UpdatedAt: string
   SampleCount: number

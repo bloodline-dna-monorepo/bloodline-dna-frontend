@@ -152,7 +152,7 @@ const TestTracking: React.FC = () => {
                     </div>
                     <div>
                       <div className='text-sm text-gray-600'>Kỹ thuật viên:</div>
-                      <div className='font-medium'>{request.AssignedTo || 'Chưa phân công'}</div>
+                      <div className='font-medium'>{request.StaffName || 'Chưa phân công'}</div>
                     </div>
                   </div>
 
@@ -283,7 +283,15 @@ const validationSchema = (serviceType: string, count: number) =>
           file: serviceType === 'Civil' ? Yup.mixed().nullable() : Yup.string().required('Cần có file đính kèm')
         })
       )
-      .length(count),
+      .length(count)
+      .test('unique-id-numbers', 'CMND/CCCD không được trùng lặp trong cùng một yêu cầu', (samples) => {
+        if (!samples) return true
+
+        const idNumbers = samples.map((sample) => sample?.idNumber).filter((id) => id && id.trim() !== '')
+
+        const uniqueIds = new Set(idNumbers)
+        return uniqueIds.size === idNumbers.length
+      }),
     acceptTerms: Yup.boolean().oneOf([true], 'Bạn phải đồng ý với điều khoản và điều kiện')
   })
 
@@ -310,6 +318,19 @@ const TestInfoForm: React.FC<{
 
   const handleSubmit = async (values: { samples: SampleInfo[]; acceptTerms: boolean }) => {
     try {
+      // Check for duplicate CMND/CCCD in database using service
+      const idNumbers = values.samples.map((sample) => sample.idNumber).filter((id) => id && id.trim() !== '')
+
+      // Check each ID number against database
+      for (const idNumber of idNumbers) {
+        const isDuplicate = await testRequestService.checkDuplicateIdNumber(idNumber)
+        if (isDuplicate) {
+          toast.error(`❌ CMND/CCCD ${idNumber} đã tồn tại trong hệ thống!`)
+          return
+        }
+      }
+
+      // If no duplicates found, proceed with submission
       for (let i = 0; i < values.samples.length; i++) {
         const sample = values.samples[i]
         const formData = new FormData()
@@ -325,12 +346,16 @@ const TestInfoForm: React.FC<{
         await testRequestService.createSampleCategory(request.TestRequestID, formData)
       }
 
-      toast.success(' Gửi mẫu thành công!')
+      toast.success('✅ Gửi mẫu thành công!')
       onClose()
       onSubmitted()
     } catch (err) {
       console.error('❌ Lỗi gửi mẫu:', err)
-      toast.error(' Có lỗi xảy ra. Vui lòng thử lại.')
+      if (err instanceof Error && err.message.includes('duplicate')) {
+        toast.error('❌ CMND/CCCD đã tồn tại trong hệ thống!')
+      } else {
+        toast.error('❌ Có lỗi xảy ra. Vui lòng thử lại.')
+      }
     }
   }
 
@@ -413,6 +438,12 @@ const TestInfoForm: React.FC<{
               </div>
             </div>
           ))}
+
+          {/* Display validation error for duplicate IDs */}
+          <ErrorMessage
+            name='samples'
+            render={(msg) => (typeof msg === 'string' ? <div className='text-red-500 text-sm mb-4'>{msg}</div> : null)}
+          />
 
           {/* Terms and Conditions Checkbox */}
           <div className='mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200'>

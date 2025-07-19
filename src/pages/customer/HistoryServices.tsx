@@ -347,8 +347,8 @@ const HistoryServices: React.FC = () => {
                           <div>
                             <h3 className='font-semibold text-lg mb-1'>{request.ServiceName}</h3>
                             <div className='text-sm text-gray-600 mb-2'>
-                              Mã dịch vụ: {request.ServiceID} • Mã kit:{' '}
-                              {request.KitID || `KIT${request.TestRequestID.toString().padStart(3, '0')}`}
+                              Mã dịch vụ: {request.ServiceID} 🔸 Mã đăng ký:{' '}
+                              {request.TestRequestID}
                             </div>
                           </div>
                           <span
