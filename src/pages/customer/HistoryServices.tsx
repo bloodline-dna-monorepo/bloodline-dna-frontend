@@ -122,7 +122,7 @@ const HistoryServices: React.FC = () => {
     completedTests: 0,
     totalCost: 0
   })
-  const [loadingDownload, setLoadingDownload] = useState(false)
+  const [loadingDownload, setLoadingDownload] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     fetchHistoryData()
@@ -158,7 +158,7 @@ const HistoryServices: React.FC = () => {
 
   const handleDownloadResults = async (request: TestProcess) => {
     try {
-      setLoadingDownload(true)
+       setLoadingDownload((prev) => new Set(prev).add(request.TestRequestID))
 
       // Download both PDFs
 
@@ -196,12 +196,16 @@ const HistoryServices: React.FC = () => {
       console.error('Error downloading PDFs:', error)
       toast.error('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
     } finally {
-      setLoadingDownload(false)
+       setLoadingDownload((prev) => {
+      const updated = new Set(prev)
+      updated.delete(request.TestRequestID)
+      return updated
+    })
     }
   }
   const handleDownloadResults1 = async (request: TestProcess) => {
     try {
-      setLoadingDownload(true)
+      setLoadingDownload((prev) => new Set(prev).add(request.TestRequestID))
 
       // Download both PDFs
 
@@ -223,7 +227,11 @@ const HistoryServices: React.FC = () => {
       console.error('Error downloading PDFs:', error)
       toast.error('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
     } finally {
-      setLoadingDownload(false)
+       setLoadingDownload((prev) => {
+      const updated = new Set(prev)
+      updated.delete(request.TestRequestID)
+      return updated
+    })
     }
   }
 
@@ -400,10 +408,10 @@ const HistoryServices: React.FC = () => {
                                 ? handleDownloadResults1(request)
                                 : handleDownloadResults(request)
                             }
-                            disabled={loadingDownload}
+                            disabled={loadingDownload.has(request.TestRequestID)}
                             className='px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium disabled:opacity-50'
                           >
-                            {loadingDownload ? '⏳ Đang tải...' : '📄 Tải kết quả'}
+                            {loadingDownload.has(request.TestRequestID) ? '⏳ Đang tải...' : '📄 Tải kết quả'}
                           </button>
                         )}
                       </div>
