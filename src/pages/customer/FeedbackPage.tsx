@@ -14,6 +14,7 @@ import {
 
 import type { PendingFeedbackRequest, SubmittedFeedbackRequest } from "../../utils/types"
 import { feedbackService } from "../../services/feedbackService"
+import dayjs from "dayjs"
 
 const FeedbackPage: React.FC = () => {
   const [pendingRequests, setPendingRequests] = useState<PendingFeedbackRequest[]>([])
@@ -249,7 +250,7 @@ const FeedbackPage: React.FC = () => {
                     <div>
                       <p className="font-medium text-gray-800">{request.ServiceName}</p>
                       <p className="text-sm text-gray-500">
-                        Mã: {request.TestRequestID} • Kit: {request.KitID} • Hoàn thành: {request.CompletionDate}
+                        Mã đăng ký: {request.TestRequestID} • Kit: {request.KitID} • Hoàn thành: {dayjs(request.CompletionDate).format('DD/MM/YYYY')}
                       </p>
                     </div>
                   </div>
@@ -285,7 +286,7 @@ const FeedbackPage: React.FC = () => {
                       <div>
                         <p className="font-medium text-gray-800">{request.ServiceName}</p>
                         <p className="text-sm text-gray-500">
-                          Mã: {request.TestRequestID} • Kit: {request.KitID}
+                          Mã đăng ký: {request.TestRequestID} • Kit: {request.KitID}
                         </p>
                       </div>
                     </div>
@@ -329,8 +330,8 @@ const FeedbackPage: React.FC = () => {
                 <div className="mb-6 p-4 bg-gray-50 rounded-md border border-gray-200">
                   <p className="font-medium text-gray-800">{selectedRequest.ServiceName}</p>
                   <p className="text-sm text-gray-500">
-                    Mã: {selectedRequest.TestRequestID} • Kit: {selectedRequest.KitID} • Hoàn thành:{" "}
-                    {selectedRequest.CompletionDate}
+                    Mã đăng ký: {selectedRequest.TestRequestID} • Kit: {selectedRequest.KitID} • Hoàn thành:{" "}
+                    {dayjs(selectedRequest.CompletionDate).format('DD/MM/YYYY')}
                   </p>
                 </div>
               )}
@@ -408,7 +409,7 @@ const FeedbackPage: React.FC = () => {
                 <div className="mb-6 p-4 bg-gray-50 rounded-md border border-gray-200">
                   <p className="font-medium text-gray-800">{editingFeedback.ServiceName}</p>
                   <p className="text-sm text-gray-500">
-                    Mã: {editingFeedback.TestRequestID} • Kit: {editingFeedback.KitID}
+                    Mã đăng ký: {editingFeedback.TestRequestID} • Kit: {editingFeedback.KitID}
                   </p>
                 </div>
               )}

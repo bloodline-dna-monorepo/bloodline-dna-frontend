@@ -318,18 +318,6 @@ const TestInfoForm: React.FC<{
 
   const handleSubmit = async (values: { samples: SampleInfo[]; acceptTerms: boolean }) => {
     try {
-      // Check for duplicate CMND/CCCD in database using service
-      const idNumbers = values.samples.map((sample) => sample.idNumber).filter((id) => id && id.trim() !== '')
-
-      // Check each ID number against database
-      for (const idNumber of idNumbers) {
-        const isDuplicate = await testRequestService.checkDuplicateIdNumber(idNumber)
-        if (isDuplicate) {
-          toast.error(`❌ CMND/CCCD ${idNumber} đã tồn tại trong hệ thống!`)
-          return
-        }
-      }
-
       // If no duplicates found, proceed with submission
       for (let i = 0; i < values.samples.length; i++) {
         const sample = values.samples[i]
@@ -351,11 +339,6 @@ const TestInfoForm: React.FC<{
       onSubmitted()
     } catch (err) {
       console.error('❌ Lỗi gửi mẫu:', err)
-      if (err instanceof Error && err.message.includes('duplicate')) {
-        toast.error('❌ CMND/CCCD đã tồn tại trong hệ thống!')
-      } else {
-        toast.error('❌ Có lỗi xảy ra. Vui lòng thử lại.')
-      }
     }
   }
 

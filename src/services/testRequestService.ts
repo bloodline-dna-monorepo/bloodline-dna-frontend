@@ -35,15 +35,7 @@ export const testRequestService = {
       message: res.data.message
     }
   },
- async checkDuplicateIdNumber(idNumber: string): Promise<boolean> {
-    try {
-      const response = await apiClient.get(`/test-requests/check-duplicate-id/${idNumber}`)
-      return response.data.exists
-    } catch (error) {
-      console.error("Error checking duplicate ID:", error)
-      return false
-    }
-  },
+
   // Get user's test requests
   getUserTestRequests: async (): Promise<TestProcess[]> => {
     const response = await apiClient.get<ApiResponse<TestProcess[]>>('/test-requests/testRequestCustomer')
