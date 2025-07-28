@@ -158,7 +158,7 @@ const HistoryServices: React.FC = () => {
 
   const handleDownloadResults = async (request: TestProcess) => {
     try {
-       setLoadingDownload((prev) => new Set(prev).add(request.TestRequestID))
+      setLoadingDownload((prev) => new Set(prev).add(request.TestRequestID))
 
       // Download both PDFs
 
@@ -196,11 +196,11 @@ const HistoryServices: React.FC = () => {
       console.error('Error downloading PDFs:', error)
       toast.error('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
     } finally {
-       setLoadingDownload((prev) => {
-      const updated = new Set(prev)
-      updated.delete(request.TestRequestID)
-      return updated
-    })
+      setLoadingDownload((prev) => {
+        const updated = new Set(prev)
+        updated.delete(request.TestRequestID)
+        return updated
+      })
     }
   }
   const handleDownloadResults1 = async (request: TestProcess) => {
@@ -227,11 +227,11 @@ const HistoryServices: React.FC = () => {
       console.error('Error downloading PDFs:', error)
       toast.error('Không thể tải xuống file PDF. Vui lòng thử lại sau.')
     } finally {
-       setLoadingDownload((prev) => {
-      const updated = new Set(prev)
-      updated.delete(request.TestRequestID)
-      return updated
-    })
+      setLoadingDownload((prev) => {
+        const updated = new Set(prev)
+        updated.delete(request.TestRequestID)
+        return updated
+      })
     }
   }
 
@@ -355,8 +355,7 @@ const HistoryServices: React.FC = () => {
                           <div>
                             <h3 className='font-semibold text-lg mb-1'>{request.ServiceName}</h3>
                             <div className='text-sm text-gray-600 mb-2'>
-                              Mã dịch vụ: {request.ServiceID} 🔸 Mã đăng ký:{' '}
-                              {request.TestRequestID}
+                              Mã dịch vụ: {request.ServiceID} 🔸 Mã đăng ký: {request.TestRequestID}
                             </div>
                           </div>
                           <span
@@ -440,12 +439,19 @@ const HistoryServices: React.FC = () => {
             <h3 className='font-semibold mb-2'>Cần hỗ trợ?</h3>
             <p className='text-gray-600 mb-4'>Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
             <div className='flex gap-4'>
-              <button className='flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors'>
+              <a
+                href='tel:0123456789'
+                className='flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors'
+              >
                 📞 Gọi ngay: 0123 456 789
-              </button>
-              <button className='flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors'>
+              </a>
+              <a
+                href='https://mail.google.com/mail/?view=cm&fs=1&to=genunitycompany@gmail.com'
+                target='_blank'
+                className='flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors'
+              >
                 ✉️ Email: genunitycompany@gmail.com
-              </button>
+              </a>
             </div>
           </div>
         </div>
