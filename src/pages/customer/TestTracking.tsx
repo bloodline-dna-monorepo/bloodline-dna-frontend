@@ -109,7 +109,8 @@ const TestTracking: React.FC = () => {
                       <div>
                         <h3 className='font-semibold text-lg'>{request.ServiceName}</h3>
                         <div className='text-sm text-gray-600'>
-                          Mã kit: {request.KitID || ''} 🔸 {request.SampleCount} mẫu
+                          Mã đăng ký: {request.TestRequestID} 🔸 {request.SampleCount} mẫu 🔸 Mã kit:{' '}
+                          {request.KitID || ''}
                         </div>
                       </div>
                     </div>
@@ -510,7 +511,9 @@ const TestProgressTracker: React.FC<{
       <div className='flex items-center justify-between mb-6'>
         <div>
           <h3 className='font-semibold'>{request.ServiceName}</h3>
-          <p className='text-sm text-gray-600'>Mã kit: {request.KitID || ''}</p>
+          <p className='text-sm text-gray-600'>
+            Mã đăng ký: {request.TestRequestID} 🔸 {request.SampleCount} mẫu 🔸Mã kit: {request.KitID || ''}
+          </p>
         </div>
         <div className='text-right'>
           <p className='text-sm text-gray-600'>Địa điểm</p>
@@ -582,7 +585,7 @@ const TestProgressTracker: React.FC<{
           </div>
           <div className='flex items-center gap-2 text-sm'>
             <span>✉️</span>
-            <span>Email: info@genunity.com</span>
+            <span>Email: genunitycompany@gmail.com</span>
           </div>
         </div>
       </div>

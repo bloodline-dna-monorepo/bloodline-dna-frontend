@@ -199,7 +199,7 @@ const Register: React.FC = () => {
 
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-1'>Hình ảnh vân tay của bạn *</label>
-            <input
+            <Input
               type='file'
               name='SignatureImage'
               accept='image/*'
@@ -210,7 +210,7 @@ const Register: React.FC = () => {
           </div>
 
           <div className='flex items-center'>
-            <input
+            <Input
               id='agree-terms'
               name='agree-terms'
               type='checkbox'
