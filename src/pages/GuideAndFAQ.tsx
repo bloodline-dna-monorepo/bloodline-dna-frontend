@@ -110,7 +110,7 @@ const GuideAndFAQ: React.FC = () => {
                     1
                   </div>
                   <div>
-                    <h4 className='font-semibold text-gray-900 mb-2'>Đặt bộ kit của bạn</h4>
+                    <h4 className='font-semibold text-gray-900 mb-2'>Chọn dịch vụ của bạn</h4>
                     <p className='text-gray-600'>
                       Chọn xét nghiệm bạn muốn và hoàn tất đơn đặt hàng. Bộ kit lấy mẫu của bạn sẽ được gửi đến bạn
                       trong bao bì kín đáo.
@@ -118,22 +118,11 @@ const GuideAndFAQ: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='flex items-start space-x-4'>
-                  <div className='w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm'>
-                    2
-                  </div>
-                  <div>
-                    <h4 className='font-semibold text-gray-900 mb-2'>Đăng ký bộ kit của bạn</h4>
-                    <p className='text-gray-600'>
-                      Mỗi bộ kit có một số nhận dạng duy nhất. Đăng ký số này trên cổng thông tin an toàn của chúng tôi
-                      để liên kết bộ kit của bạn với tài khoản của bạn.
-                    </p>
-                  </div>
-                </div>
+              
 
                 <div className='flex items-start space-x-4'>
                   <div className='w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm'>
-                    3
+                    2
                   </div>
                   <div>
                     <h4 className='font-semibold text-gray-900 mb-2'>Thu thập mẫu của bạn</h4>
@@ -146,20 +135,20 @@ const GuideAndFAQ: React.FC = () => {
 
                 <div className='flex items-start space-x-4'>
                   <div className='w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm'>
-                    4
+                    3
                   </div>
                   <div>
                     <h4 className='font-semibold text-gray-900 mb-2'>Gửi mẫu của bạn</h4>
                     <p className='text-gray-600'>
-                      Đặt mẫu của bạn vào phong bì trả trước và gửi lại phòng thí nghiệm của chúng tôi. Không cần thêm
-                      phí bưu chính.
+                      Đặt mẫu của bạn vào phong bì  và gửi lại phòng thí nghiệm của chúng tôi. Không cần thêm
+                      phí vận chuyển.
                     </p>
                   </div>
                 </div>
 
                 <div className='flex items-start space-x-4'>
                   <div className='w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm'>
-                    5
+                    4
                   </div>
                   <div>
                     <h4 className='font-semibold text-gray-900 mb-2'>Nhận kết quả của bạn</h4>
