@@ -158,8 +158,27 @@ const UserProfilePage: React.FC = () => {
     const birthDate = dayjs(dateOfBirth, 'YYYY-MM-DD', true)
     const age = dayjs().diff(birthDate, 'year')
 
+    // Kiểm tra tuổi
     if (!birthDate.isValid() || age < 18) {
       toast.error('Bạn phải từ 18 tuổi trở lên')
+      return
+    }
+
+    // Kiểm tra Họ tên và Địa chỉ
+    if (!fullName.trim()) {
+      toast.error('Họ và tên không được để trống')
+      return
+    }
+
+    if (!address.trim()) {
+      toast.error('Địa chỉ không được để trống')
+      return
+    }
+
+    // Kiểm tra số điện thoại
+    const phoneRegex = /^0\d{9}$/
+    if (!phoneRegex.test(phoneNumber)) {
+      toast.error('Số điện thoại không hợp lệ. Phải bắt đầu bằng số 0 và có đúng 10 chữ số.')
       return
     }
 
@@ -256,6 +275,7 @@ const UserProfilePage: React.FC = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500'
+                  required
                 />
               </div>
             </div>
