@@ -189,7 +189,7 @@ const TestProcessCenter: React.FC = () => {
       navigate('/staff/manage-requests/confirmed')
     } catch (error) {
       console.error('Error submitting result:', error)
-       toast.error('Có lỗi xảy ra khi lưu kết quả!')
+      toast.error('Kết quả đã từng được tạo! Vui lòng chờ xác nhận từ quản lý.')
     }
   }
 
