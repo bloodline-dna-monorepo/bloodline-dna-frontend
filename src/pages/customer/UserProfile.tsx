@@ -155,6 +155,14 @@ const UserProfilePage: React.FC = () => {
   }
 
   const handleUpdateProfile = async () => {
+    const birthDate = dayjs(dateOfBirth, 'YYYY-MM-DD', true)
+    const age = dayjs().diff(birthDate, 'year')
+
+    if (!birthDate.isValid() || age < 18) {
+      toast.error('Bạn phải từ 18 tuổi trở lên')
+      return
+    }
+
     try {
       const data = {
         FullName: fullName,

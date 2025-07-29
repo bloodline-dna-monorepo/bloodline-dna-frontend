@@ -118,8 +118,6 @@ const GuideAndFAQ: React.FC = () => {
                   </div>
                 </div>
 
-              
-
                 <div className='flex items-start space-x-4'>
                   <div className='w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm'>
                     2
@@ -140,8 +138,8 @@ const GuideAndFAQ: React.FC = () => {
                   <div>
                     <h4 className='font-semibold text-gray-900 mb-2'>Gửi mẫu của bạn</h4>
                     <p className='text-gray-600'>
-                      Đặt mẫu của bạn vào phong bì  và gửi lại phòng thí nghiệm của chúng tôi. Không cần thêm
-                      phí vận chuyển.
+                      Đặt mẫu của bạn vào phong bì và gửi lại phòng thí nghiệm của chúng tôi. Không cần thêm phí vận
+                      chuyển.
                     </p>
                   </div>
                 </div>
