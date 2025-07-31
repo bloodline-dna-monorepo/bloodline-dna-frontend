@@ -50,6 +50,7 @@ const DashboardSidebar: React.FC = () => {
         { path: '/staff/manage-requests/confirmed', label: '+ Đã xác nhận', icon: CheckCircleIcon }
       ]
     },
+    { path: "/staff/verified-results", label: "Lịch sử kết quả", icon: StarIcon },
     { path: '/profile', label: 'Thông tin cá nhân', icon: UserIcon }
   ]
 
@@ -96,11 +97,10 @@ const DashboardSidebar: React.FC = () => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                      isActive(item.path)
-                        ? 'bg-teal-700 text-white'
-                        : 'text-teal-100 hover:bg-teal-500 hover:text-white'
-                    }`}
+                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.path)
+                      ? 'bg-teal-700 text-white'
+                      : 'text-teal-100 hover:bg-teal-500 hover:text-white'
+                      }`}
                   >
                     <Icon className='w-5 h-5' />
                     <span className='font-medium'>{item.label}</span>
@@ -115,11 +115,10 @@ const DashboardSidebar: React.FC = () => {
                           <li key={sub.path}>
                             <Link
                               to={sub.path}
-                              className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                                isActive(sub.path)
-                                  ? 'bg-teal-700 text-white'
-                                  : 'text-teal-100 hover:bg-teal-500 hover:text-white'
-                              }`}
+                              className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm transition-colors ${isActive(sub.path)
+                                ? 'bg-teal-700 text-white'
+                                : 'text-teal-100 hover:bg-teal-500 hover:text-white'
+                                }`}
                             >
                               <SubIcon className='w-4 h-4' />
                               <span>{sub.label}</span>

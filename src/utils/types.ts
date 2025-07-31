@@ -228,7 +228,7 @@ export interface TestResults {
   CreatedAt: string
   UpdatedAt: string
   ConfirmDate: string
-    RegistrationDate: string
+  RegistrationDate: string
 }
 
 // File Upload Types
@@ -464,7 +464,7 @@ export interface Feedback {
   isVerified: boolean
 }
 
-export interface SubmittedFeedback{
+export interface SubmittedFeedback {
   FeedbackID: number
   Rating: number
   Comment: string
@@ -476,4 +476,29 @@ export interface SubmittedFeedback{
   CollectionMethod: "Home" | "Facility"
   Status: string
   FullName?: string
+}
+export interface VerifiedResult {
+  TestResultID: number
+  TestRequestID: number
+  CustomerName: string
+  CustomerEmail: string
+  CustomerPhone: string
+  ServiceName: string
+  ServiceType: string
+  SampleCount: number
+  Result: string
+  StaffName: string
+  VerifiedDate: string
+  CreatedAt: string
+  KitID: string | null
+  CollectionMethod: string
+}
+
+export interface VerifiedResultDetail extends VerifiedResult {
+  CustomerAddress: string
+  TestSubjects: string
+  SampleDate: string
+  EnterDate: string
+  ManagerName: string
+  RegistrationDate: string
 }

@@ -1,5 +1,5 @@
 import { apiClient } from "../utils/api"
-import type { ApiResponse, DashboardStaffStats, RecentRequest, TestRequestDetail, TestRequestFullDetail, TestResultData } from "../utils/types"
+import type { ApiResponse, DashboardStaffStats, RecentRequest, TestRequestDetail, TestRequestFullDetail, TestResultData, VerifiedResult, VerifiedResultDetail } from "../utils/types"
 
 
 
@@ -48,7 +48,15 @@ class StaffService {
     const response = await apiClient.put<ApiResponse<TestRequestDetail>>(`/staff/requests/${requestId}/confirm-sample`)
     return response.data.data
   }
+  async getVerifiedResults(): Promise<VerifiedResult[]> {
+    const response = await apiClient.get<ApiResponse<VerifiedResult[]>>("/staff/results/verified")
+    return response.data.data
+  }
 
+  async getVerifiedResultDetail(resultId: number): Promise<VerifiedResultDetail> {
+    const response = await apiClient.get<ApiResponse<VerifiedResultDetail>>(`/staff/results/${resultId}/detail`)
+    return response.data.data
+  }
   async createTestResult(requestId: number, resultData: TestResultData): Promise<void> {
     await apiClient.post(`/staff/requests/${requestId}/result`, resultData)
   }

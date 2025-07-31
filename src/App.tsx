@@ -25,6 +25,7 @@ import ManageRequests from './pages/staff/ManageRequests'
 import ConfirmedRequests from './pages/staff/ConfirmedRequests'
 import TestProcess from './pages/staff/TestProcess'
 import TestProcessCenter from './pages/staff/TestProcessCenter'
+
 // import TestRequestDetails from "./pages/staff/TestRequestDetails"
 
 // Manager Pages
@@ -51,6 +52,7 @@ import AdminRole from './pages/admin/AdminRole'
 import ForgotPassword from './components/Auth/ForgotPassword'
 import ResetPassword from './components/Auth/ResetPassword'
 import Terms from './pages/Terms'
+import VerifiedResults from './pages/staff/VerifiedResults'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
@@ -367,6 +369,14 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/staff/verified-results"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <VerifiedResults />
+                </ProtectedRoute>
+              }
+            />
             {/* <Route
               path="/staff/test-request/:id"
               element={
@@ -403,6 +413,15 @@ const App: React.FC = () => {
                 <div className='min-h-screen flex items-center justify-center'>
                   <h1 className='text-2xl text-red-600'>Unauthorized Access</h1>
                 </div>
+              }
+
+            />
+            <Route
+              path="/staff/verified-results"
+              element={
+                <ProtectedRoute allowedRoles={["Staff"]}>
+                  <VerifiedResults />
+                </ProtectedRoute>
               }
             />
             <Route path='*' element={<Navigate to='/' replace />} />

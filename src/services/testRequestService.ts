@@ -38,8 +38,25 @@ export const testRequestService = {
 
   // Get user's test requests
   getUserTestRequests: async (): Promise<TestProcess[]> => {
-    const response = await apiClient.get<ApiResponse<TestProcess[]>>('/test-requests/testRequestCustomer')
-    return response.data.data
+    try {
+      console.log('Calling getUserTestRequests API...')
+      const response = await apiClient.get<ApiResponse<TestProcess[]>>('/test-requests/testRequestCustomer')
+      console.log('getUserTestRequests response:', response.data)
+      return response.data.data
+    } catch (error) {
+      console.error('Error in getUserTestRequests:', error)
+
+      // Fallback: try alternative endpoint
+      try {
+        console.log('Trying fallback endpoint...')
+        const fallbackResponse = await apiClient.get<ApiResponse<TestProcess[]>>('/test-requests/user')
+        console.log('Fallback response:', fallbackResponse.data)
+        return fallbackResponse.data.data
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError)
+        throw error // throw original error
+      }
+    }
   },
 
   // Download test result PDF

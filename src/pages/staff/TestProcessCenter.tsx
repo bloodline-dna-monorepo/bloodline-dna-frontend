@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { CheckCircleIcon, ClockIcon, XMarkIcon, EyeIcon } from '@heroicons/react/24/outline'
 import { useParams, useNavigate } from 'react-router-dom'
 import DashboardSidebar from '../../components/Common/Sidebar'
@@ -21,7 +21,7 @@ const TestProcessCenter: React.FC = () => {
     result: ''
   })
 
-  const initialSteps = [
+  const initialSteps = useMemo(() => [
     {
       id: 1,
       title: 'Đặt hàng thành công',
@@ -30,29 +30,17 @@ const TestProcessCenter: React.FC = () => {
     },
     {
       id: 2,
-      title: 'Đã lấy mẫu',
-      description: 'Mẫu đã được lấy tại cơ sở',
+      title: 'Xử lý mẫu và phân tích',
+      description: 'Lấy mẫu, chuyển đến phòng xét nghiệm và thực hiện phân tích',
       completedDate: null
     },
     {
       id: 3,
-      title: 'Đã mang đi xét nghiệm',
-      description: 'Mẫu đã được chuyển đến phòng xét nghiệm',
-      completedDate: null
-    },
-    {
-      id: 4,
-      title: 'Xử lý và phân tích',
-      description: 'Đang thực hiện xử lý và phân tích mẫu',
-      completedDate: null
-    },
-    {
-      id: 5,
       title: 'Nhập kết quả và chờ xác minh',
       description: 'Nhập kết quả xét nghiệm và chờ manager xác minh',
       completedDate: null
     }
-  ]
+  ], [])
 
   const [processSteps, setProcessSteps] = useState(initialSteps)
 
@@ -66,7 +54,7 @@ const TestProcessCenter: React.FC = () => {
         setRequestData(data)
 
         if (data.Status === 'In Progress' || data.Status === 'Pending Review') {
-          setCurrentStepIndex(4)
+          setCurrentStepIndex(2) // Chuyển từ step 4 thành step 2 (Xử lý mẫu và phân tích)
           if (data.Status === 'In Progress') {
             const updatedSteps = [...initialSteps]
             const currentTime = new Date().toLocaleString('vi-VN', {
@@ -77,9 +65,7 @@ const TestProcessCenter: React.FC = () => {
               minute: '2-digit'
             })
 
-            updatedSteps[1] = { ...updatedSteps[1], completedDate: currentTime }
-            updatedSteps[2] = { ...updatedSteps[2], completedDate: currentTime }
-            updatedSteps[3] = { ...updatedSteps[3], completedDate: currentTime }
+            updatedSteps[1] = { ...updatedSteps[1], completedDate: currentTime } // Bước 2: Xử lý mẫu và phân tích
             setProcessSteps(updatedSteps)
           }
         }
@@ -91,7 +77,7 @@ const TestProcessCenter: React.FC = () => {
     }
 
     fetchRequestData()
-  }, [requestId])
+  }, [requestId, initialSteps])
 
   const getStepStatus = (stepIndex: number) => {
     if (stepIndex < currentStepIndex) return 'completed'
@@ -138,11 +124,9 @@ const TestProcessCenter: React.FC = () => {
 
         const updatedSteps = [...processSteps]
         updatedSteps[1] = { ...updatedSteps[1], completedDate: currentTime }
-        updatedSteps[2] = { ...updatedSteps[2], completedDate: currentTime }
-        updatedSteps[3] = { ...updatedSteps[3], completedDate: currentTime }
         setProcessSteps(updatedSteps)
 
-        setCurrentStepIndex(4)
+        setCurrentStepIndex(2)
       } catch (error) {
         console.error('Error confirming sample:', error)
         alert('Có lỗi xảy ra khi xác nhận mẫu!')
@@ -150,7 +134,7 @@ const TestProcessCenter: React.FC = () => {
     }
   }
 
-  const canInputResult = currentStepIndex === 4
+  const canInputResult = currentStepIndex === 2
 
   const handleBackToRequests = () => {
     navigate('/staff/manage-requests/confirmed')
@@ -498,14 +482,14 @@ const TestProcessCenter: React.FC = () => {
                 <div className='mt-4 mb-6'>
                   <h4 className='text-sm font-medium text-gray-700 mb-3'>Tiến trình</h4>
                   <div className='flex items-center space-x-4'>
-                    {processSteps.slice(0, 4).map((step, index) => (
+                    {processSteps.slice(0, 2).map((step, index) => (
                       <div key={step.id} className='flex items-center'>
                         <div className='flex items-center space-x-2'>
                           <CheckCircleIcon className='w-5 h-5 text-green-500' />
                           <span className='text-sm text-gray-600'>{step.title}</span>
                           <span className='text-xs text-gray-400'>{step.completedDate}</span>
                         </div>
-                        {index < 3 && <div className='w-8 h-0.5 bg-green-300 mx-2'></div>}
+                        {index < 1 && <div className='w-8 h-0.5 bg-green-300 mx-2'></div>}
                       </div>
                     ))}
                     <div className='w-8 h-0.5 bg-blue-300 mx-2'></div>

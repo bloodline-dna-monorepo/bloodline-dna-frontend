@@ -131,8 +131,12 @@ const HistoryServices: React.FC = () => {
   const fetchHistoryData = async () => {
     try {
       setLoading(true)
+      console.log('Fetching customer test history...')
       const requests = await testRequestService.getUserTestRequests()
+      console.log('Customer test requests:', requests)
+
       const completedRequests = requests.filter((req) => req.Status === 'Completed')
+      console.log('Completed requests:', completedRequests)
 
       setTestRequests(requests)
 
@@ -146,6 +150,7 @@ const HistoryServices: React.FC = () => {
       })
     } catch (error) {
       console.error('Error fetching history data:', error)
+      toast.error('Không thể tải lịch sử xét nghiệm. Vui lòng thử lại sau.')
     } finally {
       setLoading(false)
     }
@@ -359,11 +364,10 @@ const HistoryServices: React.FC = () => {
                             </div>
                           </div>
                           <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium ${
-                              request.Status === 'Completed'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-yellow-100 text-yellow-700'
-                            }`}
+                            className={`px-3 py-1 rounded-full text-sm font-medium ${request.Status === 'Completed'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-yellow-100 text-yellow-700'
+                              }`}
                           >
                             {request.Status === 'Completed' ? 'Hoàn thành' : request.Status}
                           </span>
