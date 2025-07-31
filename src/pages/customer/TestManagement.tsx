@@ -424,7 +424,7 @@ resultsLink.click()
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
               >
                 <option value="all">Tất cả trạng thái</option>
-                <option value="pending">Đang thực hiện</option>
+                <option value="pending">Chưa hoàn thành</option>
                 <option value="completed">Đã hoàn thành</option>
               </select>
             </div>
