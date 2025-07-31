@@ -187,7 +187,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, 
           {formData.collectionMethod === 'Facility' && (
             <div>
               <label className='block text-sm font-medium mb-2'>
-                Ngày đăng ký <span className='text-red-500'>*</span>
+                Chọn lịch hẹn <span className='text-red-500'>*</span>
               </label>
               <input
                 type='date'
