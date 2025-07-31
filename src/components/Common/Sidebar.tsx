@@ -5,7 +5,6 @@ import { Link, useLocation } from 'react-router-dom'
 import {
   HomeIcon,
   UserIcon,
-  DocumentTextIcon,
   BeakerIcon,
   UsersIcon,
   ChartBarIcon,
@@ -34,9 +33,8 @@ const DashboardSidebar: React.FC = () => {
 
   const customerMenuItems: MenuItem[] = [
     { path: '/profile', label: 'Thông tin cá nhân', icon: UserIcon },
-    { path: '/customer/test-process', label: 'Theo dõi xét nghiệm', icon: BeakerIcon },
+    { path: '/customer/test-management', label: 'Theo dõi xét nghiệm', icon: BeakerIcon },
     { path: '/customer/feedback', label: 'Đánh giá', icon: StarIcon }, // Added Feedback item with StarIcon
-    { path: '/customer/history', label: 'Lịch sử', icon: DocumentTextIcon }
   ]
 
   const staffMenuItems: MenuItem[] = [

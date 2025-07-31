@@ -35,9 +35,7 @@ import TestProcessCenter from './pages/staff/TestProcessCenter'
 
 // Protected Route Component
 import { useAuth } from './hooks/useAuth'
-import TestTracking from './pages/customer/TestTracking'
 import UserProfilePage from './pages/customer/UserProfile'
-import HistoryServices from './pages/customer/HistoryServices'
 import FeedbackPage from './pages/customer/FeedbackPage' // Import FeedbackPage
 
 import ManagerDashboard from './pages/manager/ManagerDashboard'
@@ -51,6 +49,7 @@ import AdminRole from './pages/admin/AdminRole'
 import ForgotPassword from './components/Auth/ForgotPassword'
 import ResetPassword from './components/Auth/ResetPassword'
 import Terms from './pages/Terms'
+import TestManagement from './pages/customer/TestManagement'
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
@@ -215,23 +214,15 @@ const App: React.FC = () => {
                   <ResetPassword />
                 </PublicRoute>
               }
-            />
+            />            
             <Route
-              path='/customer/test-process'
+              path='/customer/test-management'
               element={
                 <ProtectedRoute allowedRoles={['Customer']}>
-                  <TestTracking />
+                  <TestManagement />
                 </ProtectedRoute>
               }
-            />
-            <Route
-              path='/customer/history'
-              element={
-                <ProtectedRoute allowedRoles={['Customer']}>
-                  <HistoryServices />
-                </ProtectedRoute>
-              }
-            />
+            />            
             <Route
               path='/customer/feedback' // New route for FeedbackPage
               element={
