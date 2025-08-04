@@ -23,7 +23,6 @@ import Register from './components/Auth/Register'
 import StaffDashboard from './pages/staff/StaffDashboard'
 import ManageRequests from './pages/staff/ManageRequests'
 import ConfirmedRequests from './pages/staff/ConfirmedRequests'
-import TestProcess from './pages/staff/TestProcess'
 import TestProcessCenter from './pages/staff/TestProcessCenter'
 
 // import TestRequestDetails from "./pages/staff/TestRequestDetails"
@@ -342,14 +341,6 @@ const App: React.FC = () => {
               element={
                 <ProtectedRoute allowedRoles={['Staff']}>
                   <ConfirmedRequests />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path='/staff/test-process/:requestId'
-              element={
-                <ProtectedRoute allowedRoles={['Staff']}>
-                  <TestProcess />
                 </ProtectedRoute>
               }
             />

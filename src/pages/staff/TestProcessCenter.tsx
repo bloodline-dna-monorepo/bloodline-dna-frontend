@@ -26,19 +26,19 @@ const TestProcessCenter: React.FC = () => {
       id: 1,
       title: 'Đặt hàng thành công',
       description: 'Đơn hàng đã được xác nhận',
-      completedDate: '2024-03-01 14:30'
+      completedDate: null as string | null
     },
     {
       id: 2,
       title: 'Xử lý mẫu và phân tích',
       description: 'Lấy mẫu, chuyển đến phòng xét nghiệm và thực hiện phân tích',
-      completedDate: null
+      completedDate: null as string | null
     },
     {
       id: 3,
       title: 'Nhập kết quả và chờ xác minh',
       description: 'Nhập kết quả xét nghiệm và chờ manager xác minh',
-      completedDate: null
+      completedDate: null as string | null
     }
   ], [])
 
@@ -53,10 +53,24 @@ const TestProcessCenter: React.FC = () => {
         console.log(data)
         setRequestData(data)
 
+        // Set step 1 completed date from actual data
+        const updatedSteps = [...initialSteps]
+
+        // Format the actual creation date for step 1
+        if (data.CreatedAt) {
+          const createdDate = new Date(data.CreatedAt).toLocaleString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+          updatedSteps[0] = { ...updatedSteps[0], completedDate: createdDate }
+        }
+
         if (data.Status === 'In Progress' || data.Status === 'Pending Review') {
           setCurrentStepIndex(2) // Chuyển từ step 4 thành step 2 (Xử lý mẫu và phân tích)
           if (data.Status === 'In Progress') {
-            const updatedSteps = [...initialSteps]
             const currentTime = new Date().toLocaleString('vi-VN', {
               year: 'numeric',
               month: '2-digit',
@@ -66,9 +80,10 @@ const TestProcessCenter: React.FC = () => {
             })
 
             updatedSteps[1] = { ...updatedSteps[1], completedDate: currentTime } // Bước 2: Xử lý mẫu và phân tích
-            setProcessSteps(updatedSteps)
           }
         }
+
+        setProcessSteps(updatedSteps)
       } catch (error) {
         console.error('Error fetching request data:', error)
       } finally {
