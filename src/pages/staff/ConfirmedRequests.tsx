@@ -16,7 +16,6 @@ const ConfirmedRequests: React.FC = () => {
   const [requests, setRequests] = useState<TestRequestDetail[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Fetch requests data
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -31,7 +30,6 @@ const ConfirmedRequests: React.FC = () => {
     fetchRequests()
   }, [])
 
-  // Filter requests based on search query
   const filteredRequests = requests.filter(
     (request) =>
       request.CustomerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -39,7 +37,6 @@ const ConfirmedRequests: React.FC = () => {
       request.ServiceName?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  // Handle view request details
   const handleViewRequest = async (requestId: number) => {
     try {
       const request = await staffService.getRequestById(requestId)
@@ -50,24 +47,20 @@ const ConfirmedRequests: React.FC = () => {
     }
   }
 
-  // Handle start test process
   const handleStartProcess = (requestId: number) => {
     navigate(`/staff/test-process-center/${requestId}`)
   }
 
-  // Close modal
   const closeModal = () => {
     setShowModal(false)
     setSelectedRequest(null)
   }
 
-  // Format date helper
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Không rõ'
     return new Date(dateString).toLocaleDateString('vi-VN')
   }
 
-  // Get status display
   const getStatusDisplay = (status: string) => {
     const statusMap: Record<string, { text: string; color: string }> = {
       'Confirmed': { text: 'Đã xác nhận', color: 'bg-green-100 text-green-800' },
@@ -78,7 +71,6 @@ const ConfirmedRequests: React.FC = () => {
     return statusMap[status] || { text: status, color: 'bg-gray-100 text-gray-800' }
   }
 
-  // Loading state
   if (loading) {
     return (
       <div className='flex min-h-screen bg-gray-50'>

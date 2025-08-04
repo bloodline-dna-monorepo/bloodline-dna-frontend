@@ -53,10 +53,7 @@ const TestProcessCenter: React.FC = () => {
         console.log(data)
         setRequestData(data)
 
-        // Set step 1 completed date from actual data
         const updatedSteps = [...initialSteps]
-
-        // Format the actual creation date for step 1
         if (data.CreatedAt) {
           const createdDate = new Date(data.CreatedAt).toLocaleString('vi-VN', {
             year: 'numeric',
@@ -69,7 +66,7 @@ const TestProcessCenter: React.FC = () => {
         }
 
         if (data.Status === 'In Progress' || data.Status === 'Pending Review') {
-          setCurrentStepIndex(2) // Chuyển từ step 4 thành step 2 (Xử lý mẫu và phân tích)
+          setCurrentStepIndex(2)
           if (data.Status === 'In Progress') {
             const currentTime = new Date().toLocaleString('vi-VN', {
               year: 'numeric',
@@ -79,7 +76,7 @@ const TestProcessCenter: React.FC = () => {
               minute: '2-digit'
             })
 
-            updatedSteps[1] = { ...updatedSteps[1], completedDate: currentTime } // Bước 2: Xử lý mẫu và phân tích
+            updatedSteps[1] = { ...updatedSteps[1], completedDate: currentTime }
           }
         }
 

@@ -10,14 +10,12 @@ import { type TestRequestDetail } from '../../utils/types'
 import { staffService } from '../../services/staffService'
 
 const ManageRequests: React.FC = () => {
-  // State management
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedRequest, setSelectedRequest] = useState<TestRequestDetail | null>(null)
   const [showModal, setShowModal] = useState(false)
   const [requests, setRequests] = useState<TestRequestDetail[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Helper functions
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Không rõ'
     const date = new Date(dateString)
@@ -29,7 +27,6 @@ const ManageRequests: React.FC = () => {
     setSelectedRequest(null)
   }
 
-  // Data fetching and filtering
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -53,7 +50,6 @@ const ManageRequests: React.FC = () => {
       request.ServiceName?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  // Event handlers
   const handleViewRequest = async (requestId: number) => {
     try {
       const request = await staffService.getRequestById(requestId)
@@ -76,7 +72,6 @@ const ManageRequests: React.FC = () => {
     }
   }
 
-  // Loading state
   if (loading) {
     return (
       <div className='flex min-h-screen bg-gray-50'>
